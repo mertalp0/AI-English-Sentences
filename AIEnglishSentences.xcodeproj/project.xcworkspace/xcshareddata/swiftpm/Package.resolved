@@ -1,0 +1,33 @@
+{
+  "originHash" : "9dd044a27048555b6d786367cb1bcb8d8f53253fc574ddcdf40d44333300185b",
+  "pins" : [
+    {
+      "identity" : "alamofire",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Alamofire/Alamofire.git",
+      "state" : {
+        "revision" : "513364f870f6bfc468f9d2ff0a95caccc10044c5",
+        "version" : "5.10.2"
+      }
+    },
+    {
+      "identity" : "basemvvmckit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/mertalp0/BaseMVVMCKit.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "18e8b285e426343dfab1986c92e0136d4e047d2f"
+      }
+    },
+    {
+      "identity" : "snapkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SnapKit/SnapKit.git",
+      "state" : {
+        "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
+        "version" : "5.7.1"
+      }
+    }
+  ],
+  "version" : 3
+}
