@@ -15,6 +15,7 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
     private var  pageTitle : UILabel!
     private var  loginButton : CustomButton!
     private var  registerButton : CustomButton!
+    private var  backButton : CustomButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,20 +24,12 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
         setupUI()
         setupActions()
     }
-    
-    //MARK: - Deinit
-    deinit {
-        print("\(self) deallocated")
-    }
-    
-    
-    
-    
+
     private func setupUI(){
         
         //Page Title
         pageTitle = UILabel()
-        pageTitle.text = "register vc"
+        pageTitle.text = String(describing: type(of: self))
         pageTitle.textColor = .black
         
         view.addSubview(pageTitle)
@@ -63,11 +56,23 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-120)
         }
+        
+        //Login button
+        backButton = CustomButton()
+        backButton.configure(title: "Back", backgroundColor: .systemGreen, textColor: .white)
+        
+        view.addSubview(backButton)
+        backButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-240)
+        }
+        
     }
     
     private func setupActions(){
         loginButton.addTarget(self, action: #selector(onTapLogin) , for: .touchUpInside)
         registerButton.addTarget(self, action: #selector(onTapRegister), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(onTapBack), for: .touchUpInside)
     }
 }
 
@@ -75,10 +80,14 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
 extension RegisterVC {
     
     @objc func onTapLogin(){
-        viewModel.register()
+        coordinator?.showLogin()
     }
     
     @objc func onTapRegister(){
-      
+        coordinator?.showDashboard()
+    }
+    
+    @objc func onTapBack(){
+        coordinator?.pop()
     }
 }

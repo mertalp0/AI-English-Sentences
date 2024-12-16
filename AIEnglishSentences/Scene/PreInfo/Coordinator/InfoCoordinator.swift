@@ -7,6 +7,12 @@
 
 import BaseMVVMCKit
 
+enum NavigationSource {
+    case info
+    case register
+    case login
+}
+
 final class InfoCoordinator: BaseCoordinator {
     
     override func start() {
@@ -17,14 +23,12 @@ final class InfoCoordinator: BaseCoordinator {
     }
     
     func showLogin() {
-        let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!)
-        addChildCoordinator(loginCoordinator)
+        let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, from: .info)
         loginCoordinator.start()
     }
     
     func showRegister() {
-        let registerCoordinator = RegisterCoordinator(navigationController: self.navigationController!)
-        addChildCoordinator(registerCoordinator)
+        let registerCoordinator = RegisterCoordinator(navigationController: self.navigationController!, from: .info)
         registerCoordinator.start()
     }
    
