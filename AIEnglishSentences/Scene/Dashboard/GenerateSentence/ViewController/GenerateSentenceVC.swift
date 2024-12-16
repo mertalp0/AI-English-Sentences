@@ -12,11 +12,14 @@ final class GenerateSentenceVC: BaseViewController<GenerateSentenceCoordinator, 
 
     //MARK: - UI Elements
     private var  pageTitle : UILabel!
-    
+    private weak var generateButton: CustomButton?
+
+
     override func viewDidLoad() {
         super.viewDidLoad()
        
         setupUI()
+        setupActions()
     }
     
     private func setupUI(){
@@ -31,6 +34,29 @@ final class GenerateSentenceVC: BaseViewController<GenerateSentenceCoordinator, 
         pageTitle.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
+    
+        let button = CustomButton()
+           button.configure(title: "Generate", backgroundColor: .systemBlue, textColor: .white)
+        
+           view.addSubview(button)
+           button.snp.makeConstraints { make in
+               make.bottom.equalToSuperview().offset(-120)
+               make.centerX.equalToSuperview()
+           }
+           generateButton = button
     }
+    
+    private func setupActions(){
+        generateButton?.addTarget(self, action: #selector(onTapGenerate), for: .touchUpInside)
+    }
+}
 
+//MARK: - Actions
+
+extension GenerateSentenceVC {
+    @objc func onTapGenerate(){
+        tabBarController?.tabBar.isUserInteractionEnabled = false
+
+        viewModel.generateSentences()
+    }
 }

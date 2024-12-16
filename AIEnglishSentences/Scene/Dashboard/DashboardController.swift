@@ -9,7 +9,6 @@ import UIKit
 
 final class DashboardController: UITabBarController {
     
-    
     private let historyCoordinator: HistoryCoordinator
     private let generateSentenceCoordinator: GenerateSentenceCoordinator
     private let profileCoordinator: ProfileCoordinator

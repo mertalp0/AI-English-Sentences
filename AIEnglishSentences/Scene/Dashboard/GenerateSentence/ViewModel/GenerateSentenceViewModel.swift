@@ -9,4 +9,9 @@ import BaseMVVMCKit
 
 final class GenerateSentenceViewModel: BaseViewModel{
     
+    func generateSentences(){
+        startLoading()
+        print("generating")
+    }
+
 }
