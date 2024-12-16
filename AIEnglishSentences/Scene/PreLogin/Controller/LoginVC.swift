@@ -6,10 +6,17 @@
 //
 
 import UIKit
+import BaseMVVMCKit
 
-final class LoginVC: UIViewController{
+final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel>{
     
     override func viewDidLoad() {
+        super.viewDidLoad()
         view.backgroundColor = .red
+    }
+    
+    //MARK: - Deinit
+    deinit {
+        print("\(self) deallocated")
     }
 }
