@@ -1,5 +1,5 @@
 //
-//  LoginVC.swift
+//  RegisterVC.swift
 //  AIEnglishSentences
 //
 //  Created by mert alp on 15.12.2024.
@@ -7,9 +7,9 @@
 
 import UIKit
 import BaseMVVMCKit
+import SnapKit
 
-final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel>{
-    
+final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewModel>{
     
     //MARK: - UI Elements
     private var  pageTitle : UILabel!
@@ -24,7 +24,7 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel>{
         setupUI()
         setupActions()
     }
-    
+
     private func setupUI(){
         
         //Page Title
@@ -77,14 +77,14 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel>{
 }
 
 //MARK: - Actions
-extension LoginVC {
+extension RegisterVC {
     
     @objc func onTapLogin(){
-        coordinator?.showDashboard()
+        coordinator?.showLogin()
     }
     
     @objc func onTapRegister(){
-        coordinator?.showRegister()
+        coordinator?.showDashboard()
     }
     
     @objc func onTapBack(){
