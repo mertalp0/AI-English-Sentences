@@ -1,0 +1,12 @@
+# Config dosyalarını gizle
+Config/*.xcconfig
+
+# Xcode kullanıcı dosyalarını gizle
+*.xcuserdata
+*.xcworkspace
+*.lock
+*.DS_Store
+
+# Derleme çıktıları
+DerivedData/
+build/

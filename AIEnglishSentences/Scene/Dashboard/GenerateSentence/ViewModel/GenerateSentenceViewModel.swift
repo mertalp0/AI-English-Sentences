@@ -8,5 +8,13 @@
 import BaseMVVMCKit
 
 final class GenerateSentenceViewModel: BaseViewModel{
-    
+    let openAIService = OpenAIService()
+
+    func generateSentences(){
+      
+        
+    }
+
+ 
+
 }
