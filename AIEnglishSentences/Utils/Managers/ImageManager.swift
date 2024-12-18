@@ -5,7 +5,6 @@
 //  Created by mert alp on 17.12.2024.
 //
 
-
 import UIKit
 
 final class ImageManager {

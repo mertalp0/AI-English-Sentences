@@ -3,4 +3,84 @@
    uuid = "9E09C677-6B6D-448D-A82C-5C02530DB130"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2B3D4E00-DC49-410C-9F14-3BF28B732B1F"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AIEnglishSentences/Scene/Dashboard/GenerateSentence/ViewModel/GenerateSentenceViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "19"
+            endingLineNumber = "19"
+            landmarkName = "generateSentences()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "2B3D4E00-DC49-410C-9F14-3BF28B732B1F - 4e9b51183bd39807"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AIEnglishSentences.GenerateSentenceViewModel.generateSentences() -&gt; ()"
+                  moduleName = "AIEnglishSentences.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mertalp/AI-English-Sentences/AIEnglishSentences/Scene/Dashboard/GenerateSentence/ViewModel/GenerateSentenceViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "20"
+                  endingLineNumber = "20">
+               </Location>
+               <Location
+                  uuid = "2B3D4E00-DC49-410C-9F14-3BF28B732B1F - 10d210ced8e696eb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Result&lt;Swift.Array&lt;Swift.String&gt;, Swift.Error&gt;) -&gt; () in AIEnglishSentences.GenerateSentenceViewModel.generateSentences() -&gt; ()"
+                  moduleName = "AIEnglishSentences.debug.dylib"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/mertalp/AI-English-Sentences/AIEnglishSentences/Scene/Dashboard/GenerateSentence/ViewModel/GenerateSentenceViewModel.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "20"
+                  endingLineNumber = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "C16017A5-D5E0-4433-9292-0DE69D309DBC"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AIEnglishSentences/Scene/Dashboard/GenerateSentence/ViewModel/GenerateSentenceViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "23"
+            endingLineNumber = "23"
+            landmarkName = "generateSentences()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "2D0C7912-A086-4EFB-90E7-DA039C2AB009"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "AIEnglishSentences/Scene/Dashboard/GenerateSentence/ViewModel/GenerateSentenceViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "generateSentences()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>
