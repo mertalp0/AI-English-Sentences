@@ -9,9 +9,18 @@ import BaseMVVMCKit
 
 final class AppCoordinator: BaseCoordinator{
     
+    private let authService = AuthService.shared
+    
     override func start() {
-        let infoCoordinator = InfoCoordinator(navigationController: self.navigationController!)
-        infoCoordinator.start()
+        
+        if authService.isUserLoggedIn() {
+            let dashboardCoordinator = DashboardCoordinator(navigationController: self.navigationController!)
+            dashboardCoordinator.start()
+            
+        }else {
+            let infoCoordinator = InfoCoordinator(navigationController: self.navigationController!)
+            infoCoordinator.start()
+        }
     }
     
 }
