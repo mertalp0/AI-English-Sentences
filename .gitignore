@@ -10,3 +10,6 @@ Config/*.xcconfig
 # Derleme çıktıları
 DerivedData/
 build/
+
+# Firebase Config File
+GoogleService-Info.plist
