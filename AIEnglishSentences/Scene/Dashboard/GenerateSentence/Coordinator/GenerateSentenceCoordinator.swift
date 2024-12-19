@@ -18,5 +18,18 @@ final class GenerateSentenceCoordinator: BaseCoordinator {
         push(generateSentenceVC)
         
     }
+    
+    func showResult() {
+        guard let navigationController = navigationController else {
+            fatalError("Navigation controller is nil in showResult")
+        }
+        let resultCoordinator = ResultCoordinator(navigationController: navigationController)
+        resultCoordinator.start()
+
+        if let tabBarController = navigationController.tabBarController {
+            tabBarController.setTabBar(hidden: true, animated: false)
+        }
+    }
+
 }
 
