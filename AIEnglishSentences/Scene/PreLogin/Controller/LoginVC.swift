@@ -80,7 +80,17 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel>{
 extension LoginVC {
     
     @objc func onTapLogin(){
-        coordinator?.showDashboard()
+        
+        viewModel.login(email: "mertalp@gmail.com", password: "123123") { isSucces in
+            switch isSucces {
+            case true:
+                self.coordinator?.showDashboard()
+                
+            case false:
+                print("Kayıt sırasında bir hata oluştu.")
+                
+            }
+        }
     }
     
     @objc func onTapRegister(){

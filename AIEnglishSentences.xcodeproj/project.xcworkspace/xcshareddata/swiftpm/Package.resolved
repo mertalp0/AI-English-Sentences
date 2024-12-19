@@ -1,5 +1,5 @@
 {
-  "originHash" : "0bcb8914949086f28fb1a55088e8861bb30566b9a3bd8554e8a6510d1f3852c5",
+  "originHash" : "c6da96a11b9bcbd9fa5fc04191941822bf95f46634ddd6a7d03a81f2c1396180",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -143,15 +143,6 @@
       "state" : {
         "revision" : "ebc7251dd5b37f627c93698e4374084d98409633",
         "version" : "1.28.2"
-      }
-    },
-    {
-      "identity" : "swiftopenai",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftBeta/SwiftOpenAI",
-      "state" : {
-        "revision" : "b316788cf0e6584cc730d8231112dd2c76458713",
-        "version" : "1.9.0"
       }
     }
   ],

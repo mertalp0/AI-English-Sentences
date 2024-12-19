@@ -24,7 +24,7 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
         setupUI()
         setupActions()
     }
-
+    
     private func setupUI(){
         
         //Page Title
@@ -84,7 +84,17 @@ extension RegisterVC {
     }
     
     @objc func onTapRegister(){
-        coordinator?.showDashboard()
+        
+        viewModel.register(email: "mertalp@gmail.com", password: "123123") { isSucces in
+            switch isSucces {
+            case true:
+                self.coordinator?.showDashboard()
+                
+            case false:
+                print("Kayıt sırasında bir hata oluştu.")
+                
+            }
+        }
     }
     
     @objc func onTapBack(){

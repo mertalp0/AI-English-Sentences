@@ -13,7 +13,7 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel>{
     //MARK: - UI Elements
     private var  pageTitle : UILabel!
     private var  logoutButton : CustomButton!
- 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -55,6 +55,15 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel>{
 extension ProfileVC {
     
     @objc func onTapLogout(){
-        coordinator?.showInfo()
+        
+        viewModel.logout { isSucces in
+            switch isSucces {
+            case true:
+                self.coordinator?.showInfo()
+                
+            case false:
+                print("Kayıt sırasında bir hata oluştu.")
+            }
+        }
     }
 }
