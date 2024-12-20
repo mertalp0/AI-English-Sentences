@@ -8,10 +8,16 @@
 import UIKit
 import BaseMVVMCKit
 
+enum Gender: String{
+    case male = "Male"
+    case female = "Female"
+    case preferNotToSay = "Prefer Not to Say"
+}
+
 final class RegisterViewModel: BaseViewModel {
     private let authService = AuthService.shared
     
-    func register(email: String, password: String, completion: @escaping (Bool) -> Void) {
+    func register(email: String, name: String, password: String, gender:Gender ,completion: @escaping (Bool) -> Void) {
         
         startLoading()
         authService.signUpWithEmail(email: email, password: password) { result in

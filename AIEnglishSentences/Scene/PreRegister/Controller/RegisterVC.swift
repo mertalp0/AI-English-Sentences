@@ -12,10 +12,15 @@ import SnapKit
 final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewModel>{
     
     //MARK: - UI Elements
-    private var  pageTitle : UILabel!
-    private var  loginButton : CustomButton!
-    private var  registerButton : CustomButton!
-    private var  backButton : CustomButton!
+    private var pageTitle : UILabel!
+    private var loginButton : CustomButton!
+    private var registerButton : CustomButton!
+    private var backButton : CustomButton!
+    private var emailTextField : CustomTextField!
+    private var passwordTextField : CustomTextField!
+    private var nameTextField : CustomTextField!
+    private var gender : Gender = .preferNotToSay
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,6 +42,45 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
             make.center.equalToSuperview()
         }
         
+        setupTextFields()
+        setupButtons()
+       
+        
+    }
+    
+    private func setupTextFields(){
+        // Email TextField
+        emailTextField = CustomTextField()
+        emailTextField.configure(placeholder: "Enter your email",type: .normal)
+        view.addSubview(emailTextField)
+        emailTextField.snp.makeConstraints { make in
+            make.top.equalTo(view.snp.top).offset(140)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+        }
+    
+        // Name TextField
+        nameTextField = CustomTextField()
+        nameTextField.configure(placeholder: "Enter your Name",type: .normal)
+        view.addSubview(nameTextField)
+        nameTextField.snp.makeConstraints { make in
+            make.top.equalTo(emailTextField.snp.bottom).offset(20)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+        }
+        
+        // Password TextField
+        passwordTextField = CustomTextField()
+        passwordTextField.configure(placeholder: "Enter your password",type: .password)
+        view.addSubview(passwordTextField)
+        passwordTextField.snp.makeConstraints { make in
+            make.top.equalTo(nameTextField.snp.bottom).offset(20)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+        }
+    }
+    
+    private func setupButtons(){
         //Login button
         loginButton = CustomButton()
         loginButton.configure(title: "Login", backgroundColor: .systemGreen, textColor: .white)
@@ -66,7 +110,6 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-240)
         }
-        
     }
     
     private func setupActions(){
@@ -84,15 +127,23 @@ extension RegisterVC {
     }
     
     @objc func onTapRegister(){
+        let isEmailValid = emailTextField.validate(with: "Please enter your email.")
+        let isNameValid = nameTextField.validate(with: "Please enter your name.")
+        let isPasswordValid = passwordTextField.validate(with: "Please enter your password.")
         
-        viewModel.register(email: "mertalp@gmail.com", password: "123123") { isSucces in
+        guard isEmailValid, isPasswordValid, isNameValid else {
+            print("Validation failed.")
+            return
+        }
+
+        viewModel.register(email: emailTextField.text!, name:nameTextField.text!, password: passwordTextField.text!, gender: gender ) { isSucces in
             switch isSucces {
             case true:
                 self.coordinator?.showDashboard()
                 
             case false:
-                print("Kayıt sırasında bir hata oluştu.")
-                
+                print("Register failed.")
+        
             }
         }
     }
