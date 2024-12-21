@@ -12,6 +12,7 @@ struct UserModel: Codable {
     @DocumentID var id: String? 
     let name: String
     let email: String
+    let gender: String
     let createdAt: Date
     var generate: [String]
 }

@@ -9,6 +9,11 @@ import FirebaseFirestore
 import Foundation
 
 final class UserService {
+    
+    static var shared = UserService()
+    
+    private init (){}
+    
     private let client = FirebaseClient.shared
 
     func saveUser(user: UserModel, completion: @escaping (Result<Void, Error>) -> Void) {

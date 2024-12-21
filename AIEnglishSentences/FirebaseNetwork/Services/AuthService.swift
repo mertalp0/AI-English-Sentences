@@ -12,17 +12,17 @@ final class AuthService {
     static let shared = AuthService()
     private init() {}
     
-    // MARK: - Kullanıcı Giriş Yapmış mı?
+    // MARK: - Is User Logged In?
     func isUserLoggedIn() -> Bool {
         return Auth.auth().currentUser != nil
     }
     
-    // MARK: - Kullanıcı ID'si Al
+    // MARK: - Get Current User ID
     func getCurrentUserId() -> String? {
         return Auth.auth().currentUser?.uid
     }
     
-    // MARK: - E-Posta ile Kayıt Ol
+    // MARK: - Sign Up with Email
     func signUpWithEmail(email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { result, error in
             if let error = error {
@@ -35,7 +35,7 @@ final class AuthService {
         }
     }
     
-    // MARK: - E-Posta ile Giriş Yap
+    // MARK: - Sign In with Email
     func signInWithEmail(email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { result, error in
             if let error = error {
@@ -48,7 +48,11 @@ final class AuthService {
         }
     }
     
-    // MARK: - Çıkış Yap
+    func signInWithGoogle(){}
+    
+    func signInWithApple(){}
+    
+    // MARK: - Log Out
     func logout(completion: @escaping (Result<Void, Error>) -> Void) {
         do {
             try Auth.auth().signOut()
