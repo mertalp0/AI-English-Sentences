@@ -10,11 +10,19 @@ import UIKit
 
 final class ResultCoordinator: BaseCoordinator {
     
+    var generateModel : GenerateModel?
+    
+    init(navigationController: UINavigationController, generateModel: GenerateModel? = nil) {
+        super.init(navigationController: navigationController)
+        self.generateModel = generateModel
+    }
+    
     override func start() {
         
         let resultViewModel = ResultViewModel()
         let resultVC = ResultVC(viewModel: resultViewModel)
         resultVC.coordinator = self
+        resultVC.generateModel = generateModel
         push(resultVC)
         
     }

@@ -10,9 +10,14 @@ import BaseMVVMCKit
 
 final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel>{
     
+    //MARK: - Properties
+    var generateModel: GenerateModel?
+    
     //MARK: - UI Elements
-    private var  pageTitle : UILabel!
-    private var  backButton : CustomButton!
+    private var pageTitle: UILabel!
+    private var backButton: CustomButton!
+    private var tableView: UITableView!
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,10 +36,11 @@ final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel>{
         
         view.addSubview(pageTitle)
         pageTitle.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.centerX.equalToSuperview()
+            make.top.equalTo(UIHelper.statusBarHeight + 10)
         }
         
-        //back Button
+        //Back Button
         backButton = CustomButton()
         backButton.configure(title: "Back", backgroundColor: .systemGreen, textColor: .white)
         
@@ -43,12 +49,48 @@ final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel>{
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-250)
         }
+        
+        setupTableView()
+
+    }
+
+    private func setupTableView(){
+    
+        tableView = UITableView()
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        view.addSubview(tableView)
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(pageTitle.snp.bottom)
+            make.bottom.equalTo(backButton.snp.top)
+            make.left.right.equalToSuperview()
+        }
+        
     }
     
     private func setupActions(){
         backButton.addTarget(self, action: #selector(onTapBack) , for: .touchUpInside)
         
     }
+}
+
+//MARK: -
+extension ResultVC: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        return generateModel?.sentences.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        cell.textLabel?.text = generateModel?.sentences[indexPath.row]
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
+        cell.selectionStyle = .none
+        return cell
+    }
+    
+    
 }
 
 //MARK: - Actions

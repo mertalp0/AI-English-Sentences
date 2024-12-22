@@ -33,7 +33,7 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel>{
         titleLabel.textAlignment = .center
         view.addSubview(titleLabel)
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(UIHelper.statusBarHeight + 10) // Kamera alanına göre konumlandır
+            make.top.equalToSuperview().offset(UIHelper.statusBarHeight + 10)
             make.centerX.equalToSuperview()
         }
         pageTitle = titleLabel

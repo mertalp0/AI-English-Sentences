@@ -69,14 +69,15 @@ extension GenerateSentenceVC {
         
         guard let button = generateButton else { return }
         print("Generate button tapped: \(button)")
-        viewModel.generateSentences { isSucces in
-            switch isSucces{
-            case true:
+        viewModel.generateSentences { result in
+            switch result{
+            case .success(let generateModel):
+                
                 DispatchQueue.main.async {
-                    self.coordinator?.showResult()
+                    self.coordinator?.showResult(generateModel: generateModel)
                 }
             default:
-                print(" generateSentences Error")
+                print("generateSentences Error")
             }
             
         }
