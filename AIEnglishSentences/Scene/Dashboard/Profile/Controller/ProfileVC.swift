@@ -55,13 +55,14 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel>{
 extension ProfileVC {
     
     @objc func onTapLogout(){
-        
+        tabBarController?.tabBar.isUserInteractionEnabled = false
         viewModel.logout { isSucces in
             switch isSucces {
             case true:
                 self.coordinator?.showInfo()
                 
             case false:
+                self.tabBarController?.tabBar.isUserInteractionEnabled = true
                 print("Kayıt sırasında bir hata oluştu.")
             }
         }

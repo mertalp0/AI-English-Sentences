@@ -23,7 +23,6 @@ final class DashboardCoordinator: BaseCoordinator {
         let profileCoordinator = ProfileCoordinator(navigationController: profileNavigationController)
         profileCoordinator.start()
         
-
         let dashboardController = DashboardController(
             historyCoordinator: historyCoordinator,
             generateSentenceCoordinator: generateSentenceCoordinator,
