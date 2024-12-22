@@ -28,6 +28,7 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
         
         setupUI()
         setupActions()
+        setupKeyboardDismissRecognizer()
     }
     
     private func setupUI(){

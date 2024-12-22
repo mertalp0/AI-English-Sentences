@@ -25,6 +25,7 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel>{
         
         setupUI()
         setupActions()
+        setupKeyboardDismissRecognizer() 
     }
     
     private func setupUI(){
