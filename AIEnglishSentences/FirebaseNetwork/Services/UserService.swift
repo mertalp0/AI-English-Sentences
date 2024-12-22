@@ -15,19 +15,15 @@ final class UserService {
     private init (){}
     
     private let client = FirebaseClient.shared
-
+    
     func saveUser(user: UserModel, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let userId = user.id else {
-            completion(.failure(FirebaseError.unknown))
-            return
-        }
-
+        
         let request = FirebaseRequest(
             collection: "users",
-            documentID: userId,
+            documentID: user.id,
             data: try? Firestore.Encoder().encode(user)
         )
-
+        
         client.create(request: request) { result in
             switch result {
             case .success:
@@ -37,14 +33,42 @@ final class UserService {
             }
         }
     }
-
+    
     func getUser(by userId: String, completion: @escaping (Result<UserModel, Error>) -> Void) {
         let request = FirebaseRequest(
             collection: "users",
             documentID: userId,
             data: nil
         )
-
+        
         client.read(request: request, completion: completion)
+    }
+    
+    func addGenerateIdToUser(userId: String, generateId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let userRef = Firestore.firestore().collection("users").document(userId)
+        
+        userRef.updateData([
+            "generate": FieldValue.arrayUnion([generateId])
+        ]) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+    
+    func removeGenerateIdFromUser(userId: String, generateId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let userRef = Firestore.firestore().collection("users").document(userId)
+        
+        userRef.updateData([
+            "generate": FieldValue.arrayRemove([generateId])
+        ]) { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
     }
 }

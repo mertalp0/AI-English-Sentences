@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import NotificationCenter
 import BaseMVVMCKit
 
 final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel>{
@@ -21,7 +22,21 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel>{
         super.viewDidLoad()
         setupUI()
         setupActions()
+        setupObservers()
+        fetchSentences()
     }
+    
+    private func setupObservers() {
+           NotificationCenter.default.addObserver(self, selector: #selector(generateModelsDidUpdate), name: .generateModelsUpdated, object: nil)
+       }
+
+       deinit {
+           NotificationCenter.default.removeObserver(self, name: .generateModelsUpdated, object: nil)
+       }
+
+       @objc private func generateModelsDidUpdate() {
+           tableView.reloadData()
+       }
     
     private func setupUI() {
         view.backgroundColor = .white
@@ -83,21 +98,28 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel>{
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
 extension HistoryVC: UITableViewDataSource, UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.sentences.count
+        return GenerateManager.shared.generateModels.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell" , for: indexPath)
-        cell.textLabel?.text = viewModel.sentences[indexPath.row]
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
-        cell.selectionStyle = .none
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let model = GenerateManager.shared.generateModels[indexPath.row]
+        cell.textLabel?.text = model.words
         return cell
     }
-    
-    
 }
+//MARK: - Fetch Sentences
+extension HistoryVC {
+    private func fetchSentences(){
+        viewModel.fetchSentences(){ isSucces in
+            if(isSucces){
+               
+            }
+        }
+    }
+}
+
 
 // MARK: - Actions
 extension HistoryVC {
@@ -112,4 +134,29 @@ extension HistoryVC {
         print("Delete Sentences Button tapped: \(button)")
         
     }
+}
+
+
+final class GenerateManager {
+    static let shared = GenerateManager()
+    private init() {}
+
+    var generateModels: [GenerateModel] = [] {
+        didSet {
+            NotificationCenter.default.post(name: .generateModelsUpdated, object: nil)
+        }
+    }
+
+    func addGenerateModel(_ model: GenerateModel) {
+        generateModels.append(model)
+    }
+
+    func removeGenerateModel(at index: Int) {
+        guard index < generateModels.count else { return }
+        generateModels.remove(at: index)
+    }
+}
+
+extension Notification.Name {
+    static let generateModelsUpdated = Notification.Name("generateModelsUpdated")
 }

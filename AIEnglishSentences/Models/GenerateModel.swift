@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 
 struct GenerateModel: Codable {
-    @DocumentID var id: String? 
+    let id: String?
     let words: String
     let sentences: [String]
 }
