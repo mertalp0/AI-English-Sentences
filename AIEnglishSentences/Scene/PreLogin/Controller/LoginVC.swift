@@ -7,6 +7,9 @@
 
 import UIKit
 import BaseMVVMCKit
+import FirebaseCore
+import GoogleSignIn
+import FirebaseAuth
 
 final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel>{
     
@@ -16,6 +19,7 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel>{
     private var loginButton : CustomButton!
     private var registerButton : CustomButton!
     private var backButton : CustomButton!
+    private var googleButton : CustomButton!
     private var emailTextField : CustomTextField!
     private var passwordTextField : CustomTextField!
     
@@ -25,7 +29,7 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel>{
         
         setupUI()
         setupActions()
-        setupKeyboardDismissRecognizer() 
+        setupKeyboardDismissRecognizer()
     }
     
     private func setupUI(){
@@ -43,8 +47,8 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel>{
         setupTextFields()
         setupButtons()
         
-        }
-        
+    }
+    
     private func setupTextFields(){
         // Email TextField
         emailTextField = CustomTextField()
@@ -68,42 +72,52 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel>{
     }
     
     private func setupButtons(){
-    //Login button
-    loginButton = CustomButton()
-    loginButton.configure(title: "Login", backgroundColor: .systemGreen, textColor: .white)
-    
-    view.addSubview(loginButton)
-    loginButton.snp.makeConstraints { make in
-        make.centerX.equalToSuperview()
-        make.bottom.equalToSuperview().offset(-50)
+        //Login button
+        loginButton = CustomButton()
+        loginButton.configure(title: "Login", backgroundColor: .systemGreen, textColor: .white)
+        
+        view.addSubview(loginButton)
+        loginButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-50)
+        }
+        
+        //Register button
+        registerButton = CustomButton()
+        registerButton.configure(title: "Register", backgroundColor: .systemGreen, textColor: .white)
+        
+        view.addSubview(registerButton)
+        registerButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-120)
+        }
+        
+        //Back button
+        backButton = CustomButton()
+        backButton.configure(title: "Back", backgroundColor: .systemGreen, textColor: .white)
+        
+        view.addSubview(backButton)
+        backButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-240)
+        }
+        
+        //Google button
+        googleButton = CustomButton()
+        googleButton.configure(title: "Google", backgroundColor: .cyan, textColor: .white)
+        
+        view.addSubview(googleButton)
+        googleButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalTo(registerButton.snp.top).offset(-50)
+        }
     }
-    
-    //Register button
-    registerButton = CustomButton()
-    registerButton.configure(title: "Register", backgroundColor: .systemGreen, textColor: .white)
-    
-    view.addSubview(registerButton)
-    registerButton.snp.makeConstraints { make in
-        make.centerX.equalToSuperview()
-        make.bottom.equalToSuperview().offset(-120)
-    }
-    
-    //Back button
-    backButton = CustomButton()
-    backButton.configure(title: "Back", backgroundColor: .systemGreen, textColor: .white)
-    
-    view.addSubview(backButton)
-    backButton.snp.makeConstraints { make in
-        make.centerX.equalToSuperview()
-        make.bottom.equalToSuperview().offset(-240)
-}
-    
-}
     
     private func setupActions(){
         loginButton.addTarget(self, action: #selector(onTapLogin) , for: .touchUpInside)
         registerButton.addTarget(self, action: #selector(onTapRegister), for: .touchUpInside)
         backButton.addTarget(self, action: #selector(onTapBack), for: .touchUpInside)
+        googleButton.addTarget(self, action: #selector(onTapGoogleSignIn), for: .touchUpInside)
     }
     
 }
@@ -121,15 +135,12 @@ extension LoginVC {
         }
         
         viewModel.login(email: emailTextField.text!, password: passwordTextField.text!) { isSuccess in
-            switch isSuccess {
-            case true:
+            if(isSuccess){
                 self.coordinator?.showDashboard()
-            case false:
-                print("Login failed")
             }
         }
     }
-
+    
     
     @objc func onTapRegister(){
         coordinator?.showRegister()
@@ -137,5 +148,13 @@ extension LoginVC {
     
     @objc func onTapBack(){
         coordinator?.pop()
+    }
+    
+    @objc private func onTapGoogleSignIn() {
+        viewModel.googleSignIn(from: self) { isSuccess in
+            if(isSuccess){
+                self.coordinator?.showDashboard()
+            }
+        }
     }
 }

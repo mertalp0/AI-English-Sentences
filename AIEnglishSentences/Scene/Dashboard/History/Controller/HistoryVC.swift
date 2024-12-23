@@ -21,22 +21,15 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel>{
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupTableView()
         setupActions()
-        setupObservers()
+        setupNC()
         fetchSentences()
     }
     
-    private func setupObservers() {
-           NotificationCenter.default.addObserver(self, selector: #selector(generateModelsDidUpdate), name: .generateModelsUpdated, object: nil)
-       }
-
-       deinit {
-           NotificationCenter.default.removeObserver(self, name: .generateModelsUpdated, object: nil)
-       }
-
-       @objc private func generateModelsDidUpdate() {
-           tableView.reloadData()
-       }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .generateModelsUpdated, object: nil)
+    }
     
     private func setupUI() {
         view.backgroundColor = .white
@@ -72,9 +65,6 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel>{
             make.centerX.equalToSuperview()
         }
         deleteSentencesButton = deleteSentencesBtn
-        
-        setupTableView()
-        
     }
     
     private func setupTableView(){
@@ -112,12 +102,15 @@ extension HistoryVC: UITableViewDataSource, UITableViewDelegate {
 //MARK: - Fetch Sentences
 extension HistoryVC {
     private func fetchSentences(){
-        viewModel.fetchSentences(){ isSucces in
-            if(isSucces){
-               
-            }
-        }
+        viewModel.fetchSentences()
     }
+}
+
+//MARK: - NotificationCenter
+extension HistoryVC {
+    private func setupNC() {
+           NotificationCenter.default.addObserver(self, selector: #selector(generateModelsDidUpdate), name: .generateModelsUpdated, object: nil)
+       }
 }
 
 
@@ -134,29 +127,8 @@ extension HistoryVC {
         print("Delete Sentences Button tapped: \(button)")
         
     }
-}
-
-
-final class GenerateManager {
-    static let shared = GenerateManager()
-    private init() {}
-
-    var generateModels: [GenerateModel] = [] {
-        didSet {
-            NotificationCenter.default.post(name: .generateModelsUpdated, object: nil)
-        }
+    
+    @objc private func generateModelsDidUpdate() {
+        tableView.reloadData()
     }
-
-    func addGenerateModel(_ model: GenerateModel) {
-        generateModels.append(model)
-    }
-
-    func removeGenerateModel(at index: Int) {
-        guard index < generateModels.count else { return }
-        generateModels.remove(at: index)
-    }
-}
-
-extension Notification.Name {
-    static let generateModelsUpdated = Notification.Name("generateModelsUpdated")
 }
