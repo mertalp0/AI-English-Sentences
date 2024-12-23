@@ -11,6 +11,7 @@ import Foundation
 enum FirebaseError: LocalizedError {
     case missingDocument
     case decodingFailed
+    case documentAlreadyExists
     case unknown
 
     var errorDescription: String? {
@@ -19,6 +20,8 @@ enum FirebaseError: LocalizedError {
             return "The requested document is missing."
         case .decodingFailed:
             return "Failed to decode the document."
+        case .documentAlreadyExists:
+            return "The document already exists in the database."
         case .unknown:
             return "An unknown error occurred."
         }

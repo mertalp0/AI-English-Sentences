@@ -9,12 +9,17 @@ import FirebaseFirestore
 import Foundation
 
 final class GenerateService {
+    
+    static let shared = GenerateService()
+    
     private let client = FirebaseClient.shared
+    
+    private init() {}
 
     func saveGenerate(generate: GenerateModel, completion: @escaping (Result<String, Error>) -> Void) {
         let request = FirebaseRequest(
             collection: "generate",
-            documentID: nil,
+            documentID: generate.id,
             data: try? Firestore.Encoder().encode(generate)
         )
 

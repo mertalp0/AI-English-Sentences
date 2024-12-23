@@ -12,9 +12,9 @@ final class GenerateSentenceViewModel: BaseViewModel{
 
     let openAIService = OpenAIService()
 
-    let inputWords = "FOOTBALL, Computer, Player"
-    let maxWords = 15
-    let sentenceCount = 1
+    let inputWords = "Color Text"
+    let maxWords = 10
+    let sentenceCount = 2
     
     func generateSentences(completion: @escaping(Result<GenerateModel,Error>)->Void){
         startLoading()

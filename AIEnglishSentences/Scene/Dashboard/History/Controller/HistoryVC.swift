@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import NotificationCenter
 import BaseMVVMCKit
 
 final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel>{
@@ -20,7 +21,14 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel>{
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+        setupTableView()
         setupActions()
+        setupNC()
+        fetchSentences()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: .generateModelsUpdated, object: nil)
     }
     
     private func setupUI() {
@@ -57,9 +65,6 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel>{
             make.centerX.equalToSuperview()
         }
         deleteSentencesButton = deleteSentencesBtn
-        
-        setupTableView()
-        
     }
     
     private func setupTableView(){
@@ -83,21 +88,31 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel>{
 
 //MARK: - UITableViewDelegate, UITableViewDataSource
 extension HistoryVC: UITableViewDataSource, UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.sentences.count
+        return GenerateManager.shared.generateModels.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell" , for: indexPath)
-        cell.textLabel?.text = viewModel.sentences[indexPath.row]
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
-        cell.selectionStyle = .none
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        let model = GenerateManager.shared.generateModels[indexPath.row]
+        cell.textLabel?.text = model.words
         return cell
     }
-    
-    
 }
+//MARK: - Fetch Sentences
+extension HistoryVC {
+    private func fetchSentences(){
+        viewModel.fetchSentences()
+    }
+}
+
+//MARK: - NotificationCenter
+extension HistoryVC {
+    private func setupNC() {
+           NotificationCenter.default.addObserver(self, selector: #selector(generateModelsDidUpdate), name: .generateModelsUpdated, object: nil)
+       }
+}
+
 
 // MARK: - Actions
 extension HistoryVC {
@@ -111,5 +126,9 @@ extension HistoryVC {
         guard let button = deleteSentencesButton else { return }
         print("Delete Sentences Button tapped: \(button)")
         
+    }
+    
+    @objc private func generateModelsDidUpdate() {
+        tableView.reloadData()
     }
 }

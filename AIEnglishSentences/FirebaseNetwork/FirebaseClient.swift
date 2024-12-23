@@ -20,16 +20,30 @@ final class FirebaseClient {
             return
         }
 
-        let collection = db.collection(request.collection)
-        collection.document(documentID).setData(data) { error in
+        let documentRef = db.collection(request.collection).document(documentID)
+        
+        // Check if the document already exists
+        documentRef.getDocument { (documentSnapshot, error) in
             if let error = error {
                 completion(.failure(error))
+                return
+            }
+            
+            if let documentSnapshot = documentSnapshot, documentSnapshot.exists {
+                // Document already exists, return an error
+                completion(.failure(FirebaseError.documentAlreadyExists))
             } else {
-                completion(.success(documentID))
+                // Document does not exist, proceed to create it
+                documentRef.setData(data) { error in
+                    if let error = error {
+                        completion(.failure(error))
+                    } else {
+                        completion(.success(documentID))
+                    }
+                }
             }
         }
     }
-
 
     // MARK: - Veri Okuma
     func read<T: Decodable>(request: FirebaseRequest, completion: @escaping (Result<T, Error>) -> Void) {

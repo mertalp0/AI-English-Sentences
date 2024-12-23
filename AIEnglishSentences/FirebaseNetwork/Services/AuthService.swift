@@ -7,6 +7,8 @@
 
 import FirebaseAuth
 import UIKit
+import GoogleSignIn
+import FirebaseCore
 
 final class AuthService {
     static let shared = AuthService()
@@ -48,7 +50,49 @@ final class AuthService {
         }
     }
     
-    func signInWithGoogle(){}
+    func signInWithGoogle(with viewController: UIViewController, completion: @escaping (Result<User, Error>) -> Void) {
+        guard let clientID = FirebaseApp.app()?.options.clientID else {
+            completion(.failure(NSError(domain: "FirebaseError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Missing Firebase Client ID"])))
+            return
+        }
+        
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+        
+        GIDSignIn.sharedInstance.signIn(
+            withPresenting: viewController
+        ) { signInResult, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let result = signInResult else {
+                completion(.failure(NSError(domain: "SignInError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Sign-in result is nil"])))
+                return
+            }
+            
+            let user = result.user
+            let accessToken = user.accessToken.tokenString
+    
+            guard let idToken = user.idToken?.tokenString else {
+                completion(.failure(NSError(domain: "TokenError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch tokens"])))
+                return
+            }
+            
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+            
+            Auth.auth().signIn(with: credential) { authResult, error in
+                if let error = error {
+                    completion(.failure(error))
+                } else if let user = authResult?.user {
+                    completion(.success(user))
+                } else {
+                    completion(.failure(NSError(domain: "SignInError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Unexpected error during sign-in"])))
+                }
+            }
+        }
+    }
     
     func signInWithApple(){}
     

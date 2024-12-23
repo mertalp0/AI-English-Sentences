@@ -8,7 +8,7 @@
 import UIKit
 
 extension UITabBarController {
-    func setTabBar(hidden: Bool, animated: Bool = true, duration: TimeInterval = 0.3) {
+    func setTabBar(hidden: Bool, animated: Bool = true, duration: TimeInterval = 0.2) {
         let tabBarFrame = tabBar.frame
         let offset = hidden ? tabBarFrame.height : -tabBarFrame.height
 

@@ -13,7 +13,6 @@ final class GenerateSentenceVC: BaseViewController<GenerateSentenceCoordinator, 
     // MARK: - UI Elements
     private var pageTitle: UILabel!
     private weak var generateButton: CustomButton?
-    private weak var saveSentencesButton: CustomButton?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -46,20 +45,10 @@ final class GenerateSentenceVC: BaseViewController<GenerateSentenceCoordinator, 
         }
         generateButton = generateBtn
         
-        // Save Sentences Button
-        let saveBtn = CustomButton()
-        saveBtn.configure(title: "Save Sentences", backgroundColor: .systemGreen, textColor: .white)
-        view.addSubview(saveBtn)
-        saveBtn.snp.makeConstraints { make in
-            make.bottom.equalTo(generateBtn.snp.top).offset(-20)
-            make.centerX.equalToSuperview()
-        }
-        saveSentencesButton = saveBtn
     }
     
     private func setupActions() {
         generateButton?.addTarget(self, action: #selector(onTapGenerate), for: .touchUpInside)
-        saveSentencesButton?.addTarget(self, action: #selector(onTapSaveSentences), for: .touchUpInside)
     }
 }
 
@@ -83,9 +72,4 @@ extension GenerateSentenceVC {
         }
     }
     
-    @objc private func onTapSaveSentences() {
-        guard let button = saveSentencesButton else { return }
-        print("Save Sentences button tapped: \(button)")
-     
-    }
 }
