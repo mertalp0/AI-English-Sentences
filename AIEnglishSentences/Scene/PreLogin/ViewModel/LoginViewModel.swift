@@ -7,10 +7,10 @@
 
 import BaseMVVMCKit
 import GoogleSignIn
-import FirebaseAuth
-import FirebaseCore
+import AuthenticationServices
 
 final class LoginViewModel: BaseViewModel {
+    
     private let authService = AuthService.shared
     private let userService = UserService.shared
     
@@ -66,7 +66,40 @@ final class LoginViewModel: BaseViewModel {
         }
     }
     
-    private func saveUserToFirestore(userId: String, name: String, email: String, gender: Gender, completion: @escaping (Bool) -> Void) {
+    func signInWithApple(presentationAnchor: ASPresentationAnchor, completion: @escaping (Bool) -> Void) {
+            startLoading()
+           authService.signInWithApple(presentationAnchor: presentationAnchor) { [weak self] result in
+               switch result {
+               case .success(let authResult):
+                   let userId = authResult.user.uid
+                   let email = authResult.user.email ?? "No Email"
+                   let name = authResult.user.displayName ?? "Apple User"
+                   
+                   self?.saveUserToFirestore(userId: userId, name: name, email: email, gender: .preferNotToSay) { success in
+                       self?.stopLoading()
+                       if success {
+                           print("Firestore kaydı başarılı: \(userId)")
+                           completion(true)
+                       } else {
+                           print("Firestore kaydı başarısız: \(userId)")
+                           completion(false)
+                       }
+                       
+                }
+                   
+               case .failure(let error):
+                   self?.stopLoading()
+                   self?.handleError(message: error.localizedDescription)
+                   print("Apple Sign-In Failed: \(error.localizedDescription)")
+                   completion(false)
+               }
+           }
+       }
+}
+
+//MARK: - Helper func saveUserToFirestore
+extension LoginViewModel {
+    private  func saveUserToFirestore(userId: String, name: String, email: String, gender: Gender, completion: @escaping (Bool) -> Void) {
         let userModel = UserModel(
             id: userId,
             name: name,
