@@ -51,6 +51,7 @@ final class AuthService {
         }
     }
     
+    // MARK: - Sign In With Goole
     func signInWithGoogle(with viewController: UIViewController, completion: @escaping (Result<User, Error>) -> Void) {
         guard let clientID = FirebaseApp.app()?.options.clientID else {
             completion(.failure(NSError(domain: "FirebaseError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Missing Firebase Client ID"])))
@@ -75,7 +76,7 @@ final class AuthService {
             
             let user = result.user
             let accessToken = user.accessToken.tokenString
-    
+            
             guard let idToken = user.idToken?.tokenString else {
                 completion(.failure(NSError(domain: "TokenError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch tokens"])))
                 return
@@ -95,15 +96,12 @@ final class AuthService {
         }
     }
     
-    func signInWithApple(
-            presentationAnchor: ASPresentationAnchor,
-            completion: @escaping (Result<AuthDataResult, Error>) -> Void
-        ) {
-            AppleAuthorizationHandler.shared.signInWithApple(
-                presentationAnchor: presentationAnchor,
-                completion: completion
-            )
-        }
+    // MARK: - Sign In With Apple
+    func signInWithApple(presentationAnchor: ASPresentationAnchor, completion: @escaping (Result<AuthDataResult, Error>) -> Void) {
+        AppleAuthorizationHandler.shared.signInWithApple(
+            presentationAnchor: presentationAnchor,
+            completion: completion )
+    }
     
     // MARK: - Log Out
     func logout(completion: @escaping (Result<Void, Error>) -> Void) {
@@ -114,78 +112,6 @@ final class AuthService {
             completion(.failure(error))
         }
     }
+    
 }
 
-
-final class AppleAuthorizationHandler: NSObject {
-    static let shared = AppleAuthorizationHandler() // Singleton
-    
-    private var completionHandler: ((Result<AuthDataResult, Error>) -> Void)?
-    private var presentationAnchor: ASPresentationAnchor?
-    
-    private override init() {}
-    
-    func signInWithApple(
-        presentationAnchor: ASPresentationAnchor,
-        completion: @escaping (Result<AuthDataResult, Error>) -> Void
-    ) {
-        let provider = ASAuthorizationAppleIDProvider()
-        let request = provider.createRequest()
-        request.requestedScopes = [.fullName, .email]
-        
-        let controller = ASAuthorizationController(authorizationRequests: [request])
-        controller.delegate = self
-        controller.presentationContextProvider = self
-        
-        // Kullanıcıya Apple giriş ekranını göster
-        controller.performRequests()
-        
-        // Completion handler'ı saklıyoruz
-        self.completionHandler = completion
-        self.presentationAnchor = presentationAnchor
-    }
-}
-
-// MARK: - ASAuthorizationControllerDelegate
-extension AppleAuthorizationHandler: ASAuthorizationControllerDelegate {
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
-        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            guard let identityToken = appleIDCredential.identityToken,
-                  let idTokenString = String(data: identityToken, encoding: .utf8) else {
-                print("Failed to retrieve identity token.")
-                self.completionHandler?(.failure(NSError(domain: "AppleAuthorizationHandler", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid identity token"])))
-                return
-            }
-            
-            // Firebase Credential oluştur
-            let credential = OAuthProvider.credential(
-                withProviderID: "apple.com",
-                idToken: idTokenString,
-                rawNonce: ""
-            )
-            
-            // Firebase ile giriş yap
-            Auth.auth().signIn(with: credential) { authResult, error in
-                if let error = error {
-                    print("Firebase Sign-In Error: \(error.localizedDescription)")
-                    self.completionHandler?(.failure(error))
-                } else if let authResult = authResult {
-                    print("Firebase Sign-In Success!")
-                    self.completionHandler?(.success(authResult))
-                }
-            }
-        }
-    }
-    
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        print("Apple Sign-In Failed: \(error.localizedDescription)")
-        self.completionHandler?(.failure(error))
-    }
-}
-
-// MARK: - ASAuthorizationControllerPresentationContextProviding
-extension AppleAuthorizationHandler: ASAuthorizationControllerPresentationContextProviding {
-    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        return self.presentationAnchor!
-    }
-}
