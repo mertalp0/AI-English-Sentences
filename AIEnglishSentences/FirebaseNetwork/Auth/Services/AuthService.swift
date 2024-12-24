@@ -9,6 +9,7 @@ import FirebaseAuth
 import UIKit
 import GoogleSignIn
 import FirebaseCore
+import AuthenticationServices
 
 final class AuthService {
     static let shared = AuthService()
@@ -50,6 +51,7 @@ final class AuthService {
         }
     }
     
+    // MARK: - Sign In With Goole
     func signInWithGoogle(with viewController: UIViewController, completion: @escaping (Result<User, Error>) -> Void) {
         guard let clientID = FirebaseApp.app()?.options.clientID else {
             completion(.failure(NSError(domain: "FirebaseError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Missing Firebase Client ID"])))
@@ -74,7 +76,7 @@ final class AuthService {
             
             let user = result.user
             let accessToken = user.accessToken.tokenString
-    
+            
             guard let idToken = user.idToken?.tokenString else {
                 completion(.failure(NSError(domain: "TokenError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch tokens"])))
                 return
@@ -94,7 +96,12 @@ final class AuthService {
         }
     }
     
-    func signInWithApple(){}
+    // MARK: - Sign In With Apple
+    func signInWithApple(presentationAnchor: ASPresentationAnchor, completion: @escaping (Result<AuthDataResult, Error>) -> Void) {
+        AppleAuthorizationHandler.shared.signInWithApple(
+            presentationAnchor: presentationAnchor,
+            completion: completion )
+    }
     
     // MARK: - Log Out
     func logout(completion: @escaping (Result<Void, Error>) -> Void) {
@@ -105,4 +112,6 @@ final class AuthService {
             completion(.failure(error))
         }
     }
+    
 }
+
