@@ -8,7 +8,6 @@
 import Foundation
 import BaseMVVMCKit
 
-
 final class ProfileViewModel: BaseViewModel {
     
     private let authService = AuthService.shared
