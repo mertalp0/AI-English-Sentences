@@ -9,27 +9,27 @@ import UIKit
 import SnapKit
 
 final class SentencesTableView: UIView {
-    
     // MARK: - Properties
     private var tableView: UITableView!
+    private var currentlyPlayingCell: SentenceCell?
+    private let textToSpeechManager =  TextToSpeechManager.shared
+
     var sentences: [String] = [] {
         didSet {
             tableView.reloadData()
         }
     }
-    var onSentenceSelected: ((String) -> Void)?
-    
+
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupTableView()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    // MARK: - Setup
+
     private func setupTableView() {
         tableView = UITableView()
         tableView.backgroundColor = .white
@@ -41,11 +41,15 @@ final class SentencesTableView: UIView {
             make.edges.equalToSuperview()
         }
     }
-    
-    // MARK: - Configure
-    func configure(with sentences: [String], onSelect: @escaping (String) -> Void) {
+
+    func configure(with sentences: [String]) {
         self.sentences = sentences
-        self.onSentenceSelected = onSelect
+    }
+
+    private func stopCurrentSpeaking() {
+        currentlyPlayingCell?.updatePlayButton(isPlaying: false)
+        textToSpeechManager.stopSpeaking()
+        currentlyPlayingCell = nil
     }
 }
 
@@ -54,17 +58,31 @@ extension SentencesTableView: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return sentences.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "SentenceCell", for: indexPath) as? SentenceCell else {
             return UITableViewCell()
         }
+        cell.delegate = self
         cell.configure(with: sentences[indexPath.row])
         return cell
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedSentence = sentences[indexPath.row]
-        onSentenceSelected?(selectedSentence)
+}
+
+// MARK: - SentenceCellDelegate
+extension SentencesTableView: SentenceCellDelegate {
+    func didTapPlayButton(for sentence: String, in cell: SentenceCell) {
+        if let currentlyPlayingCell = currentlyPlayingCell, currentlyPlayingCell == cell {
+            // Stop current speaking
+            stopCurrentSpeaking()
+        } else {
+            // Stop any ongoing speaking
+            stopCurrentSpeaking()
+            
+            // Start new speaking
+            textToSpeechManager.speak(text: sentence)
+            cell.updatePlayButton(isPlaying: true)
+            currentlyPlayingCell = cell
+        }
     }
 }

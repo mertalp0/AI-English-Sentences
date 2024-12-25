@@ -27,6 +27,10 @@ final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel> {
         configureTableView()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        TextToSpeechManager.shared.stopSpeaking()
+    }
+    
     private func setupUI() {
         // Page Title
         pageTitle = UILabel()
@@ -74,9 +78,7 @@ final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel> {
     
     private func configureTableView() {
         guard let sentences = generateModel?.sentences else { return }
-        sentencesTableView.configure(with: sentences) { selectedSentence in
-            print("Selected Sentence: \(selectedSentence)")
-        }
+        sentencesTableView.configure(with: sentences)
     }
 }
 

@@ -8,7 +8,15 @@
 import UIKit
 import SnapKit
 
+protocol SentenceCellDelegate: AnyObject {
+    func didTapPlayButton(for sentence: String, in cell: SentenceCell)
+}
+
 final class SentenceCell: UITableViewCell {
+    // MARK: - Properties
+    weak var delegate: SentenceCellDelegate?
+    private var currentSentence: String?
+
     // MARK: - UI Elements
     private let containerView: UIView = {
         let view = UIView()
@@ -22,6 +30,13 @@ final class SentenceCell: UITableViewCell {
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.clipsToBounds = false
         return view
+    }()
+    
+    private let playButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "play.circle"), for: .normal)
+        button.tintColor = .white
+        return button
     }()
     
     private let gradientLayer: CAGradientLayer = {
@@ -67,10 +82,10 @@ final class SentenceCell: UITableViewCell {
         contentView.backgroundColor = .clear
         contentView.addSubview(containerView)
         
-        // Gradyan ekleme
         containerView.layer.insertSublayer(gradientLayer, at: 0)
         
         containerView.addSubview(sentenceLabel)
+        containerView.addSubview(playButton)
         
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(8)
@@ -82,10 +97,29 @@ final class SentenceCell: UITableViewCell {
             make.trailing.equalToSuperview().offset(-16)
             make.bottom.equalToSuperview().offset(-12)
         }
+        
+        playButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().offset(-16)
+            make.centerY.equalTo(sentenceLabel)
+            make.width.height.equalTo(24)
+        }
+
+        playButton.addTarget(self, action: #selector(onTapPlay), for: .touchUpInside)
     }
     
     // MARK: - Configure Cell
     func configure(with sentence: String) {
+        currentSentence = sentence
         sentenceLabel.text = sentence
+    }
+
+    @objc private func onTapPlay() {
+        guard let sentence = currentSentence else { return }
+        delegate?.didTapPlayButton(for: sentence, in: self)
+    }
+
+    func updatePlayButton(isPlaying: Bool) {
+        let iconName = isPlaying ? "stop.circle" : "play.circle"
+        playButton.setImage(UIImage(systemName: iconName), for: .normal)
     }
 }

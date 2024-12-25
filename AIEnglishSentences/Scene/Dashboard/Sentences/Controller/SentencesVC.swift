@@ -29,6 +29,10 @@ final class SentencesVC: BaseViewController<SentencesCoordinator, SentencesViewM
 
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        TextToSpeechManager.shared.stopSpeaking()
+    }
+    
     private func setupUI(){
         
         //Page Title
@@ -67,9 +71,7 @@ final class SentencesVC: BaseViewController<SentencesCoordinator, SentencesViewM
     }
     
     private func configureTableView() {
-        sentencesTableView.configure(with: self.sentences) { selectedSentence in
-            print("Selected Sentence: \(selectedSentence)")
-        }
+        sentencesTableView.configure(with: self.sentences)
     }
 }
 
