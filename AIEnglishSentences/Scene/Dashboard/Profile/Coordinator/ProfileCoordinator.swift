@@ -26,5 +26,11 @@ final class ProfileCoordinator: BaseCoordinator {
             appCoordinator.start()
         }
     }
+    
+    func shareApp(){
+        let appStoreLink = AppConstants.URLs.appUrl
+        let activityVC = UIActivityViewController(activityItems: [appStoreLink], applicationActivities: nil)
+        self.navigationController?.present(activityVC, animated: true, completion: nil)
+    }
 }
 

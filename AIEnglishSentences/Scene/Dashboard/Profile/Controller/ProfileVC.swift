@@ -14,6 +14,7 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel>{
     private var  pageTitle : UILabel!
     private var  logoutButton : CustomButton!
     private var  IqtestButton : CustomButton!
+    private var  shareButton : CustomButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,13 +55,23 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel>{
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-150)
         }
+        
+        //Share Button
+        shareButton = CustomButton()
+        shareButton.configure(title: "share Button", backgroundColor: .blue, textColor: .white)
+        
+        view.addSubview(shareButton)
+        shareButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-300)
+        }
     }
     
     private func setupActions(){
         logoutButton.addTarget(self, action: #selector(onTapLogout) , for: .touchUpInside)
         IqtestButton.addTarget(self, action: #selector(onTapIqTest) , for: .touchUpInside)
+        shareButton.addTarget(self, action: #selector(onTapShare) , for: .touchUpInside)
 
-        
     }
 }
 
@@ -90,5 +101,9 @@ extension ProfileVC {
                 print("Uygulama açma işlemi başarısız.")
             }
         }
+    }
+    
+    @objc private func onTapShare() {
+        coordinator?.shareApp()
     }
 }
