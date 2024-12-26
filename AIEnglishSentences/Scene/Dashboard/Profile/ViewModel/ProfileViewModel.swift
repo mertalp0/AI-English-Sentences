@@ -11,6 +11,7 @@ import BaseMVVMCKit
 final class ProfileViewModel: BaseViewModel {
     
     private let authService = AuthService.shared
+    private let appLauncher = AppLauncher.shared
     
     func logout(completion: @escaping (Bool) -> Void) {
         startLoading()
@@ -27,5 +28,12 @@ final class ProfileViewModel: BaseViewModel {
                 }
             }
         }
+    }
+    
+    func openIqTestApp(completion: @escaping (Bool) -> Void) {
+        let appURLScheme = AppConstants.URLs.iqTestAppURLScheme
+        let appStoreURL = AppConstants.URLs.iqTestAppStoreURL
+        
+        appLauncher.openApp(appURLScheme: appURLScheme, appStoreURL: appStoreURL, completion: completion)
     }
 }

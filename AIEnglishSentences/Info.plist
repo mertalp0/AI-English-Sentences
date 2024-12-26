@@ -2,6 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
+
+
     <!-- OPENAI API KEY -->
     <key>OPENAI_API_KEY</key>
     <string>$(OPENAI_API_KEY)</string>
@@ -48,11 +51,13 @@
     </array>
 
     <!-- Required for Google Sign-In -->
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>google</string>
-        <string>com.googleusercontent.apps.332810838575-1c1v84qghepglgt706s5mjap2btiq8j2</string>
-    </array>
+        <key>LSApplicationQueriesSchemes</key>
+        <array>
+            <string>google</string>
+            <string>com.googleusercontent.apps.332810838575-1c1v84qghepglgt706s5mjap2btiq8j2</string>
+            <!-- IQ Test App Scheme -->
+            <string>iqtest</string>
+        </array>
 
     <!-- Scene Manifest -->
     <key>UIApplicationSceneManifest</key>
