@@ -11,21 +11,28 @@ import UIKit
 final class DashboardCoordinator: BaseCoordinator {
 
     override func start() {
+        // History
         let historyNavigationController = UINavigationController()
+        historyNavigationController.navigationBar.isHidden = true
         let historyCoordinator = HistoryCoordinator(navigationController: historyNavigationController)
         historyCoordinator.start()
 
-        let generateSentenceNavigationController = UINavigationController()
-        let generateSentenceCoordinator = ContextaCoordinator(navigationController: generateSentenceNavigationController)
-        generateSentenceCoordinator.start()
+        // Contexta
+        let contextaNavigationController = UINavigationController()
+        contextaNavigationController.navigationBar.isHidden = true
+        let contextaCoordinator = ContextaCoordinator(navigationController: contextaNavigationController)
+        contextaCoordinator.start()
         
+        // Profile
         let profileNavigationController = UINavigationController()
+        profileNavigationController.navigationBar.isHidden = true
         let profileCoordinator = ProfileCoordinator(navigationController: profileNavigationController)
         profileCoordinator.start()
         
+        // Dashboard
         let dashboardController = DashboardController(
             historyCoordinator: historyCoordinator,
-            generateSentenceCoordinator: generateSentenceCoordinator,
+            generateSentenceCoordinator: contextaCoordinator,
             profileCoordinator: profileCoordinator
         )
 

@@ -12,12 +12,10 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
     
     //MARK: -  Properties
     var pageCellType: CellType?
-    private var backButton: CustomButton!
     private weak var generateButton: CustomButton!
     
-    
     // MARK: - UI Elements
-    private var pageTitle: UILabel!
+    private var appBar: AppBar!
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -30,15 +28,12 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
         view.backgroundColor = .white
         
         // Page Title
-        pageTitle = UILabel()
-        pageTitle.text = String(describing: type(of: self))
-        pageTitle.textColor = .mainColor
-        pageTitle.font = .systemFont(ofSize: 24, weight: .bold)
-        pageTitle.textAlignment = .center
-        view.addSubview(pageTitle)
-        pageTitle.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.top.equalTo(UIHelper.statusBarHeight + 10)
+        appBar = AppBar(type: .generate)
+        appBar.delegate = self
+        view.addSubview(appBar)
+        appBar.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(UIHelper.statusBarHeight + 15)
         }
         
         // Generate Button
@@ -51,18 +46,10 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
         }
         generateButton = generateBtn
         
-        // Back Button
-        backButton = CustomButton()
-        backButton.configure(title: "Back", backgroundColor: .systemGreen, textColor: .white)
-        view.addSubview(backButton)
-        backButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-250)
-        }
+ 
     }
     
     private func setupActions() {
-        backButton.addTarget(self, action: #selector(onTapBack), for: .touchUpInside)
         generateButton.addTarget(self, action: #selector(onTapGenerate), for: .touchUpInside)
         
     }
@@ -70,10 +57,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
 
 // MARK: - Actions
 extension GenerateVC {
-    @objc func onTapBack() {
-        coordinator?.back()
-    }
-    
+ 
     @objc private func onTapGenerate() {
         
         guard let button = generateButton else { return }
@@ -92,4 +76,17 @@ extension GenerateVC {
             
         }
     }
+}
+
+
+// MARK: - AppBarDelegate
+extension GenerateVC: AppBarDelegate {
+    
+    func leftButtonTapped() {
+        coordinator?.back()
+    }
+    
+    func rightButtonTapped() {
+    }
+    
 }
