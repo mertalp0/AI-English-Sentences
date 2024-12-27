@@ -99,6 +99,7 @@ extension HistoryVC: UITableViewDataSource, UITableViewDelegate {
         }
         let model = GenerateManager.shared.generateModels[indexPath.row]
         cell.configure(with: model)
+        cell.enablePressAnimation()
         return cell
     }
     

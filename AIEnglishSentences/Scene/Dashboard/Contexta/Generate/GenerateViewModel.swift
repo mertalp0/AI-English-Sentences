@@ -1,15 +1,15 @@
 //
-//  GenerateSentenceViewModel.swift
+//  GenerateViewModel.swift
 //  AIEnglishSentences
 //
-//  Created by mert alp on 16.12.2024.
+//  Created by mert alp on 27.12.2024.
 //
 
 import BaseMVVMCKit
 import Foundation
 
-final class GenerateSentenceViewModel: BaseViewModel{
-
+final class GenerateViewModel: BaseViewModel {
+ 
     let openAIService = OpenAIService()
 
     let inputWords = "Color Text"
@@ -37,4 +37,5 @@ final class GenerateSentenceViewModel: BaseViewModel{
         }
         
     }
+    
 }

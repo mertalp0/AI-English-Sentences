@@ -1,18 +1,23 @@
 //
-//  GenerateSentenceVC.swift
+//  GenerateVC.swift
 //  AIEnglishSentences
 //
-//  Created by mert alp on 16.12.2024.
+//  Created by mert alp on 27.12.2024.
 //
 
 import UIKit
 import BaseMVVMCKit
 
-final class GenerateSentenceVC: BaseViewController<GenerateSentenceCoordinator, GenerateSentenceViewModel> {
+final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewModel> {
+    
+    //MARK: -  Properties
+    var pageCellType: CellType?
+    private var backButton: CustomButton!
+    private weak var generateButton: CustomButton!
+    
     
     // MARK: - UI Elements
     private var pageTitle: UILabel!
-    private weak var generateButton: CustomButton?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -25,15 +30,16 @@ final class GenerateSentenceVC: BaseViewController<GenerateSentenceCoordinator, 
         view.backgroundColor = .white
         
         // Page Title
-        let titleLabel = UILabel()
-        titleLabel.text = String(describing: type(of: self))
-        titleLabel.textColor = .black
-        titleLabel.textAlignment = .center
-        view.addSubview(titleLabel)
-        titleLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+        pageTitle = UILabel()
+        pageTitle.text = String(describing: type(of: self))
+        pageTitle.textColor = .mainColor
+        pageTitle.font = .systemFont(ofSize: 24, weight: .bold)
+        pageTitle.textAlignment = .center
+        view.addSubview(pageTitle)
+        pageTitle.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalTo(UIHelper.statusBarHeight + 10)
         }
-        pageTitle = titleLabel
         
         // Generate Button
         let generateBtn = CustomButton()
@@ -45,19 +51,34 @@ final class GenerateSentenceVC: BaseViewController<GenerateSentenceCoordinator, 
         }
         generateButton = generateBtn
         
+        // Back Button
+        backButton = CustomButton()
+        backButton.configure(title: "Back", backgroundColor: .systemGreen, textColor: .white)
+        view.addSubview(backButton)
+        backButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-250)
+        }
     }
     
     private func setupActions() {
-        generateButton?.addTarget(self, action: #selector(onTapGenerate), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(onTapBack), for: .touchUpInside)
+        generateButton.addTarget(self, action: #selector(onTapGenerate), for: .touchUpInside)
+        
     }
 }
 
 // MARK: - Actions
-extension GenerateSentenceVC {
+extension GenerateVC {
+    @objc func onTapBack() {
+        coordinator?.back()
+    }
+    
     @objc private func onTapGenerate() {
         
         guard let button = generateButton else { return }
         print("Generate button tapped: \(button)")
+        
         viewModel.generateSentences { result in
             switch result{
             case .success(let generateModel):
@@ -71,5 +92,4 @@ extension GenerateSentenceVC {
             
         }
     }
-    
 }

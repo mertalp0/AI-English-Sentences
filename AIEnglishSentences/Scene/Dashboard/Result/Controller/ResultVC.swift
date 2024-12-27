@@ -85,7 +85,7 @@ final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel> {
 // MARK: - Actions
 extension ResultVC {
     @objc func onTapBack() {
-        coordinator?.back()
+        coordinator?.showRoot()
     }
     
     @objc private func onTapSaveSentences() {
