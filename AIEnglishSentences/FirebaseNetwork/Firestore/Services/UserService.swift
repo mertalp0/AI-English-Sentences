@@ -11,6 +11,7 @@ import Foundation
 final class UserService {
     
     static var shared = UserService()
+    var user : UserModel?
     
     private init (){}
     
@@ -41,9 +42,16 @@ final class UserService {
             data: nil
         )
         
-        client.read(request: request, completion: completion)
+        client.read(request: request) { [weak self] (result: Result<UserModel, Error>) in
+            switch result {
+            case .success(let fetchedUser):
+                self?.user = fetchedUser
+                completion(.success(fetchedUser))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
     }
-    
     func addGenerateIdToUser(userId: String, generateId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let userRef = Firestore.firestore().collection("users").document(userId)
         

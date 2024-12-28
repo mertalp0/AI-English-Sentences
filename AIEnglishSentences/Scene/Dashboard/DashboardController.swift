@@ -10,11 +10,11 @@ import UIKit
 final class DashboardController: UITabBarController {
 
     private let historyCoordinator: HistoryCoordinator
-    private let generateSentenceCoordinator: GenerateSentenceCoordinator
+    private let generateSentenceCoordinator: ContextaCoordinator
     private let profileCoordinator: ProfileCoordinator
 
     // MARK: - Initialization
-    init(historyCoordinator: HistoryCoordinator, generateSentenceCoordinator: GenerateSentenceCoordinator, profileCoordinator: ProfileCoordinator) {
+    init(historyCoordinator: HistoryCoordinator, generateSentenceCoordinator: ContextaCoordinator, profileCoordinator: ProfileCoordinator) {
         self.historyCoordinator = historyCoordinator
         self.generateSentenceCoordinator = generateSentenceCoordinator
         self.profileCoordinator = profileCoordinator

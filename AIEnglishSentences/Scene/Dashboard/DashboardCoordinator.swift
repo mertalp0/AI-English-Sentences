@@ -16,7 +16,7 @@ final class DashboardCoordinator: BaseCoordinator {
         historyCoordinator.start()
 
         let generateSentenceNavigationController = UINavigationController()
-        let generateSentenceCoordinator = GenerateSentenceCoordinator(navigationController: generateSentenceNavigationController)
+        let generateSentenceCoordinator = ContextaCoordinator(navigationController: generateSentenceNavigationController)
         generateSentenceCoordinator.start()
         
         let profileNavigationController = UINavigationController()

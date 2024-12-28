@@ -27,7 +27,7 @@ final class ResultCoordinator: BaseCoordinator {
         
     }
     
-    func back() {
+    func showRoot() {
         guard let navigationController = navigationController else {
             fatalError("Navigation controller is nil in ResultCoordinator")
         }
@@ -36,7 +36,7 @@ final class ResultCoordinator: BaseCoordinator {
             tabBarController.setTabBar(hidden: false, animated: true)
         }
 
-        pop()
+        popToRoot()
     }
 
 }

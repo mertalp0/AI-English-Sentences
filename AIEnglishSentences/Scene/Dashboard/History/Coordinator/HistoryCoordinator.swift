@@ -18,5 +18,20 @@ final class HistoryCoordinator: BaseCoordinator {
         push(historyVC)
         
     }
+    
+    func showSentences(sentences: [String]){
+       
+        guard let navigationController = navigationController else {
+            fatalError("Navigation controller is nil in showResult")
+        }
+        
+       let sentencesCoordinator = SentencesCoordinator(navigationController: navigationController)
+       sentencesCoordinator.sentences = sentences
+       sentencesCoordinator.start()
+    
+        if let tabBarController = navigationController.tabBarController {
+            tabBarController.setTabBar(hidden: true, animated: false)
+        }
+   }
 }
 

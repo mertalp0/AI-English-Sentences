@@ -13,6 +13,8 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel>{
     //MARK: - UI Elements
     private var  pageTitle : UILabel!
     private var  logoutButton : CustomButton!
+    private var  IqtestButton : CustomButton!
+    private var  shareButton : CustomButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,18 +45,40 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel>{
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().offset(-250)
         }
+        
+        //IQ-Test Button
+        IqtestButton = CustomButton()
+        IqtestButton.configure(title: "IqtestButton", backgroundColor: .blue, textColor: .white)
+        
+        view.addSubview(IqtestButton)
+        IqtestButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-150)
+        }
+        
+        //Share Button
+        shareButton = CustomButton()
+        shareButton.configure(title: "share Button", backgroundColor: .blue, textColor: .white)
+        
+        view.addSubview(shareButton)
+        shareButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-300)
+        }
     }
     
     private func setupActions(){
         logoutButton.addTarget(self, action: #selector(onTapLogout) , for: .touchUpInside)
-        
+        IqtestButton.addTarget(self, action: #selector(onTapIqTest) , for: .touchUpInside)
+        shareButton.addTarget(self, action: #selector(onTapShare) , for: .touchUpInside)
+
     }
 }
 
 //MARK: - Actions
 extension ProfileVC {
     
-    @objc func onTapLogout(){
+    @objc private func onTapLogout(){
         tabBarController?.tabBar.isUserInteractionEnabled = false
         viewModel.logout { isSucces in
             switch isSucces {
@@ -66,5 +90,20 @@ extension ProfileVC {
                 print("Kayıt sırasında bir hata oluştu.")
             }
         }
+    }
+    
+    @objc private func onTapIqTest() {
+        print("IQ Test Button tapped")
+        viewModel.openIqTestApp { success in
+            if success {
+                print("Uygulama açıldı veya App Store yönlendirmesi yapıldı.")
+            } else {
+                print("Uygulama açma işlemi başarısız.")
+            }
+        }
+    }
+    
+    @objc private func onTapShare() {
+        coordinator?.shareApp()
     }
 }

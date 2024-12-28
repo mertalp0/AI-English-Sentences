@@ -33,7 +33,7 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel>{
     
     private func setupUI() {
         view.backgroundColor = .white
-
+        
         // Page Title
         let titleLabel = UILabel()
         titleLabel.text = String(describing: type(of: self))
@@ -69,9 +69,10 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel>{
     
     private func setupTableView(){
         tableView = UITableView()
+        tableView.backgroundColor = .white
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        tableView.register(GenerateCell.self, forCellReuseIdentifier: "GenerateCell")
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
             make.top.equalTo(pageTitle.snp.bottom)
@@ -91,14 +92,24 @@ extension HistoryVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return GenerateManager.shared.generateModels.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "GenerateCell", for: indexPath) as? GenerateCell else {
+            return UITableViewCell()
+        }
         let model = GenerateManager.shared.generateModels[indexPath.row]
-        cell.textLabel?.text = model.words
+        cell.configure(with: model)
+        cell.enablePressAnimation()
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let model = GenerateManager.shared.generateModels[indexPath.row]
+        print("Selected Words: \(model.words), Sentences Count: \(model.sentences.count)")
+        coordinator?.showSentences(sentences: model.sentences)
+    }
 }
+
 //MARK: - Fetch Sentences
 extension HistoryVC {
     private func fetchSentences(){
@@ -109,8 +120,8 @@ extension HistoryVC {
 //MARK: - NotificationCenter
 extension HistoryVC {
     private func setupNC() {
-           NotificationCenter.default.addObserver(self, selector: #selector(generateModelsDidUpdate), name: .generateModelsUpdated, object: nil)
-       }
+        NotificationCenter.default.addObserver(self, selector: #selector(generateModelsDidUpdate), name: .generateModelsUpdated, object: nil)
+    }
 }
 
 
