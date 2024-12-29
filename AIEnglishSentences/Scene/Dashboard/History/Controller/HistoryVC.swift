@@ -6,140 +6,149 @@
 //
 
 import UIKit
-import NotificationCenter
 import BaseMVVMCKit
 
-final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel>{
+final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> {
     
     // MARK: - UI Elements
-    private var pageTitle: UILabel!
-    private weak var getSentencesButton: CustomButton?
-    private weak var deleteSentencesButton: CustomButton?
+    private var appBar: AppBar!
+    private var historySegmentedControl: HistorySegmentedControl!
     private var tableView: UITableView!
+    private var emptyStateImageView: UIImageView!
+    private var currentlyPlayingCell: SentenceCell?
+    
+    // MARK: - Properties
+    private let textToSpeechManager =  TextToSpeechManager.shared
+    private var allData: [String] = ["data" , "data 2"]
+    private var favouritesData: [String] = ["my name is mert my name is mert my name is mert my name is mert"]
+    private var currentData: [String] {
+        return historySegmentedControl.selectedIndex == 0 ? allData : favouritesData
+    }
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupTableView()
-        setupActions()
-        setupNC()
-        fetchSentences()
+        updateUIForCurrentData()
+        
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: .generateModelsUpdated, object: nil)
+    override func viewWillDisappear(_ animated: Bool) {
+        stopCurrentSpeaking()
     }
     
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .init(hex: "F2F2F2")
         
-        // Page Title
-        let titleLabel = UILabel()
-        titleLabel.text = String(describing: type(of: self))
-        titleLabel.textColor = .black
-        titleLabel.textAlignment = .center
-        view.addSubview(titleLabel)
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(UIHelper.statusBarHeight + 10)
-            make.centerX.equalToSuperview()
+        // AppBar
+        appBar = AppBar(type: .history)
+        appBar.delegate = self
+        view.addSubview(appBar)
+        appBar.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(UIHelper.statusBarHeight + 10)
         }
-        pageTitle = titleLabel
         
-        // Generate Button
-        let getSentencesBtn = CustomButton()
-        getSentencesBtn.configure(title: "Get Sentences", backgroundColor: .systemBlue, textColor: .white)
-        view.addSubview(getSentencesBtn)
-        getSentencesBtn.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().offset(-120)
-            make.centerX.equalToSuperview()
+        // Custom Segmented Control
+        historySegmentedControl = HistorySegmentedControl(items: ["All", "Favourites"])
+        historySegmentedControl.delegate = self
+        view.addSubview(historySegmentedControl)
+        historySegmentedControl.snp.makeConstraints { make in
+            make.top.equalTo(appBar.snp.bottom).offset(10)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+            make.height.equalTo(40)
         }
-        getSentencesButton = getSentencesBtn
         
-        // Save Sentences Button
-        let deleteSentencesBtn = CustomButton()
-        deleteSentencesBtn.configure(title: "Delete Sentences", backgroundColor: .systemGreen, textColor: .white)
-        view.addSubview(deleteSentencesBtn)
-        deleteSentencesBtn.snp.makeConstraints { make in
-            make.bottom.equalTo(getSentencesBtn.snp.top).offset(-20)
-            make.centerX.equalToSuperview()
-        }
-        deleteSentencesButton = deleteSentencesBtn
-    }
-    
-    private func setupTableView(){
+        // TableView
         tableView = UITableView()
-        tableView.backgroundColor = .white
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(GenerateCell.self, forCellReuseIdentifier: "GenerateCell")
+        tableView.register(SentenceCell.self, forCellReuseIdentifier: "SentenceCell")
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
         view.addSubview(tableView)
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(pageTitle.snp.bottom)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            make.left.right.equalToSuperview()
+            make.top.equalTo(historySegmentedControl.snp.bottom).offset(10)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
+        
+        // Empty State ImageView
+        emptyStateImageView = UIImageView()
+        emptyStateImageView.contentMode = .scaleAspectFit
+        emptyStateImageView.isHidden = true
+        view.addSubview(emptyStateImageView)
+        emptyStateImageView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.height.equalTo(300)
         }
     }
     
-    private func setupActions() {
-        getSentencesButton?.addTarget(self, action: #selector(onTapGetSentences), for: .touchUpInside)
-        deleteSentencesButton?.addTarget(self, action: #selector(onTaDeleteSentences), for: .touchUpInside)
+    private func updateUIForCurrentData() {
+        stopCurrentSpeaking()
+        
+        let isDataEmpty = currentData.isEmpty
+        
+        let emptyImageName = historySegmentedControl.selectedIndex == 0
+        ? "history_all_empty_image"
+        : "history_favorites_empty_image"
+        emptyStateImageView.image = UIImage(named: emptyImageName)
+        
+        tableView.isHidden = isDataEmpty
+        emptyStateImageView.isHidden = !isDataEmpty
+        
+        if !isDataEmpty {
+            tableView.reloadData()
+        }
+    }
+    
+    private func stopCurrentSpeaking() {
+        currentlyPlayingCell?.updatePlayButton(isPlaying: false)
+        textToSpeechManager.stopSpeaking()
+        currentlyPlayingCell = nil
     }
 }
 
-//MARK: - UITableViewDelegate, UITableViewDataSource
+// MARK: - UITableViewDataSource
 extension HistoryVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return GenerateManager.shared.generateModels.count
+        return currentData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "GenerateCell", for: indexPath) as? GenerateCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "SentenceCell", for: indexPath) as? SentenceCell else {
             return UITableViewCell()
         }
-        let model = GenerateManager.shared.generateModels[indexPath.row]
-        cell.configure(with: model)
-        cell.enablePressAnimation()
+        cell.delegate = self
+        cell.configure(with: currentData[indexPath.row])
         return cell
     }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let model = GenerateManager.shared.generateModels[indexPath.row]
-        print("Selected Words: \(model.words), Sentences Count: \(model.sentences.count)")
-        coordinator?.showSentences(sentences: model.sentences)
+}
+
+// MARK: - CustomSegmentedControlDelegate
+extension HistoryVC: HistorySegmentedControlDelegate {
+    func segmentChanged(to index: Int) {
+        updateUIForCurrentData()
     }
 }
 
-//MARK: - Fetch Sentences
-extension HistoryVC {
-    private func fetchSentences(){
-        viewModel.fetchSentences()
-    }
+extension HistoryVC: AppBarDelegate {
+    func leftButtonTapped() {}
+    
+    func rightButtonTapped() {}
 }
 
-//MARK: - NotificationCenter
-extension HistoryVC {
-    private func setupNC() {
-        NotificationCenter.default.addObserver(self, selector: #selector(generateModelsDidUpdate), name: .generateModelsUpdated, object: nil)
-    }
-}
-
-
-// MARK: - Actions
-extension HistoryVC {
-    @objc private func onTapGetSentences() {
-        guard let button = getSentencesButton else { return }
-        print("Get Sentences Button tapped: \(button)")
-        
-    }
-    
-    @objc private func onTaDeleteSentences() {
-        guard let button = deleteSentencesButton else { return }
-        print("Delete Sentences Button tapped: \(button)")
-        
-    }
-    
-    @objc private func generateModelsDidUpdate() {
-        tableView.reloadData()
+// MARK: - SentenceCellDelegate
+extension HistoryVC: SentenceCellDelegate {
+    func didTapPlayButton(for sentence: String, in cell: SentenceCell) {
+        if let currentlyPlayingCell = currentlyPlayingCell, currentlyPlayingCell == cell {
+            stopCurrentSpeaking()
+        } else {
+            stopCurrentSpeaking()
+            
+            textToSpeechManager.speak(text: sentence)
+            cell.updatePlayButton(isPlaying: true)
+            currentlyPlayingCell = cell
+        }
     }
 }

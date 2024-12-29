@@ -12,7 +12,7 @@ final class HistoryViewModel: BaseViewModel {
     private let userService = UserService.shared
     private let authService = AuthService.shared
     private let generateService = GenerateService.shared
-    
+        
     func fetchSentences() {
         startLoading()
         

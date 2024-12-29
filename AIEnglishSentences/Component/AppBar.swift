@@ -15,18 +15,23 @@ protocol AppBarDelegate: AnyObject {
 
 enum AppBarType {
     case generate
+    case history
     
     var title: String {
         switch self {
         case .generate:
             return "Generate"
+        case .history:
+            return "History"
         }
     }
     
     var rightIcon: UIImage? {
         switch self {
         case .generate:
-            return UIImage(systemName: "plus")
+            return UIImage(systemName: "square.and.arrow.up.circle")
+        case .history:
+            return UIImage(systemName: "gear")
         }
     }
     
@@ -34,6 +39,8 @@ enum AppBarType {
         switch self {
         case .generate:
             return UIImage(systemName: "chevron.left")
+        case .history:
+            return nil
         }
     }
 }

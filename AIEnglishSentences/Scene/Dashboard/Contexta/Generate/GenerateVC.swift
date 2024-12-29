@@ -12,6 +12,8 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
               
     //MARK: -  Properties
     var pageCellType: CellType?
+    
+    // MARK: - UI Elements
     private weak var generateButton: GenerateButton!
     private var questionLabel: UILabel!
     private var textField: GenerateTextView!
@@ -19,9 +21,6 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
     private var wordSelector: CountSelectorView!
     private var writingTone: DropdownMenuButton!
     private var writingStyle: DropdownMenuButton!
-    
-    
-    // MARK: - UI Elements
     private var appBar: AppBar!
     
     // MARK: - Lifecycle
