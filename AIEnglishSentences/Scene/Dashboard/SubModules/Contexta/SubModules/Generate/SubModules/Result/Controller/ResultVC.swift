@@ -63,6 +63,7 @@ final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel> {
         
         // Sentences TableView
         sentencesTableView = SentencesTableView()
+        sentencesTableView.delegate = self
         view.addSubview(sentencesTableView)
         sentencesTableView.snp.makeConstraints { make in
             make.top.equalTo(pageTitle.snp.bottom)
@@ -108,5 +109,12 @@ extension ResultVC {
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
+    }
+}
+
+
+extension ResultVC: SentenceTableViewDelegate {
+    func didTapSave(for sentence: String, in cell: SentenceCell) {
+        
     }
 }

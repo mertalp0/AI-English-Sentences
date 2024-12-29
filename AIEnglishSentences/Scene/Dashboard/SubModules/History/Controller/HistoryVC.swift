@@ -140,6 +140,10 @@ extension HistoryVC: AppBarDelegate {
 
 // MARK: - SentenceCellDelegate
 extension HistoryVC: SentenceCellDelegate {
+    func didTapSave(for sentence: String, in cell: SentenceCell) {
+
+    }
+        
     func didTapPlayButton(for sentence: String, in cell: SentenceCell) {
         if let currentlyPlayingCell = currentlyPlayingCell, currentlyPlayingCell == cell {
             stopCurrentSpeaking()

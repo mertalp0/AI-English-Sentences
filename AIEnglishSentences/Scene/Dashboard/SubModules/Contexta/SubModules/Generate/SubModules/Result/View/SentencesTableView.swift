@@ -8,8 +8,13 @@
 import UIKit
 import SnapKit
 
+protocol SentenceTableViewDelegate: AnyObject {
+    func didTapSave(for sentence: String, in cell: SentenceCell)
+}
+
 final class SentencesTableView: UIView {
     // MARK: - Properties
+    weak var delegate: SentenceTableViewDelegate?
     private var tableView: UITableView!
     private var currentlyPlayingCell: SentenceCell?
     private let textToSpeechManager =  TextToSpeechManager.shared
@@ -71,6 +76,10 @@ extension SentencesTableView: UITableViewDataSource, UITableViewDelegate {
 
 // MARK: - SentenceCellDelegate
 extension SentencesTableView: SentenceCellDelegate {
+    func didTapSave(for sentence: String, in cell: SentenceCell) {
+        delegate?.didTapSave(for: sentence, in: cell)
+    }
+    
     func didTapPlayButton(for sentence: String, in cell: SentenceCell) {
         if let currentlyPlayingCell = currentlyPlayingCell, currentlyPlayingCell == cell {
             // Stop current speaking

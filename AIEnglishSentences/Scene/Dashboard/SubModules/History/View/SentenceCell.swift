@@ -10,13 +10,14 @@ import SnapKit
 
 protocol SentenceCellDelegate: AnyObject {
     func didTapPlayButton(for sentence: String, in cell: SentenceCell)
+    func didTapSave(for sentence: String, in cell: SentenceCell)
 }
 
 final class SentenceCell: UITableViewCell {
     // MARK: - Properties
     weak var delegate: SentenceCellDelegate?
     private var currentSentence: String?
-
+    
     // MARK: - UI Elements
     private let containerView: UIView = {
         let view = UIView()
@@ -35,6 +36,13 @@ final class SentenceCell: UITableViewCell {
     private let playButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "play.circle"), for: .normal)
+        button.tintColor = .white
+        return button
+    }()
+    
+    private let saveButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "bookmark"), for: .normal)
         button.tintColor = .white
         return button
     }()
@@ -86,6 +94,7 @@ final class SentenceCell: UITableViewCell {
         
         containerView.addSubview(sentenceLabel)
         containerView.addSubview(playButton)
+        containerView.addSubview(saveButton)
         
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(8)
@@ -94,17 +103,24 @@ final class SentenceCell: UITableViewCell {
         sentenceLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(12)
             make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
+            make.trailing.equalTo(playButton.snp.leading).offset(-16)
             make.bottom.equalToSuperview().offset(-12)
         }
         
         playButton.snp.makeConstraints { make in
+            make.trailing.equalTo(saveButton.snp.leading).offset(-16)
+            make.centerY.equalTo(sentenceLabel)
+            make.width.height.equalTo(24)
+        }
+        
+        saveButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-16)
             make.centerY.equalTo(sentenceLabel)
             make.width.height.equalTo(24)
         }
-
+        
         playButton.addTarget(self, action: #selector(onTapPlay), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(onTapSave), for: .touchUpInside)
     }
     
     // MARK: - Configure Cell
@@ -112,10 +128,15 @@ final class SentenceCell: UITableViewCell {
         currentSentence = sentence
         sentenceLabel.text = sentence
     }
-
+    
     @objc private func onTapPlay() {
         guard let sentence = currentSentence else { return }
         delegate?.didTapPlayButton(for: sentence, in: self)
+    }
+    
+    @objc private func onTapSave() {
+        guard let sentence = currentSentence else { return }
+        delegate?.didTapSave(for: sentence, in: self)
     }
 
     func updatePlayButton(isPlaying: Bool) {
