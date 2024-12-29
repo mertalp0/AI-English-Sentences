@@ -35,7 +35,7 @@ final class CustomButton: UIButton {
     
     private func setupActions() {
         addTarget(self, action: #selector(animateDown), for: .touchDown)
-        addTarget(self, action: #selector(animateUp), for: [.touchUpInside, .touchCancel])
+        addTarget(self, action: #selector(animateUp), for: [.touchUpInside, .touchCancel, .touchDragExit])
     }
     
     // MARK: - Customization Method
@@ -51,14 +51,10 @@ final class CustomButton: UIButton {
     
     // MARK: - Animation Methods
     @objc private func animateDown() {
-        UIView.animate(withDuration: 0.1, animations: {
-            self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-        })
+        self.animateScaleDown()
     }
-    
+
     @objc private func animateUp() {
-        UIView.animate(withDuration: 0.1, animations: {
-            self.transform = .identity
-        })
+        self.animateScaleUp()
     }
 }

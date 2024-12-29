@@ -1,5 +1,5 @@
 {
-  "originHash" : "df6810018d34f936a44f8489f90f2c1241146f98d0a4cda850ecb3f1a9b16512",
+  "originHash" : "e8d937e1a74dd57128f4d66df42d02b748a15dd22f5a1f914f7302a1b34e7c0f",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mertalp0/BaseMVVMCKit.git",
       "state" : {
-        "revision" : "4cbfe73f4a27289406d4df09859717e7d5b4c874",
-        "version" : "1.0.4"
+        "revision" : "1bed3e2088e028f9c4957dec1b497bbfafed4628",
+        "version" : "1.0.8"
       }
     },
     {

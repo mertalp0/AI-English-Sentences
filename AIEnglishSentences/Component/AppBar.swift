@@ -77,7 +77,7 @@ final class AppBar: UIView {
     
     // MARK: - Setup
     private func setupView() {
-        backgroundColor = .white
+        backgroundColor = .init(hex: "F2F2F2")
         
         addSubview(titleLabel)
         addSubview(leftButton)
