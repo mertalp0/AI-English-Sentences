@@ -10,11 +10,11 @@ import UIKit
 
 final class ResultCoordinator: BaseCoordinator {
     
-    var generateModel : GenerateModel?
+    var sentences : [NewSentence]?
     
-    init(navigationController: UINavigationController, generateModel: GenerateModel? = nil) {
+    init(navigationController: UINavigationController, sentences: [NewSentence]? = nil) {
         super.init(navigationController: navigationController)
-        self.generateModel = generateModel
+        self.sentences = sentences
     }
     
     override func start() {
@@ -22,7 +22,7 @@ final class ResultCoordinator: BaseCoordinator {
         let resultViewModel = ResultViewModel()
         let resultVC = ResultVC(viewModel: resultViewModel)
         resultVC.coordinator = self
-        resultVC.generateModel = generateModel
+        resultVC.sentences = sentences
         push(resultVC)
         
     }

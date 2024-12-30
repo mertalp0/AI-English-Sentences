@@ -13,38 +13,35 @@ final class ResultViewModel: BaseViewModel {
     private let authService = AuthService.shared
     private let userService = UserService.shared
     
-    func saveGenerateModel(generateModel: GenerateModel, completion: @escaping (Bool) -> Void) {
+  
+    func saveSentence(sentence: NewSentence, completion: @escaping (Bool) -> Void) {
         startLoading()
-        generateService.saveGenerate(generate: generateModel) { [weak self] result in
+        generateService.saveSentence(sentence: sentence) { [weak self] result in
             guard let self = self else { return }
             self.stopLoading()
             switch result {
             case .success(_):
-                self.handleGenerateSaveSuccess(generate: generateModel, completion: completion)
+                self.handleSentenceeSaveSuccess(sentence: sentence, completion: completion)
             case .failure(let error):
                 self.handleError(message: error.localizedDescription)
                 completion(false)
             }
         }
+   
     }
     
-    private func handleGenerateSaveSuccess(generate: GenerateModel, completion: @escaping (Bool) -> Void) {
+    private func handleSentenceeSaveSuccess(sentence: NewSentence, completion: @escaping (Bool) -> Void) {
         guard let userId = authService.getCurrentUserId() else {
             handleError(message: "An error occurred")
             completion(false)
             return
         }
-        guard let generateId = generate.id else {
-            handleError(message: "An error occurred")
-            completion(false)
-            return
-        }
-        
-        userService.addGenerateIdToUser(userId: userId, generateId: generateId) { [weak self] result in
+
+        userService.addGenerateIdToUser(userId: userId, generateId: sentence.id) { [weak self] result in
             guard let self = self else { return }
             switch result {
             case .success:
-                GenerateManager.shared.addGenerateModel(generate)
+                SentenceManager.shared.addSentence(sentence)
                 completion(true)
             case .failure(let error):
                 self.handleError(message: error.localizedDescription)

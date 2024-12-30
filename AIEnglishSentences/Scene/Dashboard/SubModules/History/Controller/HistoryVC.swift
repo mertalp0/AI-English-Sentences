@@ -19,9 +19,9 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
     
     // MARK: - Properties
     private let textToSpeechManager =  TextToSpeechManager.shared
-    private var allData: [String] = ["data" , "data 2"]
-    private var favouritesData: [String] = ["my name is mert my name is mert my name is mert my name is mert"]
-    private var currentData: [String] {
+    private var allData: [NewSentence] = []
+    private var favouritesData: [NewSentence] = []
+    private var currentData: [NewSentence] {
         return historySegmentedControl.selectedIndex == 0 ? allData : favouritesData
     }
     
@@ -29,8 +29,9 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        updateUIForCurrentData()
-        
+        setupNotificationCenter()
+        fetchSentences()
+       
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -68,9 +69,11 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
         view.addSubview(tableView)
+
         tableView.snp.makeConstraints { make in
             make.top.equalTo(historySegmentedControl.snp.bottom).offset(10)
-            make.leading.trailing.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
         // Empty State ImageView
@@ -82,6 +85,26 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
             make.center.equalToSuperview()
             make.width.height.equalTo(300)
         }
+    }
+    
+    private func setupNotificationCenter() {
+        NotificationCenter.default.addObserver(self, selector: #selector(onSentencesUpdated), name: SentenceManager.sentencesUpdatedNotification, object: nil)
+    }
+    
+    private func fetchSentences(){
+        viewModel.fetchSentences { isSucces in
+            self.loadInitialData()
+            self.updateUIForCurrentData()
+        }}
+    
+    private func loadInitialData() {
+        allData = SentenceManager.shared.sentences
+        tableView.reloadData()
+    }
+    
+    @objc private func onSentencesUpdated() {
+        allData = SentenceManager.shared.sentences
+        tableView.reloadData()
     }
     
     private func updateUIForCurrentData() {
@@ -120,7 +143,7 @@ extension HistoryVC: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
         cell.delegate = self
-        cell.configure(with: currentData[indexPath.row])
+        cell.configure(with: currentData[indexPath.row], type: .historyCell)
         return cell
     }
 }
@@ -140,10 +163,28 @@ extension HistoryVC: AppBarDelegate {
 
 // MARK: - SentenceCellDelegate
 extension HistoryVC: SentenceCellDelegate {
-    func didTapSave(for sentence: String, in cell: SentenceCell) {
-
-    }
-        
+    
+    func didTapSave(for sentence: NewSentence, in cell: SentenceCell) {
+        if let indexInAllData = SentenceManager.shared.sentences.firstIndex(where: { $0.id == sentence.id }) {
+            var updatedSentence = sentence
+            updatedSentence.favorite.toggle()
+            
+            if updatedSentence.favorite {
+                if !favouritesData.contains(where: { $0.id == updatedSentence.id }) {
+                    favouritesData.append(updatedSentence)
+                    print("\(updatedSentence.sentence) favorilere eklendi.")
+                }
+            } else {
+                if let indexInFavorites = favouritesData.firstIndex(where: { $0.id == updatedSentence.id }) {
+                    favouritesData.remove(at: indexInFavorites)
+                    print("\(updatedSentence.sentence) favorilerden çıkarıldı.")
+                }
+            }
+            
+            SentenceManager.shared.updateSentence(updatedSentence, at: indexInAllData)
+        }
+        updateUIForCurrentData()     }
+    
     func didTapPlayButton(for sentence: String, in cell: SentenceCell) {
         if let currentlyPlayingCell = currentlyPlayingCell, currentlyPlayingCell == cell {
             stopCurrentSpeaking()

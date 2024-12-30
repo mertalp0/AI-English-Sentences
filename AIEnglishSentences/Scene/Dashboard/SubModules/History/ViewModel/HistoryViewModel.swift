@@ -13,7 +13,7 @@ final class HistoryViewModel: BaseViewModel {
     private let authService = AuthService.shared
     private let generateService = GenerateService.shared
         
-    func fetchSentences() {
+    func fetchSentences(completion: @escaping(Bool)-> Void) {
         startLoading()
         
         guard let userId = authService.getCurrentUserId() else {
@@ -24,20 +24,23 @@ final class HistoryViewModel: BaseViewModel {
         userService.getUser(by: userId) { [weak self] result in
             switch result {
             case .success(let user):
-                self?.fetchGenerates(for: user.generate)
+                self?.fetchSentencesWithUser(for: user.generate, completion: completion)
             case .failure(let error):
+                completion(false)
                 self?.handleFetchError(message: error.localizedDescription)
             }
         }
     }
     
-    private func fetchGenerates(for generateIds: [String]) {
+    private func fetchSentencesWithUser(for generateIds: [String] , completion: @escaping (Bool)-> Void) {
         generateService.getGenerates(for: generateIds) { [weak self] result in
             switch result {
-            case .success(let generateModelList):
-                GenerateManager.shared.generateModels = generateModelList
+            case .success(let sentences):
+                SentenceManager.shared.loadSentences(sentences)
+                completion(true)
                 self?.stopLoading()
             case .failure(let error):
+                completion(false)
                 self?.handleFetchError(message: error.localizedDescription)
             }
         }

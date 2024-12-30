@@ -10,14 +10,24 @@ import SnapKit
 
 protocol SentenceCellDelegate: AnyObject {
     func didTapPlayButton(for sentence: String, in cell: SentenceCell)
-    func didTapSave(for sentence: String, in cell: SentenceCell)
+    func didTapSave(for sentence: NewSentence, in cell: SentenceCell)
+}
+
+enum SentenceCellType {
+    case historyCell
+    case resultCell
 }
 
 final class SentenceCell: UITableViewCell {
     // MARK: - Properties
     weak var delegate: SentenceCellDelegate?
-    private var currentSentence: String?
-    
+    private var currentSentence: NewSentence?
+    private var type: SentenceCellType? {
+        didSet {
+            updateSaveAndFavoriteButton()
+        }
+    }
+
     // MARK: - UI Elements
     private let containerView: UIView = {
         let view = UIView()
@@ -40,9 +50,8 @@ final class SentenceCell: UITableViewCell {
         return button
     }()
     
-    private let saveButton: UIButton = {
+    private let saveAndFavoriteButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "bookmark"), for: .normal)
         button.tintColor = .white
         return button
     }()
@@ -94,7 +103,7 @@ final class SentenceCell: UITableViewCell {
         
         containerView.addSubview(sentenceLabel)
         containerView.addSubview(playButton)
-        containerView.addSubview(saveButton)
+        containerView.addSubview(saveAndFavoriteButton)
         
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(8)
@@ -108,39 +117,56 @@ final class SentenceCell: UITableViewCell {
         }
         
         playButton.snp.makeConstraints { make in
-            make.trailing.equalTo(saveButton.snp.leading).offset(-16)
+            make.trailing.equalTo(saveAndFavoriteButton.snp.leading).offset(-16)
             make.centerY.equalTo(sentenceLabel)
             make.width.height.equalTo(24)
         }
         
-        saveButton.snp.makeConstraints { make in
+        saveAndFavoriteButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-16)
             make.centerY.equalTo(sentenceLabel)
             make.width.height.equalTo(24)
         }
         
         playButton.addTarget(self, action: #selector(onTapPlay), for: .touchUpInside)
-        saveButton.addTarget(self, action: #selector(onTapSave), for: .touchUpInside)
+        saveAndFavoriteButton.addTarget(self, action: #selector(onTapSaveAndFavorite), for: .touchUpInside)
     }
     
     // MARK: - Configure Cell
-    func configure(with sentence: String) {
-        currentSentence = sentence
-        sentenceLabel.text = sentence
+    func configure(with sentence: NewSentence, type: SentenceCellType) {
+        self.currentSentence = sentence
+        self.type = type
+        sentenceLabel.text = sentence.sentence
+        updateSaveAndFavoriteButton()
     }
     
-    @objc private func onTapPlay() {
+    func updateSaveAndFavoriteButton() {
         guard let sentence = currentSentence else { return }
-        delegate?.didTapPlayButton(for: sentence, in: self)
+        let icon: String
+        switch type {
+        case .historyCell:
+            icon = sentence.favorite ? "star.fill" : "star"
+        case .resultCell:
+            icon = "bookmark.fill"
+        case .none:
+            return
+        }
+        saveAndFavoriteButton.setImage(UIImage(systemName: icon), for: .normal)
     }
     
-    @objc private func onTapSave() {
-        guard let sentence = currentSentence else { return }
-        delegate?.didTapSave(for: sentence, in: self)
-    }
-
     func updatePlayButton(isPlaying: Bool) {
         let iconName = isPlaying ? "stop.circle" : "play.circle"
         playButton.setImage(UIImage(systemName: iconName), for: .normal)
+    }
+
+    // MARK: - Actions
+    @objc private func onTapPlay() {
+        guard let sentence = currentSentence else { return }
+        delegate?.didTapPlayButton(for: sentence.sentence, in: self)
+    }
+    
+    @objc private func onTapSaveAndFavorite() {
+        guard let sentence = currentSentence else { return }
+        delegate?.didTapSave(for: sentence, in: self)
     }
 }

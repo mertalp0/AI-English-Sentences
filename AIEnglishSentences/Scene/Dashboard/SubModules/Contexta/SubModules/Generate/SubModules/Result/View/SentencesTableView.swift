@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 
 protocol SentenceTableViewDelegate: AnyObject {
-    func didTapSave(for sentence: String, in cell: SentenceCell)
+    func didTapSave(for sentence: NewSentence, in cell: SentenceCell)
 }
 
 final class SentencesTableView: UIView {
@@ -19,7 +19,7 @@ final class SentencesTableView: UIView {
     private var currentlyPlayingCell: SentenceCell?
     private let textToSpeechManager =  TextToSpeechManager.shared
 
-    var sentences: [String] = [] {
+    var sentences: [NewSentence] = [] {
         didSet {
             tableView.reloadData()
         }
@@ -47,7 +47,7 @@ final class SentencesTableView: UIView {
         }
     }
 
-    func configure(with sentences: [String]) {
+    func configure(with sentences: [NewSentence]) {
         self.sentences = sentences
     }
 
@@ -69,14 +69,14 @@ extension SentencesTableView: UITableViewDataSource, UITableViewDelegate {
             return UITableViewCell()
         }
         cell.delegate = self
-        cell.configure(with: sentences[indexPath.row])
+        cell.configure(with: sentences[indexPath.row], type: .resultCell)
         return cell
     }
 }
 
 // MARK: - SentenceCellDelegate
 extension SentencesTableView: SentenceCellDelegate {
-    func didTapSave(for sentence: String, in cell: SentenceCell) {
+    func didTapSave(for sentence: NewSentence, in cell: SentenceCell) {
         delegate?.didTapSave(for: sentence, in: cell)
     }
     

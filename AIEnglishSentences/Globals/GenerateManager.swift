@@ -6,28 +6,41 @@
 //
 
 import Foundation
-import NotificationCenter
 
-final class GenerateManager {
-    static let shared = GenerateManager()
+final class SentenceManager {
+    // Singleton Instance
+    static let shared = SentenceManager()
+
+    // Notification Names
+    static let sentencesUpdatedNotification = Notification.Name("SentenceManager.sentencesUpdated")
+    
+    // Data Storage
+    private(set) var sentences: [NewSentence] = []
+
     private init() {}
 
-    var generateModels: [GenerateModel] = [] {
-        didSet {
-            NotificationCenter.default.post(name: .generateModelsUpdated, object: nil)
-        }
+    // Load Sentences (Service Call)
+    func loadSentences(_ newSentences: [NewSentence]) {
+        sentences = newSentences
+        notifySentencesUpdated()
     }
 
-    func addGenerateModel(_ model: GenerateModel) {
-        generateModels.append(model)
-    }
+    // Güncelleme İşlemi
+     func updateSentence(_ sentence: NewSentence, at index: Int) {
+         guard index >= 0 && index < sentences.count else { return }
+         sentences[index] = sentence
+         notifySentencesUpdated()
+     }
 
-    func removeGenerateModel(at index: Int) {
-        guard index < generateModels.count else { return }
-        generateModels.remove(at: index)
+    // Add Sentence
+    func addSentence(_ sentence: NewSentence) {
+        sentences.append(sentence)
+        notifySentencesUpdated()
     }
-}
+    
 
-extension Notification.Name {
-    static let generateModelsUpdated = Notification.Name("generateModelsUpdated")
+    // Notify Observers
+    private func notifySentencesUpdated() {
+        NotificationCenter.default.post(name: SentenceManager.sentencesUpdatedNotification, object: nil)
+    }
 }

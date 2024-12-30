@@ -16,7 +16,7 @@ final class GenerateViewModel: BaseViewModel {
     let maxWords = 10
     let sentenceCount = 2
     
-    func generateSentences(completion: @escaping(Result<GenerateModel,Error>)->Void){
+    func generateSentences(completion: @escaping(Result<[NewSentence],Error>)->Void){
         startLoading()
         
         openAIService.generateSentences(inputWords: inputWords, maxWords: maxWords, sentenceCount: sentenceCount) { result in
@@ -26,9 +26,7 @@ final class GenerateViewModel: BaseViewModel {
                 case .success(let sentences):
                     self.stopLoading()
                     print("Generated Sentences:")
-                    sentences.forEach { print($0) }
-                    let generateModel = GenerateModel(id: UUID().uuidString, words: self.inputWords, sentences: sentences)
-                    completion(.success(generateModel))
+                    completion(.success(sentences))
                     
                 case .failure(let error):
                     self.stopLoading()

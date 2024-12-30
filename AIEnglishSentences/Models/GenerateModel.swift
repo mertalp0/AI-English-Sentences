@@ -13,3 +13,16 @@ struct GenerateModel: Codable {
     let words: String
     let sentences: [String]
 }
+
+
+
+struct NewSentence: Codable {
+    let id: String
+    let sentence: String
+    var favorite: Bool
+    let category: String
+    let promt: String
+    let writingTone: String
+    let writingStyle: String
+    let createdAt: Date
+}

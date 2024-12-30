@@ -22,12 +22,12 @@ final class GenerateCoordinator: BaseCoordinator {
         
     }
     
-    func showResult(generateModel: GenerateModel) {
+    func showResult(sentences: [NewSentence]) {
         guard let navigationController = navigationController else {
             fatalError("Navigation controller is nil in showResult")
         }
         let resultCoordinator = ResultCoordinator(navigationController: navigationController)
-        resultCoordinator.generateModel = generateModel
+        resultCoordinator.sentences = sentences
         resultCoordinator.start()
 
         if let tabBarController = navigationController.tabBarController {

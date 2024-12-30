@@ -155,10 +155,10 @@ extension GenerateVC {
         
         viewModel.generateSentences { result in
             switch result{
-            case .success(let generateModel):
+            case .success(let sentences):
                 
                 DispatchQueue.main.async {
-                    self.coordinator?.showResult(generateModel: generateModel)
+                    self.coordinator?.showResult(sentences: sentences)
                 }
             default:
                 print("generateSentences Error")
