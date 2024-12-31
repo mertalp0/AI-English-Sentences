@@ -52,6 +52,7 @@ final class UserService {
             }
         }
     }
+    
     func addGenerateIdToUser(userId: String, generateId: String, completion: @escaping (Result<Void, Error>) -> Void) {
         let userRef = Firestore.firestore().collection("users").document(userId)
         
@@ -79,4 +80,6 @@ final class UserService {
             }
         }
     }
+    
+
 }
