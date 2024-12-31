@@ -24,6 +24,7 @@ final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel> {
         setupUI()
         setupActions()
         configureTableView()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -89,11 +90,36 @@ extension ResultVC {
 
 extension ResultVC: SentenceTableViewDelegate {
     func didTapSave(for sentence: NewSentence, in cell: SentenceCell) {
-        viewModel.saveSentence(sentence: sentence) { isSucces in
-            if isSucces {
-                self.showSuccesAlert()
+        if SentenceManager.shared.sentences.contains(where: { $0.id == sentence.id }) {
+            // Cümle zaten kaydedildiyse sil
+            viewModel.deleteSentence(sentence: sentence) { [weak self] isSuccess in
+                guard let self = self else { return }
+                if isSuccess {
+                    cell.updateSaveAndFavoriteButton(for: sentence)
+                    self.showAlert(title: "Success", message: "Sentence removed successfully.")
+                } else {
+                    self.showAlert(title: "Error", message: "Failed to remove sentence.")
+                }
+            }
+        } else {
+            // Cümle kaydedilmemişse kaydet
+            viewModel.saveSentence(sentence: sentence) { [weak self] isSuccess in
+                guard let self = self else { return }
+                if isSuccess {
+                    cell.updateSaveAndFavoriteButton(for: sentence)
+                    self.showAlert(title: "Success", message: "Sentence saved successfully.")
+                } else {
+                    self.showAlert(title: "Error", message: "Failed to save sentence.")
+                }
             }
         }
+    }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
     }
 }
  

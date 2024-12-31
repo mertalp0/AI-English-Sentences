@@ -50,6 +50,7 @@ final class SentencesTableView: UIView {
     func configure(with sentences: [NewSentence]) {
         self.sentences = sentences
     }
+    
 
     private func stopCurrentSpeaking() {
         currentlyPlayingCell?.updatePlayButton(isPlaying: false)
@@ -76,7 +77,7 @@ extension SentencesTableView: UITableViewDataSource, UITableViewDelegate {
 
 // MARK: - SentenceCellDelegate
 extension SentencesTableView: SentenceCellDelegate {
-    func didTapSave(for sentence: NewSentence, in cell: SentenceCell) {
+    func didTapSaveAndFavorite(for sentence: NewSentence, in cell: SentenceCell) {
         delegate?.didTapSave(for: sentence, in: cell)
     }
     
@@ -95,3 +96,4 @@ extension SentencesTableView: SentenceCellDelegate {
         }
     }
 }
+

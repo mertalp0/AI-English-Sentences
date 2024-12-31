@@ -81,7 +81,5 @@ final class UserService {
         }
     }
     
-    func addFavoriteSentence(){}
-    
-    func deleteFavoriteSentence(){}
+
 }

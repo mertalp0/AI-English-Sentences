@@ -13,7 +13,6 @@ final class ResultViewModel: BaseViewModel {
     private let authService = AuthService.shared
     private let userService = UserService.shared
     
-  
     func saveSentence(sentence: NewSentence, completion: @escaping (Bool) -> Void) {
         startLoading()
         generateService.saveSentence(sentence: sentence) { [weak self] result in
@@ -27,7 +26,7 @@ final class ResultViewModel: BaseViewModel {
                 completion(false)
             }
         }
-   
+        
     }
     
     private func handleSentenceeSaveSuccess(sentence: NewSentence, completion: @escaping (Bool) -> Void) {
@@ -36,7 +35,7 @@ final class ResultViewModel: BaseViewModel {
             completion(false)
             return
         }
-
+        
         userService.addGenerateIdToUser(userId: userId, generateId: sentence.id) { [weak self] result in
             guard let self = self else { return }
             switch result {
@@ -49,4 +48,45 @@ final class ResultViewModel: BaseViewModel {
             }
         }
     }
+    
+    func deleteSentence(sentence: NewSentence, completion: @escaping (Bool) -> Void) {
+        startLoading()
+        
+        generateService.deleteSentence(sentence: sentence) { [weak self] result in
+            switch result {
+            case .success:
+                if let index = SentenceManager.shared.sentences.firstIndex(where: { $0.id == sentence.id }) {
+                    
+                    print("\(sentence.sentence) başarıyla silindi.")
+                    guard let userId = self?.authService.getCurrentUserId() else {
+                        print("Kullanıcı ID'si alınamadı.")
+                        completion(false)
+                        return
+                    }
+                    
+                    self?.userService.removeGenerateIdFromUser(userId: userId, generateId: sentence.id) { result in
+                        switch result {
+                        case .success:
+                            SentenceManager.shared.removeSentence(at: index)
+                            print("\(sentence.id) kullanıcıdan başarıyla kaldırıldı.")
+                            completion(true)
+                        case .failure(let error):
+                            self?.handleError(message: error.localizedDescription)
+                            print("Kullanıcıdan generateId kaldırma başarısız: \(error.localizedDescription)")
+                            completion(false)
+                        }
+                    }
+                } else {
+                    print("Cümle yerel listede bulunamadı.")
+                    completion(false)
+                }
+            case .failure(let error):
+                self?.handleError(message: error.localizedDescription)
+                print("Cümle silme başarısız: \(error.localizedDescription)")
+                completion(false)
+            }
+            self?.stopLoading()
+        }
+    }
 }
+

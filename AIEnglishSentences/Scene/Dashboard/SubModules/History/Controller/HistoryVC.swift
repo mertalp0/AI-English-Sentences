@@ -31,7 +31,11 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
         setupUI()
         setupNotificationCenter()
         fetchSentences()
-       
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        updateUIForCurrentData()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -69,7 +73,7 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
         view.addSubview(tableView)
-
+        
         tableView.snp.makeConstraints { make in
             make.top.equalTo(historySegmentedControl.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview()
@@ -99,6 +103,7 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
     
     private func loadInitialData() {
         allData = SentenceManager.shared.sentences
+        favouritesData = allData.filter {$0.favorite}
         tableView.reloadData()
     }
     
@@ -146,6 +151,23 @@ extension HistoryVC: UITableViewDataSource, UITableViewDelegate {
         cell.configure(with: currentData[indexPath.row], type: .historyCell)
         return cell
     }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        if historySegmentedControl.selectedIndex != 0 {
+            return nil
+        }
+        
+        let sentence = currentData[indexPath.row]
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completionHandler in
+            guard let self = self else { return }
+            self.didTapDelete(for: sentence, in: tableView.cellForRow(at: indexPath) as! SentenceCell)
+            completionHandler(true)
+        }
+        deleteAction.backgroundColor = .systemRed
+        
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
 }
 
 // MARK: - CustomSegmentedControlDelegate
@@ -163,27 +185,49 @@ extension HistoryVC: AppBarDelegate {
 
 // MARK: - SentenceCellDelegate
 extension HistoryVC: SentenceCellDelegate {
+    func didTapCopyButton(for sentence: String, in cell: SentenceCell) {
+        
+    }
     
-    func didTapSave(for sentence: NewSentence, in cell: SentenceCell) {
+    
+    func didTapSaveAndFavorite(for sentence: NewSentence, in cell: SentenceCell) {
+        
+        
         if let indexInAllData = SentenceManager.shared.sentences.firstIndex(where: { $0.id == sentence.id }) {
             var updatedSentence = sentence
             updatedSentence.favorite.toggle()
             
             if updatedSentence.favorite {
-                if !favouritesData.contains(where: { $0.id == updatedSentence.id }) {
-                    favouritesData.append(updatedSentence)
-                    print("\(updatedSentence.sentence) favorilere eklendi.")
+                viewModel.addFavoriteSentence(sentence: updatedSentence) { [weak self] isSuccess in
+                    guard let self = self else { return }
+                    if isSuccess {
+                        if !self.favouritesData.contains(where: { $0.id == updatedSentence.id }) {
+                            self.favouritesData.append(updatedSentence)
+                            print("\(updatedSentence.sentence) favorilere eklendi.")
+                        }
+                        SentenceManager.shared.updateSentence(updatedSentence, at: indexInAllData)
+                        self.updateUIForCurrentData()
+                    } else {
+                        print("Favori ekleme başarısız.")
+                    }
                 }
             } else {
-                if let indexInFavorites = favouritesData.firstIndex(where: { $0.id == updatedSentence.id }) {
-                    favouritesData.remove(at: indexInFavorites)
-                    print("\(updatedSentence.sentence) favorilerden çıkarıldı.")
+                viewModel.deleteFavoriteSentence(sentence: updatedSentence) { [weak self] isSuccess in
+                    guard let self = self else { return }
+                    if isSuccess {
+                        if let indexInFavorites = self.favouritesData.firstIndex(where: { $0.id == updatedSentence.id }) {
+                            self.favouritesData.remove(at: indexInFavorites)
+                            print("\(updatedSentence.sentence) favorilerden çıkarıldı.")
+                        }
+                        SentenceManager.shared.updateSentence(updatedSentence, at: indexInAllData)
+                        self.updateUIForCurrentData()
+                    } else {
+                        print("Favorilerden çıkarma başarısız.")
+                    }
                 }
             }
-            
-            SentenceManager.shared.updateSentence(updatedSentence, at: indexInAllData)
         }
-        updateUIForCurrentData()     }
+    }
     
     func didTapPlayButton(for sentence: String, in cell: SentenceCell) {
         if let currentlyPlayingCell = currentlyPlayingCell, currentlyPlayingCell == cell {
@@ -194,6 +238,33 @@ extension HistoryVC: SentenceCellDelegate {
             textToSpeechManager.speak(text: sentence)
             cell.updatePlayButton(isPlaying: true)
             currentlyPlayingCell = cell
+        }
+    }
+    
+    func didTapDelete(for sentence: NewSentence, in cell: SentenceCell) {
+        let alertController = UIAlertController(
+            title: "Delete Sentence",
+            message: "Are you sure you want to delete this sentence?",
+            preferredStyle: .alert
+        )
+        
+        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+        alertController.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+            self?.deleteSentence(sentence: sentence)
+        })
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
+    private func deleteSentence(sentence: NewSentence) {
+        viewModel.deleteSentence(sentence: sentence) { [weak self] isSuccess in
+            if isSuccess {
+                print("\(sentence.sentence) başarıyla silindi.")
+                self?.loadInitialData()
+                self?.updateUIForCurrentData()
+            } else {
+                print("\(sentence.sentence) silinirken hata oluştu.")
+            }
         }
     }
 }
