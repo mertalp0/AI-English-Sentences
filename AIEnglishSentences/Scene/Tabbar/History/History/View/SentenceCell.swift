@@ -11,7 +11,7 @@ import SnapKit
 protocol SentenceCellDelegate: AnyObject {
     func didTapPlayButton(for sentence: String, in cell: SentenceCell)
     func didTapSaveAndFavorite(for sentence: NewSentence, in cell: SentenceCell)
-//    func didTapCopyButton(for sentence: String, in cell: SentenceCell)
+    func didTapCopyButton(for sentence: String, in cell: SentenceCell)
 }
 enum SentenceCellType {
     case historyCell
@@ -259,7 +259,7 @@ final class SentenceCell: UITableViewCell {
     }
     
     @objc private func onTapCopy() {
-//          guard let sentence = currentSentence else { return }
-//          delegate?.didTapCopyButton(for: sentence.sentence, in: self)
+          guard let sentence = currentSentence else { return }
+          delegate?.didTapCopyButton(for: sentence.sentence, in: self)
       }
 }

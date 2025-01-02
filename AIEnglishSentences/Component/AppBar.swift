@@ -17,6 +17,8 @@ enum AppBarType {
     case generate(pageCellType: CellType)
     case history
     case profile
+    case contexta
+    case result
     
     var title: String {
         switch self {
@@ -26,8 +28,12 @@ enum AppBarType {
             return "History"
         case .profile:
             return "My Profile"
+        case .contexta:
+            return "Contexta"
+        case .result:
+            return "Sentences"
         }
-        
+
     }
     
     var rightIcon: UIImage? {
@@ -35,8 +41,12 @@ enum AppBarType {
         case .generate:
             return UIImage(systemName: "square.and.arrow.up.circle")
         case .history:
-            return UIImage(systemName: "gear")
+            return nil
         case .profile:
+            return nil
+        case .contexta:
+            return nil
+        case .result:
             return nil
         }
     }
@@ -49,7 +59,28 @@ enum AppBarType {
             return nil
         case .profile:
             return nil
+        case .contexta:
+            return nil
+        case .result:
+            return UIImage(systemName: "chevron.left")
         }
+        
+    }
+    
+    var titleColor: UIColor {
+        switch self {
+        case .generate:
+            return .main
+        case .history:
+            return .main
+        case .profile:
+            return .white
+        case .contexta:
+            return .main
+        case .result:
+            return .main
+        }
+        
     }
     
 }
@@ -60,23 +91,23 @@ final class AppBar: UIView {
     weak var delegate: AppBarDelegate?
     
     //MARK: - UI Elements
-    private let titleLabel: UILabel = {
+     var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 24)
-        label.textColor = .black
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
         return label
     }()
     
     private let leftButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .black
+        button.tintColor = .main
         return button
     }()
     
     private let rightButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .black
+        button.tintColor = .main
         return button
     }()
     
@@ -140,8 +171,13 @@ final class AppBar: UIView {
             rightButton.setImage(resizedRightIcon, for: .normal)
         }
         
-        leftButton.isHidden = (type.leftIcon == nil)
-        rightButton.isHidden = (type.rightIcon == nil)
+        titleLabel.textColor = type.titleColor
+        
+        rightButton.setTitleColor(type.titleColor, for: .normal)
+        leftButton.setTitleColor(type.titleColor, for: .normal)
+
+        leftButton.isHidden = type.leftIcon == nil
+        rightButton.isHidden = type.rightIcon == nil
     }
     
     // MARK: - Actions

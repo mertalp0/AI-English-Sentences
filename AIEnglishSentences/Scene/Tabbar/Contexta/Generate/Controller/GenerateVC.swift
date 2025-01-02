@@ -46,6 +46,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
         // Question Label
         questionLabel = UILabel()
         questionLabel.text = "What will you generate today?"
+        questionLabel.textColor = .main
         questionLabel.font = .systemFont(ofSize: 20, weight: .light)
         view.addSubview(questionLabel)
         questionLabel.snp.makeConstraints { make in

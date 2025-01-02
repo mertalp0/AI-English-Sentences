@@ -10,6 +10,7 @@ import SnapKit
 
 protocol SentenceTableViewDelegate: AnyObject {
     func didTapSave(for sentence: NewSentence, in cell: SentenceCell)
+    func didTapCopyButton(for sentence: String, in cell: SentenceCell)
 }
 
 final class SentencesTableView: UIView {
@@ -77,6 +78,10 @@ extension SentencesTableView: UITableViewDataSource, UITableViewDelegate {
 
 // MARK: - SentenceCellDelegate
 extension SentencesTableView: SentenceCellDelegate {
+    func didTapCopyButton(for sentence: String, in cell: SentenceCell) {
+        delegate?.didTapCopyButton(for: sentence, in: cell)
+    }
+    
     func didTapSaveAndFavorite(for sentence: NewSentence, in cell: SentenceCell) {
         delegate?.didTapSave(for: sentence, in: cell)
     }

@@ -186,7 +186,8 @@ extension HistoryVC: AppBarDelegate {
 // MARK: - SentenceCellDelegate
 extension HistoryVC: SentenceCellDelegate {
     func didTapCopyButton(for sentence: String, in cell: SentenceCell) {
-        
+        UIPasteboard.general.string = sentence
+        showToast(message: "Copied to clipboard!")
     }
     
     

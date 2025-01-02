@@ -14,7 +14,7 @@ final class ContextaVC: BaseViewController<ContextaCoordinator, ContextaViewMode
     let categoryCell: [CellType] = [.professional, .personal, .educational]
 
     // MARK: - UI Elements
-    private var pageTitle: UILabel!
+    private var appBar: AppBar!
     private var subTitle: UILabel!
     private var categoriesTitle: UILabel!
     private var categoryTableView: UITableView!
@@ -30,13 +30,9 @@ final class ContextaVC: BaseViewController<ContextaCoordinator, ContextaViewMode
         view.backgroundColor = .white
         
         // Page Title
-        pageTitle = UILabel()
-        pageTitle.text = "Contexta"
-        pageTitle.textColor = .mainColor
-        pageTitle.font = .systemFont(ofSize: 24, weight: .bold)
-        pageTitle.textAlignment = .center
-        view.addSubview(pageTitle)
-        pageTitle.snp.makeConstraints { make in
+        appBar = AppBar(type: .contexta)
+        view.addSubview(appBar)
+        appBar.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(UIHelper.statusBarHeight + 10)
         }
@@ -50,7 +46,7 @@ final class ContextaVC: BaseViewController<ContextaCoordinator, ContextaViewMode
         view.addSubview(subTitle)
         subTitle.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(pageTitle.snp.bottom).offset(5)
+            make.top.equalTo(appBar.snp.bottom).offset(5)
         }
         
         // CategoriesTitle

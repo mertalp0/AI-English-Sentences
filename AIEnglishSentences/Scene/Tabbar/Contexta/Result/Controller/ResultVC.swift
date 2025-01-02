@@ -14,15 +14,13 @@ final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel> {
     var sentences: [NewSentence]?
     
     // MARK: - UI Elements
-    private var pageTitle: UILabel!
-    private var backButton: CustomButton!
+    private var appBar: AppBar!
     private var sentencesTableView: SentencesTableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
         setupUI()
-        setupActions()
         configureTableView()
         
     }
@@ -32,39 +30,25 @@ final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel> {
     }
     
     private func setupUI() {
-        // Page Title
-        pageTitle = UILabel()
-        pageTitle.text = String(describing: type(of: self))
-        pageTitle.textColor = .black
-        view.addSubview(pageTitle)
-        pageTitle.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
+        
+        // AppBar
+        appBar = AppBar(type: .result)
+        appBar.delegate = self
+        view.addSubview(appBar)
+        appBar.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
             make.top.equalTo(UIHelper.statusBarHeight + 10)
         }
-        
-        // Back Button
-        backButton = CustomButton()
-        backButton.configure(title: "Back", backgroundColor: .systemGreen, textColor: .white)
-        view.addSubview(backButton)
-        backButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-250)
-        }
-        
     
         // Sentences TableView
         sentencesTableView = SentencesTableView()
         sentencesTableView.delegate = self
         view.addSubview(sentencesTableView)
         sentencesTableView.snp.makeConstraints { make in
-            make.top.equalTo(pageTitle.snp.bottom)
-            make.bottom.equalTo(backButton.snp.top)
+            make.top.equalTo(appBar.snp.bottom)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             make.left.right.equalToSuperview()
         }
-    }
-    
-    private func setupActions() {
-        backButton.addTarget(self, action: #selector(onTapBack), for: .touchUpInside)
     }
     
     private func configureTableView() {
@@ -73,25 +57,35 @@ final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel> {
     }
 }
 
-// MARK: - Actions
+// MARK: - Alert
 extension ResultVC {
-    @objc func onTapBack() {
-        coordinator?.showRoot()
-    }
-
+    
     private func showSuccesAlert() {
         let alert = UIAlertController(title: "Success", message: "Registration successful", preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .default, handler: nil)
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }
+    
+    private func showAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default)
+        alert.addAction(okAction)
+        present(alert, animated: true)
+    }
+
 }
 
 
 extension ResultVC: SentenceTableViewDelegate {
+    func didTapCopyButton(for sentence: String, in cell: SentenceCell) {
+        UIPasteboard.general.string = sentence
+        showToast(message: "Copied to clipboard!")
+    }
+     
     func didTapSave(for sentence: NewSentence, in cell: SentenceCell) {
         if SentenceManager.shared.sentences.contains(where: { $0.id == sentence.id }) {
-            // Cümle zaten kaydedildiyse sil
+            
             viewModel.deleteSentence(sentence: sentence) { [weak self] isSuccess in
                 guard let self = self else { return }
                 if isSuccess {
@@ -102,7 +96,6 @@ extension ResultVC: SentenceTableViewDelegate {
                 }
             }
         } else {
-            // Cümle kaydedilmemişse kaydet
             viewModel.saveSentence(sentence: sentence) { [weak self] isSuccess in
                 guard let self = self else { return }
                 if isSuccess {
@@ -115,11 +108,16 @@ extension ResultVC: SentenceTableViewDelegate {
         }
     }
     
-    private func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default)
-        alert.addAction(okAction)
-        present(alert, animated: true)
-    }
 }
  
+extension ResultVC: AppBarDelegate {
+    func leftButtonTapped() {
+        coordinator?.showRoot()
+
+    }
+    
+    func rightButtonTapped() {
+        
+    }
+    
+}
