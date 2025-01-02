@@ -2,83 +2,120 @@
 //  ProfileVC.swift
 //  AIEnglishSentences
 //
-//  Created by mert alp on 16.12.2024.
+//  Created by mert alp on 02.01.2025.
 //
 
 import UIKit
+import SnapKit
 import BaseMVVMCKit
 
-final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel>{
+final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> {
     
-    //MARK: - UI Elements
-    private var  pageTitle : UILabel!
-    private var  logoutButton : CustomButton!
-    private var  IqtestButton : CustomButton!
-    private var  shareButton : CustomButton!
+    // MARK: - UI Elements
+    private var profileHeaderView: ProfileHeaderView!
+    private var optionsTableView: UITableView!
+    private var logoutButton: UIButton!
     
+    private let options = [
+        ("Language", UIImage(systemName: "globe")),
+        ("Rate App", UIImage(systemName: "star")),
+        ("Terms & Conditions", UIImage(systemName: "doc.text")),
+        ("Privacy Policy", UIImage(systemName: "lock")),
+        ("Invite Friends", UIImage(systemName: "envelope"))
+    ]
+    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
         setupUI()
         setupActions()
+        fetchUserData()
     }
     
-    private func setupUI(){
+    // MARK: - Setup UI
+    private func setupUI() {
+        // Profile Header
+        profileHeaderView = ProfileHeaderView()
+        view.addSubview(profileHeaderView)
         
-        //Page Title
-        pageTitle = UILabel()
-        pageTitle.text = String(describing: type(of: self))
-        pageTitle.textColor = .black
-        
-        view.addSubview(pageTitle)
-        pageTitle.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+        profileHeaderView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(250)
         }
         
-        //logout Button
-        logoutButton = CustomButton()
-        logoutButton.configure(title: "Logout", backgroundColor: .systemGreen, textColor: .white)
+        // Options TableView
+        optionsTableView = UITableView()
+        optionsTableView.delegate = self
+        optionsTableView.dataSource = self
+        optionsTableView.register(ProfileCell.self, forCellReuseIdentifier: "ProfileCell")
+        optionsTableView.rowHeight = 60
+        optionsTableView.isScrollEnabled = false
+        optionsTableView.backgroundColor = .clear
+        view.addSubview(optionsTableView)
         
+        optionsTableView.snp.makeConstraints { make in
+            make.top.equalTo(profileHeaderView.snp.bottom).offset(16)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(80)
+        }
+        
+        // Logout Button
+        logoutButton = UIButton(type: .system)
+        logoutButton.setTitle("Log Out", for: .normal)
+        logoutButton.setTitleColor(.systemRed, for: .normal)
+        logoutButton.layer.cornerRadius = 10
+        logoutButton.layer.borderWidth = 1
+        logoutButton.layer.borderColor = UIColor.systemRed.cgColor
         view.addSubview(logoutButton)
+        
         logoutButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-250)
-        }
-        
-        //IQ-Test Button
-        IqtestButton = CustomButton()
-        IqtestButton.configure(title: "IqtestButton", backgroundColor: .blue, textColor: .white)
-        
-        view.addSubview(IqtestButton)
-        IqtestButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-150)
-        }
-        
-        //Share Button
-        shareButton = CustomButton()
-        shareButton.configure(title: "share Button", backgroundColor: .blue, textColor: .white)
-        
-        view.addSubview(shareButton)
-        shareButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-300)
+            make.top.equalTo(optionsTableView.snp.bottom).offset(16)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(50)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-22)
         }
     }
     
-    private func setupActions(){
-        logoutButton.addTarget(self, action: #selector(onTapLogout) , for: .touchUpInside)
-        IqtestButton.addTarget(self, action: #selector(onTapIqTest) , for: .touchUpInside)
-        shareButton.addTarget(self, action: #selector(onTapShare) , for: .touchUpInside)
-
+    private func setupActions() {
+        logoutButton.addTarget(self, action: #selector(onLogoutButtonPressed), for: .touchUpInside)
+    }
+    
+    private func fetchUserData() {
+        viewModel.getUser { [weak self] user in
+            guard let self = self else { return }
+            self.profileHeaderView.configure(name: user.name, email: user.email)
+        }
     }
 }
+
+// MARK: - UITableViewDelegate, UITableViewDataSource
+extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return options.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "ProfileCell", for: indexPath) as? ProfileCell else {
+            return UITableViewCell()
+        }
+        let option = options[indexPath.row]
+        cell.configure(with: option.0, icon: option.1)
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let option = options[indexPath.row]
+        print("Tapped on: \(option.0)")
+    }
+}
+
 
 //MARK: - Actions
 extension ProfileVC {
     
-    @objc private func onTapLogout(){
+    @objc private func onLogoutButtonPressed() {
         tabBarController?.tabBar.isUserInteractionEnabled = false
         viewModel.logout { isSucces in
             switch isSucces {
@@ -92,6 +129,7 @@ extension ProfileVC {
         }
     }
     
+
     @objc private func onTapIqTest() {
         print("IQ Test Button tapped")
         viewModel.openIqTestApp { success in

@@ -16,6 +16,7 @@ protocol AppBarDelegate: AnyObject {
 enum AppBarType {
     case generate
     case history
+    case profile
     
     var title: String {
         switch self {
@@ -23,7 +24,10 @@ enum AppBarType {
             return "Generate"
         case .history:
             return "History"
+        case .profile:
+            return "My Profile"
         }
+        
     }
     
     var rightIcon: UIImage? {
@@ -32,6 +36,8 @@ enum AppBarType {
             return UIImage(systemName: "square.and.arrow.up.circle")
         case .history:
             return UIImage(systemName: "gear")
+        case .profile:
+            return nil
         }
     }
     
@@ -41,8 +47,11 @@ enum AppBarType {
             return UIImage(systemName: "chevron.left")
         case .history:
             return nil
+        case .profile:
+            return nil
         }
     }
+    
 }
 
 final class AppBar: UIView {
@@ -84,7 +93,7 @@ final class AppBar: UIView {
     
     // MARK: - Setup
     private func setupView() {
-        backgroundColor = .init(hex: "F2F2F2")
+        backgroundColor = .clear
         
         addSubview(titleLabel)
         addSubview(leftButton)

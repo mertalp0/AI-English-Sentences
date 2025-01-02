@@ -259,7 +259,7 @@ final class SentenceCell: UITableViewCell {
     }
     
     @objc private func onTapCopy() {
-          guard let sentence = currentSentence else { return }
+//          guard let sentence = currentSentence else { return }
 //          delegate?.didTapCopyButton(for: sentence.sentence, in: self)
       }
 }
