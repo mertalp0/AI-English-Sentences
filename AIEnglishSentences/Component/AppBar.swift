@@ -14,14 +14,14 @@ protocol AppBarDelegate: AnyObject {
 }
 
 enum AppBarType {
-    case generate
+    case generate(pageCellType: CellType)
     case history
     case profile
     
     var title: String {
         switch self {
-        case .generate:
-            return "Generate"
+        case .generate(let pageCellType):
+            return pageCellType.title
         case .history:
             return "History"
         case .profile:

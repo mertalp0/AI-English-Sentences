@@ -11,7 +11,7 @@ import BaseMVVMCKit
 final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewModel> {
     
     // MARK: - Properties
-    var pageCellType: CellType?
+    var pageCellType: CellType!
     
     // MARK: - UI Elements
     private weak var generateButton: GenerateButton!
@@ -35,7 +35,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
         view.backgroundColor = .init(hex: "F2F2F2")
         
         // AppBar
-        appBar = AppBar(type: .generate)
+        appBar = AppBar(type: .generate(pageCellType: pageCellType))
         appBar.delegate = self
         view.addSubview(appBar)
         appBar.snp.makeConstraints { make in
@@ -64,10 +64,15 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
             make.height.equalTo(160)
         }
         
-        // Writing Tone Dropdown
         writingTone = DropdownMenuButton(
             title: "Writing Tone",
-            options: ["Default (Formal)", "Friendly", "Casual", "Academic"]
+            options: [
+                "Formal",
+                "Friendly",
+                "Casual",
+                "Inspirational",
+                "Humorous"
+            ]
         )
         writingTone.onDropdownTapped = { [weak self] in
             self?.view.endEditing(true) // Klavyeyi kapat
@@ -83,13 +88,18 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
             make.height.equalTo(70)
         }
         
-        // Writing Style Dropdown
         writingStyle = DropdownMenuButton(
             title: "Writing Style",
-            options: ["Formal", "Informal", "Persuasive", "Narrative"]
+            options: [
+                "Persuasive",
+                "Narrative",
+                "Descriptive",
+                "Explanatory",
+                "Creative"
+            ]
         )
         writingStyle.onDropdownTapped = { [weak self] in
-            self?.view.endEditing(true) // Klavyeyi kapat
+            self?.view.endEditing(true) 
         }
         writingStyle.onOptionSelected = { selectedOption in
             print("Selected Writing Style: \(selectedOption)")
@@ -158,14 +168,29 @@ extension GenerateVC {
         guard let button = generateButton else { return }
         print("Generate button tapped: \(button)")
         
-        viewModel.generateSentences { result in
+        // UI'dan alınan değerler
+        let inputWords = textField.text ?? ""
+        let maxWords = wordSelector.selectedValue
+        let sentenceCount = sentenceSelector.selectedValue
+        let category = pageCellType?.title
+        let tone = writingTone.selectedOption ?? "Default (Formal)"
+        let style = writingStyle.selectedOption ?? "Formal"
+        
+        viewModel.generateSentences(
+            inputWords: inputWords,
+            maxWords: maxWords ?? 10,
+            sentenceCount: sentenceCount ?? 1,
+            category: category ?? "Professional",
+            writingTone: tone,
+            writingStyle: style
+        ) { result in
             switch result {
             case .success(let sentences):
                 DispatchQueue.main.async {
                     self.coordinator?.showResult(sentences: sentences)
                 }
-            default:
-                print("generateSentences Error")
+            case .failure(let error):
+                print("generateSentences Error: \(error)")
             }
         }
     }

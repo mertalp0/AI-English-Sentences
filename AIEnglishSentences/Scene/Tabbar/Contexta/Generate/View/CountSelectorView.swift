@@ -17,7 +17,7 @@ enum CountSelectorViewType {
         case .sentence:
             return "Sentence Count"
         case .word:
-            return "Word Count"
+            return "Maximum Word Count"
         }
     }
     
@@ -41,6 +41,7 @@ final class CountSelectorView: UIView {
     private let container = UIView()
     private let titleLabel = UILabel()
     private let optionsStackView = UIStackView()
+    private(set) var selectedValue: Int? // Seçilen değer
     
     weak var delegate: CountSelectorViewDelegate?
     
@@ -50,6 +51,7 @@ final class CountSelectorView: UIView {
         setupViews()
         setupConstraints()
         setupOptions()
+        selectedValue = type.values.first // Varsayılan değer
     }
     
     required init?(coder: NSCoder) {
@@ -107,19 +109,26 @@ final class CountSelectorView: UIView {
             button.addTarget(self, action: #selector(optionTapped(_:)), for: .touchUpInside)
             optionsStackView.addArrangedSubview(button)
         }
+        
+        // Varsayılan seçimi ayarla
+        if let firstButton = optionsStackView.arrangedSubviews.first as? UIButton {
+            firstButton.backgroundColor = .systemBlue.withAlphaComponent(0.2)
+        }
     }
     
     @objc private func optionTapped(_ sender: UIButton) {
         guard let value = sender.titleLabel?.text, let intValue = Int(value) else { return }
         
+        // Seçilen değeri güncelle
+        selectedValue = intValue
         delegate?.countSelectorView(self, didSelectValue: intValue)
         
-        self.optionsStackView.arrangedSubviews.forEach { view in
+        // Seçilen butonu vurgula
+        optionsStackView.arrangedSubviews.forEach { view in
             if let button = view as? UIButton {
-                button.animateBackgroundColor(to: .white)
+                button.backgroundColor = .white
             }
         }
-        
-        sender.animateBackgroundColor(to: .systemBlue.withAlphaComponent(0.2))
+        sender.backgroundColor = .systemBlue.withAlphaComponent(0.2)
     }
 }

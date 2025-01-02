@@ -13,7 +13,7 @@ final class DropdownMenuButton: UIView, UITableViewDelegate, UITableViewDataSour
     // MARK: - Properties
     private let title: String
     private let options: [String]
-    private var selectedOption: String? {
+     var selectedOption: String? {
         didSet {
             selectedOptionLabel.text = selectedOption
         }

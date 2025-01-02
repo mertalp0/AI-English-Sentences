@@ -12,14 +12,17 @@ final class GenerateViewModel: BaseViewModel {
  
     let openAIService = OpenAIService()
 
-    let inputWords = "Color Text"
-    let maxWords = 10
-    let sentenceCount = 2
+  
     
-    func generateSentences(completion: @escaping(Result<[NewSentence],Error>)->Void){
-        startLoading()
+    func generateSentences (inputWords: String, maxWords: Int, sentenceCount: Int, category: String, writingTone: String, writingStyle: String , completion: @escaping(Result<[NewSentence],Error>)->Void){
         
-        openAIService.generateSentences(inputWords: inputWords, maxWords: maxWords, sentenceCount: sentenceCount) { result in
+        if inputWords.isEmpty {
+            handleError(message: "Please provide some input words to generate sentences.")
+            return
+        }
+        startLoading()
+
+        openAIService.generateSentences(inputWords: inputWords, maxWords: maxWords, sentenceCount: sentenceCount, category: category, writingTone: writingTone, writingStyle: writingStyle) { result in
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 switch result {
