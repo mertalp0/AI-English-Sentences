@@ -9,8 +9,8 @@ import UIKit
 import BaseMVVMCKit
 
 final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewModel> {
-              
-    //MARK: -  Properties
+    
+    // MARK: - Properties
     var pageCellType: CellType?
     
     // MARK: - UI Elements
@@ -34,6 +34,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
     private func setupUI() {
         view.backgroundColor = .init(hex: "F2F2F2")
         
+        // AppBar
         appBar = AppBar(type: .generate)
         appBar.delegate = self
         view.addSubview(appBar)
@@ -42,6 +43,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
             make.top.equalTo(UIHelper.statusBarHeight + 10)
         }
         
+        // Question Label
         questionLabel = UILabel()
         questionLabel.text = "What will you generate today?"
         questionLabel.font = .systemFont(ofSize: 20, weight: .light)
@@ -52,6 +54,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
             make.top.equalTo(appBar.snp.bottom).offset(13)
         }
         
+        // Text Field
         textField = GenerateTextView()
         view.addSubview(textField)
         textField.snp.makeConstraints { make in
@@ -61,16 +64,18 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
             make.height.equalTo(160)
         }
         
-        writingTone  = DropdownMenuButton(title: "Writing Tone", options: ["Default (Formal)", "Friendly", "Casual", "Academic"])
+        // Writing Tone Dropdown
+        writingTone = DropdownMenuButton(
+            title: "Writing Tone",
+            options: ["Default (Formal)", "Friendly", "Casual", "Academic"]
+        )
         writingTone.onDropdownTapped = { [weak self] in
-                   self?.view.endEditing(true)
-               }
-        writingTone.onOptionSelected = { selectedOption in
-            print("Selected Option: \(selectedOption)")
+            self?.view.endEditing(true) // Klavyeyi kapat
         }
-        
+        writingTone.onOptionSelected = { selectedOption in
+            print("Selected Writing Tone: \(selectedOption)")
+        }
         view.addSubview(writingTone)
-    
         writingTone.snp.makeConstraints { make in
             make.top.equalTo(textField.snp.bottom).offset(8)
             make.leading.equalToSuperview().offset(24)
@@ -78,23 +83,26 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
             make.height.equalTo(70)
         }
         
-        writingStyle = DropdownMenuButton(title: "Writing Tone", options: ["Default (Formal)", "Friendly", "Casual", "Academic"])
-        writingTone.onDropdownTapped = { [weak self] in
-                   self?.view.endEditing(true)
-               }
-        writingStyle.onOptionSelected = { selectedOption in
-            print("Selected Option: \(selectedOption)")
+        // Writing Style Dropdown
+        writingStyle = DropdownMenuButton(
+            title: "Writing Style",
+            options: ["Formal", "Informal", "Persuasive", "Narrative"]
+        )
+        writingStyle.onDropdownTapped = { [weak self] in
+            self?.view.endEditing(true) // Klavyeyi kapat
         }
-        
+        writingStyle.onOptionSelected = { selectedOption in
+            print("Selected Writing Style: \(selectedOption)")
+        }
         view.addSubview(writingStyle)
-    
         writingStyle.snp.makeConstraints { make in
             make.top.equalTo(writingTone.snp.bottom).offset(8)
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
             make.height.equalTo(70)
         }
-    
+        
+        // Sentence Selector
         sentenceSelector = CountSelectorView(type: .sentence)
         sentenceSelector.delegate = self
         view.addSubview(sentenceSelector)
@@ -104,7 +112,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
             make.trailing.equalToSuperview().offset(-24)
         }
         
-        
+        // Word Selector
         wordSelector = CountSelectorView(type: .word)
         wordSelector.delegate = self
         view.addSubview(wordSelector)
@@ -114,6 +122,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
             make.trailing.equalToSuperview().offset(-24)
         }
         
+        // Generate Button
         let generateBtn = GenerateButton()
         view.addSubview(generateBtn)
         generateBtn.snp.makeConstraints { make in
@@ -122,41 +131,36 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
             make.trailing.equalToSuperview().offset(-24)
         }
         generateButton = generateBtn
-        
     }
     
     private func setupActions() {
         generateButton.addTarget(self, action: #selector(onTapGenerate), for: .touchUpInside)
-        
     }
     
     override func showLoading() {
-           DispatchQueue.main.async {
-               if self.loadingView == nil {
-                   self.loadingView = GenerateLoadingView(frame: self.view.bounds) 
-                   self.loadingView?.alpha = 0
-                   self.view.addSubview(self.loadingView!)
-                   
-                   UIView.animate(withDuration: 0.3) {
-                       self.loadingView?.alpha = 1
-                   }
-               }
-           }
-       }
+        DispatchQueue.main.async {
+            if self.loadingView == nil {
+                self.loadingView = GenerateLoadingView(frame: self.view.bounds)
+                self.loadingView?.alpha = 0
+                self.view.addSubview(self.loadingView!)
+                
+                UIView.animate(withDuration: 0.3) {
+                    self.loadingView?.alpha = 1
+                }
+            }
+        }
+    }
 }
 
 // MARK: - Actions
 extension GenerateVC {
-    
     @objc private func onTapGenerate() {
-        
         guard let button = generateButton else { return }
         print("Generate button tapped: \(button)")
         
         viewModel.generateSentences { result in
-            switch result{
+            switch result {
             case .success(let sentences):
-                
                 DispatchQueue.main.async {
                     self.coordinator?.showResult(sentences: sentences)
                 }
@@ -167,28 +171,24 @@ extension GenerateVC {
     }
 }
 
-
 // MARK: - AppBarDelegate
 extension GenerateVC: AppBarDelegate {
-    
     func leftButtonTapped() {
         coordinator?.back()
     }
     
     func rightButtonTapped() {
-        
+        // Right button action
     }
-    
 }
 
+// MARK: - CountSelectorViewDelegate
 extension GenerateVC: CountSelectorViewDelegate {
     func countSelectorView(_ view: CountSelectorView, didSelectValue value: Int) {
-        print("Seçilen değer: \(value)")
-        
         if view.type == .sentence {
-            print("Sentence Count seçildi: \(value)")
+            print("Sentence Count Selected: \(value)")
         } else if view.type == .word {
-            print("Word Count seçildi: \(value)")
+            print("Word Count Selected: \(value)")
         }
     }
 }

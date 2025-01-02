@@ -28,7 +28,7 @@ final class ProfileCell: UITableViewCell {
     // MARK: - Setup UI
     private func setupUI() {
         self.selectionStyle = .none
-        
+        self.backgroundColor = .clear
         // Icon Image
         iconImageView = UIImageView()
         iconImageView.contentMode = .scaleAspectFit

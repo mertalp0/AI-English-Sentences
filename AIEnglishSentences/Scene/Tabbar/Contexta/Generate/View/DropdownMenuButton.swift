@@ -19,7 +19,6 @@ final class DropdownMenuButton: UIView, UITableViewDelegate, UITableViewDataSour
         }
     }
     var onDropdownTapped: (() -> Void)?
-
     
     private let titleLabel = UILabel()
     private let selectedOptionLabel = UILabel()
@@ -126,6 +125,7 @@ final class DropdownMenuButton: UIView, UITableViewDelegate, UITableViewDataSour
         if isExpanded {
             superview.bringSubviewToFront(tableView)
             tableView.isHidden = false
+            tableView.reloadData()
             tableViewHeightConstraint.constant = CGFloat(options.count * 44)
             dropdownIcon.transform = CGAffineTransform(rotationAngle: .pi)
         } else {
@@ -133,13 +133,19 @@ final class DropdownMenuButton: UIView, UITableViewDelegate, UITableViewDataSour
             dropdownIcon.transform = .identity
         }
 
-        UIView.animate(withDuration: 0.3, animations: {
-            superview.layoutIfNeeded()
-        }) { _ in
-            if !self.isExpanded {
-                tableView.isHidden = true
+        UIView.animate(
+            withDuration: 0.3,
+            delay: 0,
+            options: .curveEaseInOut,
+            animations: {
+                superview.layoutIfNeeded()
+            },
+            completion: { _ in
+                if !self.isExpanded {
+                    tableView.isHidden = true
+                }
             }
-        }
+        )
     }
     
     // MARK: - TableView DataSource & Delegate
@@ -150,12 +156,12 @@ final class DropdownMenuButton: UIView, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath)
         cell.textLabel?.text = options[indexPath.row]
+        cell.selectionStyle = .none
         cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
         
-      
         if options[indexPath.row] == selectedOption {
-            cell.backgroundColor = UIColor.systemBlue.withAlphaComponent(0.2)
-            cell.textLabel?.textColor = .systemBlue
+            cell.backgroundColor = .systemBlue
+            cell.textLabel?.textColor = .white
         } else {
             cell.backgroundColor = .white
             cell.textLabel?.textColor = .black
@@ -168,6 +174,5 @@ final class DropdownMenuButton: UIView, UITableViewDelegate, UITableViewDataSour
         selectedOption = options[indexPath.row]
         onOptionSelected?(selectedOption ?? "")
         toggleDropdown()
-        tableView.reloadData()
     }
 }

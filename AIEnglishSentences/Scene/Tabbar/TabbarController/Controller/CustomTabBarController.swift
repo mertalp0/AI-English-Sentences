@@ -28,6 +28,8 @@ final class DashboardController: UITabBarController {
     }
 
     private func setupTabBar() {
+        self.tabBar.backgroundColor = .init(hex: "E9F1FF")
+        
         let historyNavigationController = historyCoordinator.navigationController!
         historyNavigationController.tabBarItem = UITabBarItem(
             title: "History",

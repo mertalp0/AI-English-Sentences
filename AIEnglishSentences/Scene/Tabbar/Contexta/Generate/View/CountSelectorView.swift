@@ -102,7 +102,7 @@ final class CountSelectorView: UIView {
             button.setTitle("\(value)", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
             button.setTitleColor(.systemBlue, for: .normal)
-            button.backgroundColor = .systemGray6
+            button.backgroundColor = .white
             button.layer.cornerRadius = 10
             button.addTarget(self, action: #selector(optionTapped(_:)), for: .touchUpInside)
             optionsStackView.addArrangedSubview(button)
@@ -116,7 +116,7 @@ final class CountSelectorView: UIView {
         
         self.optionsStackView.arrangedSubviews.forEach { view in
             if let button = view as? UIButton {
-                button.animateBackgroundColor(to: .systemGray6)
+                button.animateBackgroundColor(to: .white)
             }
         }
         
