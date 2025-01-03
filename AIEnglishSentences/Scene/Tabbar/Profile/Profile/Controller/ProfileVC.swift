@@ -18,10 +18,11 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
     
     private let options = [
         ("Language", UIImage(systemName: "globe")),
-        ("Rate App", UIImage(systemName: "star")),
-        ("Terms & Conditions", UIImage(systemName: "doc.text")),
-        ("Privacy Policy", UIImage(systemName: "lock")),
-        ("Invite Friends", UIImage(systemName: "envelope"))
+        ("Rate App", UIImage(systemName: "star.fill")),
+        ("Terms & Conditions", UIImage(systemName: "shield")),
+        ("Privacy Policy", UIImage(systemName: "doc.text.magnifyingglass")),
+        ("Invite Friends", UIImage(systemName: "envelope.fill")),
+        ("Apps by Developer", UIImage(systemName: "app.badge.fill"))
     ]
     
     // MARK: - Lifecycle
@@ -37,6 +38,7 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
     private func setupUI() {
         // Profile Header
         profileHeaderView = ProfileHeaderView()
+        profileHeaderView.delegate = self
         view.addSubview(profileHeaderView)
         
         profileHeaderView.snp.makeConstraints { make in
@@ -90,6 +92,19 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
     }
 }
 
+// MARK: - ProfileHeaderViewDelegate
+extension ProfileVC: ProfileHeaderViewDelegate {
+    func didUpdateName(_ newName: String) {
+        viewModel.updateUser(name: newName) { isSuccess in
+            if isSuccess {
+                print("Name updated successfully")
+            } else {
+                print("Failed to update name")
+            }
+        }
+    }
+}
+
 // MARK: - UITableViewDelegate, UITableViewDataSource
 extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -102,12 +117,31 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
         }
         let option = options[indexPath.row]
         cell.configure(with: option.0, icon: option.1)
+        cell.enablePressAnimation()
         return cell
     }
     
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let option = options[indexPath.row]
-        print("Tapped on: \(option.0)")
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        switch indexPath.row {
+        case 0:
+            print("Invite friends action triggered")
+            changeLanguage()
+        case 1:
+            rateApp()
+        case 2:
+            showTermsAndConditions()
+        case 3:
+            openPrivacyPolicy()
+        case 4:
+            inviteFriends()
+        case 5:
+            openAppsByDeveloper()
+        default:
+            break
+        }
     }
 }
 
@@ -115,33 +149,55 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
 //MARK: - Actions
 extension ProfileVC {
     
-    @objc private func onLogoutButtonPressed() {
-        tabBarController?.tabBar.isUserInteractionEnabled = false
-        viewModel.logout { isSucces in
-            switch isSucces {
-            case true:
-                self.coordinator?.showInfo()
-                
-            case false:
-                self.tabBarController?.tabBar.isUserInteractionEnabled = true
-                print("Kayıt sırasında bir hata oluştu.")
-            }
-        }
+    private func changeLanguage() {
+       
     }
     
+    private func rateApp() {
 
-    @objc private func onTapIqTest() {
-        print("IQ Test Button tapped")
-        viewModel.openIqTestApp { success in
-            if success {
-                print("Uygulama açıldı veya App Store yönlendirmesi yapıldı.")
-            } else {
-                print("Uygulama açma işlemi başarısız.")
-            }
-        }
     }
     
-    @objc private func onTapShare() {
+    private func showTermsAndConditions() {
+    
+    }
+    
+    private func openPrivacyPolicy() {
+ 
+    }
+    
+    private func openAppsByDeveloper() {
+   
+    }
+    
+    private func inviteFriends() {
+        print("Invite friends action triggered")
         coordinator?.shareApp()
     }
+    
+    @objc private func onLogoutButtonPressed() {
+        let logoutAlertVC = LogoutAlertViewController()
+        logoutAlertVC.onCancel = {
+            print("Logout canceled")
+        }
+        logoutAlertVC.onLogout = { [weak self] in
+            guard let self = self else { return }
+            self.performLogout()
+        }
+        logoutAlertVC.modalPresentationStyle = .overFullScreen
+        logoutAlertVC.modalTransitionStyle = .crossDissolve
+        present(logoutAlertVC, animated: true)
+    }
+
+    private func performLogout() {
+        tabBarController?.tabBar.isUserInteractionEnabled = false
+        viewModel.logout { isSuccess in
+            if isSuccess {
+                self.coordinator?.showInfo()
+            } else {
+                self.tabBarController?.tabBar.isUserInteractionEnabled = true
+                print("Logout error occurred.")
+            }
+        }
+    }
 }
+

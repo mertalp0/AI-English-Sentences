@@ -10,7 +10,7 @@ import FirebaseFirestore
 
 struct UserModel: Codable {
     let id: String
-    let name: String
+    var name: String
     let email: String
     let gender: String
     let createdAt: Date

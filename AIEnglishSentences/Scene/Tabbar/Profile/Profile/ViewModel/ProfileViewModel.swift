@@ -24,6 +24,24 @@ final class ProfileViewModel: BaseViewModel {
         }
     }
     
+    func updateUser(name: String, completion: @escaping (Bool) -> Void) {
+        guard let userId = AuthService.shared.getCurrentUserId() else {
+            completion(false)
+            return
+        }
+        
+        userService.updateUser(by: userId, name: name) { result in
+            switch result {
+            case .success:
+                self.user?.name = name
+                completion(true)
+            case .failure(let error):
+                self.handleError(message: error.localizedDescription)
+                completion(false)
+            }
+        }
+    }
+    
     func logout(completion: @escaping (Bool) -> Void) {
         startLoading()
         authService.logout { result in

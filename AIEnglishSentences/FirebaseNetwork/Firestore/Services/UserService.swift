@@ -35,6 +35,23 @@ final class UserService {
         }
     }
     
+    func updateUser(by userId: String, name: String, completion: @escaping (Result<Void, Error>) -> Void) {
+        let request = FirebaseRequest(
+            collection: "users",
+            documentID: userId,
+            data: ["name": name]
+        )
+        
+        client.update(request: request) { result in
+            switch result {
+            case .success:
+                completion(.success(()))
+            case .failure(let error):
+                completion(.failure(error))
+            }
+        }
+    }
+    
     func getUser(by userId: String, completion: @escaping (Result<UserModel, Error>) -> Void) {
         let request = FirebaseRequest(
             collection: "users",

@@ -14,7 +14,7 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
     private var appBar: AppBar!
     private var historySegmentedControl: HistorySegmentedControl!
     private var tableView: UITableView!
-    private var emptyStateImageView: UIImageView!
+    private var emptyStateView: EmptyStateView!
     private var currentlyPlayingCell: SentenceCell?
     
     // MARK: - Properties
@@ -80,14 +80,13 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         
-        // Empty State ImageView
-        emptyStateImageView = UIImageView()
-        emptyStateImageView.contentMode = .scaleAspectFit
-        emptyStateImageView.isHidden = true
-        view.addSubview(emptyStateImageView)
-        emptyStateImageView.snp.makeConstraints { make in
+        // Empty State
+        emptyStateView = EmptyStateView()
+        emptyStateView.isHidden = true
+        view.addSubview(emptyStateView)
+        emptyStateView.snp.makeConstraints { make in
             make.center.equalToSuperview()
-            make.width.height.equalTo(300)
+            make.leading.trailing.equalToSuperview().inset(20)
         }
     }
     
@@ -116,16 +115,24 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
         stopCurrentSpeaking()
         
         let isDataEmpty = currentData.isEmpty
-        
-        let emptyImageName = historySegmentedControl.selectedIndex == 0
-        ? "history_all_empty_image"
-        : "history_favorites_empty_image"
-        emptyStateImageView.image = UIImage(named: emptyImageName)
-        
+        emptyStateView.isHidden = !isDataEmpty
         tableView.isHidden = isDataEmpty
-        emptyStateImageView.isHidden = !isDataEmpty
         
-        if !isDataEmpty {
+        if isDataEmpty {
+            if historySegmentedControl.selectedIndex == 0 {
+                emptyStateView.configure(
+                    image: UIImage(named: "history_all_empty_image"),
+                    title: "No History Found",
+                    description: "You haven't created any sentences yet. Start generating by selecting a category."
+                )
+            } else {
+                emptyStateView.configure(
+                    image: UIImage(named: "history_favorites_empty_image"),
+                    title: "No Favorites Yet!",
+                    description: "Looks like you haven't saved anything. Tap the heart icon to add favorites."
+                )
+            }
+        } else {
             tableView.reloadData()
         }
     }

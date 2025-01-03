@@ -39,7 +39,7 @@ enum AppBarType {
     var rightIcon: UIImage? {
         switch self {
         case .generate:
-            return UIImage(systemName: "square.and.arrow.up.circle")
+            return nil
         case .history:
             return nil
         case .profile:
