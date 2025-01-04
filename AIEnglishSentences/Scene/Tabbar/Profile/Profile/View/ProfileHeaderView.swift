@@ -24,7 +24,7 @@ final class ProfileHeaderView: UIView {
     weak var delegate: ProfileHeaderViewDelegate?
     
     // MARK: - Properties
-    private var isEditingName = false {
+     var isEditingName = false {
         didSet {
             updateEditingState()
         }
@@ -42,7 +42,7 @@ final class ProfileHeaderView: UIView {
     
     // MARK: - Setup UI
     private func setupUI() {
-        self.backgroundColor = .systemBlue
+        self.backgroundColor = .mainColor
         self.layer.cornerRadius = 16
         self.clipsToBounds = true
         
@@ -81,7 +81,7 @@ final class ProfileHeaderView: UIView {
         nameLabel.snp.makeConstraints { make in
             make.top.equalTo(avatarImageView.snp.top).offset(8)
             make.leading.equalTo(avatarImageView.snp.trailing).offset(16)
-            make.trailing.equalToSuperview().offset(-60) // Edit butonundan önce bitiyor
+            make.trailing.equalToSuperview().offset(-60)
         }
         
         // Name TextField
@@ -100,7 +100,7 @@ final class ProfileHeaderView: UIView {
         self.addSubview(nameTextField)
         
         nameTextField.snp.makeConstraints { make in
-            make.edges.equalTo(nameLabel) // NameLabel ile aynı konumda
+            make.edges.equalTo(nameLabel)
             make.height.equalTo(40)
         }
         
@@ -108,7 +108,7 @@ final class ProfileHeaderView: UIView {
         emailLabel = UILabel()
         emailLabel.text = "Loading..."
         emailLabel.textColor = .white
-        emailLabel.font = UIFont.systemFont(ofSize: 22, weight: .medium)
+        emailLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         self.addSubview(emailLabel)
         
         emailLabel.snp.makeConstraints { make in
@@ -137,7 +137,7 @@ final class ProfileHeaderView: UIView {
         emailLabel.text = email
     }
     
-    private func updateEditingState() {
+     func updateEditingState() {
         nameLabel.isHidden = isEditingName
         nameTextField.isHidden = !isEditingName
         
@@ -145,13 +145,12 @@ final class ProfileHeaderView: UIView {
         editButton.setImage(UIImage(systemName: editIcon), for: .normal)
         
         if !isEditingName {
-            // Düzenleme bittiyse yeni ismi güncelle
             if let newName = nameTextField.text, !newName.isEmpty {
                 nameLabel.text = newName
+                nameTextField.resignFirstResponder()
                 delegate?.didUpdateName(newName)
             }
         } else {
-            // Düzenleme başlıyorsa klavyeyi aç
             nameTextField.becomeFirstResponder()
         }
     }

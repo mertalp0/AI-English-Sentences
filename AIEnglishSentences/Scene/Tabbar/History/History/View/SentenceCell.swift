@@ -49,7 +49,7 @@ final class SentenceCell: UITableViewCell {
     private let playButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(systemName: "play.circle"), for: .normal)
-        button.tintColor = .systemBlue
+        button.tintColor = .mainColor
         return button
     }()
     

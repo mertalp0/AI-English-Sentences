@@ -32,7 +32,7 @@ final class ProfileCell: UITableViewCell {
         // Icon Image
         iconImageView = UIImageView()
         iconImageView.contentMode = .scaleAspectFit
-        iconImageView.tintColor = .systemBlue
+        iconImageView.tintColor = .mainColor
         contentView.addSubview(iconImageView)
         
         iconImageView.snp.makeConstraints { make in

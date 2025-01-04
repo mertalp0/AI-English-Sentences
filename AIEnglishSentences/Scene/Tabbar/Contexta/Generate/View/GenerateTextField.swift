@@ -29,7 +29,7 @@ final class GenerateTextView: UITextView {
     // MARK: - Setup
     private func setupView() {
 
-        self.backgroundColor = .init(hex: "E9F1FF")
+        self.backgroundColor = .backgroundColor
         self.layer.cornerRadius = 10
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.lightGray.cgColor

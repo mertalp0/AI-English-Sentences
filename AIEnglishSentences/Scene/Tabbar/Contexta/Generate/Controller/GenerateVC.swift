@@ -32,7 +32,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
     }
     
     private func setupUI() {
-        view.backgroundColor = .init(hex: "F2F2F2")
+        view.backgroundColor = .background
         
         // AppBar
         appBar = AppBar(type: .generate(pageCellType: pageCellType))

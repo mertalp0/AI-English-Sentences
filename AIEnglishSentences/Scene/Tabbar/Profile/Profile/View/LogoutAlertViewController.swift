@@ -44,7 +44,7 @@ final class LogoutAlertViewController: UIViewController {
 
         // Icon Image View
         iconImageView.image = UIImage(systemName: "rectangle.portrait.and.arrow.right")
-        iconImageView.tintColor = .systemBlue
+        iconImageView.tintColor = .mainColor
         containerView.addSubview(iconImageView)
 
         iconImageView.snp.makeConstraints { make in
@@ -56,7 +56,7 @@ final class LogoutAlertViewController: UIViewController {
         // Title Label
         titleLabel.text = "Logout?"
         titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
-        titleLabel.textColor = .black
+        titleLabel.textColor = .mainColor
         titleLabel.textAlignment = .center
         containerView.addSubview(titleLabel)
 

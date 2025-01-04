@@ -19,7 +19,7 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
     private let options = [
         ("Language", UIImage(systemName: "globe")),
         ("Rate App", UIImage(systemName: "star.fill")),
-        ("Terms & Conditions", UIImage(systemName: "shield")),
+//        ("Terms & Conditions", UIImage(systemName: "shield")),
         ("Privacy Policy", UIImage(systemName: "doc.text.magnifyingglass")),
         ("Invite Friends", UIImage(systemName: "envelope.fill")),
         ("Apps by Developer", UIImage(systemName: "app.badge.fill"))
@@ -32,6 +32,7 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
         setupUI()
         setupActions()
         fetchUserData()
+        setupKeyboardDismissRecognizer()
     }
     
     // MARK: - Setup UI
@@ -90,6 +91,10 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
             self.profileHeaderView.configure(name: user.name, email: user.email)
         }
     }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        dismissKeyboard()
+    }
 }
 
 // MARK: - ProfileHeaderViewDelegate
@@ -124,6 +129,7 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        dismissKeyboard()
         
         switch indexPath.row {
         case 0:
@@ -132,12 +138,10 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
         case 1:
             rateApp()
         case 2:
-            showTermsAndConditions()
-        case 3:
             openPrivacyPolicy()
-        case 4:
+        case 3:
             inviteFriends()
-        case 5:
+        case 4:
             openAppsByDeveloper()
         default:
             break
@@ -155,10 +159,6 @@ extension ProfileVC {
     
     private func rateApp() {
 
-    }
-    
-    private func showTermsAndConditions() {
-    
     }
     
     private func openPrivacyPolicy() {

@@ -28,7 +28,9 @@ final class DashboardController: UITabBarController {
     }
 
     private func setupTabBar() {
-        self.tabBar.backgroundColor = .init(hex: "E9F1FF")
+        self.tabBar.backgroundColor = .mainBlur
+        self.tabBar.tintColor = .mainColor
+        self.tabBar.unselectedItemTintColor = UIColor.lightGray
         
         let historyNavigationController = historyCoordinator.navigationController!
         historyNavigationController.tabBarItem = UITabBarItem(

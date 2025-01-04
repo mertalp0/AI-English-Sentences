@@ -43,7 +43,7 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
     }
     
     private func setupUI() {
-        view.backgroundColor = .init(hex: "F2F2F2")
+        view.backgroundColor = .backgroundColor
         
         // AppBar
         appBar = AppBar(type: .history)

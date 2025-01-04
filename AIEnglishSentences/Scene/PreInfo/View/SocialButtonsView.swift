@@ -39,7 +39,7 @@ final class SocialButtonsView: UIView {
         orLabel.text = "or"
         orLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         orLabel.textAlignment = .center
-        orLabel.textColor = .init(hex: "1F41BB")
+        orLabel.textColor = .mainColor
         addSubview(orLabel)
         
         // Google Button
@@ -65,7 +65,7 @@ final class SocialButtonsView: UIView {
         attributedString.append(NSAttributedString(
             string: viewModel.actionHighlightedText,
             attributes: [
-                .foregroundColor: UIColor(hex: "1F41BB"),
+                .foregroundColor: UIColor.mainColor ?? .white,
                 .underlineStyle: NSUnderlineStyle.single.rawValue
             ]
         ))

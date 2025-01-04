@@ -160,7 +160,7 @@ final class DropdownMenuButton: UIView, UITableViewDelegate, UITableViewDataSour
         cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
         
         if options[indexPath.row] == selectedOption {
-            cell.backgroundColor = .systemBlue
+            cell.backgroundColor = .mainColor
             cell.textLabel?.textColor = .white
         } else {
             cell.backgroundColor = .white

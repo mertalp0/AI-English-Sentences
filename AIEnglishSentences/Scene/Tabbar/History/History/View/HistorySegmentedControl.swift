@@ -41,7 +41,7 @@ final class HistorySegmentedControl: UIView {
         buttons = items.enumerated().map { index, title in
             let button = UIButton(type: .system)
             button.setTitle(title, for: .normal)
-            button.setTitleColor(index == 0 ? .systemBlue : .gray, for: .normal)
+            button.setTitleColor(index == 0 ? .mainColor : .gray, for: .normal)
             button.tag = index
             button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
             return button
@@ -58,7 +58,7 @@ final class HistorySegmentedControl: UIView {
         }
 
         // Selection Indicator
-        selectionIndicator.backgroundColor = .systemBlue
+        selectionIndicator.backgroundColor = .mainColor
         addSubview(selectionIndicator)
         selectionIndicator.snp.makeConstraints { make in
             make.height.equalTo(2)
@@ -71,7 +71,7 @@ final class HistorySegmentedControl: UIView {
     // MARK: - Actions
     @objc private func buttonTapped(_ sender: UIButton) {
         buttons.forEach { $0.setTitleColor(.gray, for: .normal) }
-        sender.setTitleColor(.systemBlue, for: .normal)
+        sender.setTitleColor(.mainColor, for: .normal)
 
         selectedIndexInternal = sender.tag
         delegate?.segmentChanged(to: selectedIndexInternal)

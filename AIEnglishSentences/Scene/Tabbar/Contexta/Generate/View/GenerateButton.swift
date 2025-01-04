@@ -24,7 +24,7 @@ final class GenerateButton: UIButton {
     
     // MARK: - Setup
     private func setupButton() {
-        self.backgroundColor = .main
+        self.backgroundColor = .mainColor
         self.layer.cornerRadius = 8
         self.clipsToBounds = true
         

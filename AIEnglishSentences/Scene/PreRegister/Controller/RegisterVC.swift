@@ -154,7 +154,7 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
         
         // Email Text Field
         emailTextField.snp.makeConstraints { make in
-            make.top.equalTo(nameTextField.snp.bottom).offset(8)
+            make.top.equalTo(subtitleLabel.snp.bottom).offset(124)
             make.leading.equalToSuperview().offset(22)
             make.trailing.equalToSuperview().offset(-22)
         }
@@ -162,7 +162,7 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
      
         // Password Text Field
         passwordTextField.snp.makeConstraints { make in
-            make.top.equalTo(emailTextField.snp.bottom).offset(8)
+            make.top.equalTo(subtitleLabel.snp.bottom).offset(206)
             make.leading.equalToSuperview().offset(22)
             make.trailing.equalToSuperview().offset(-22)
         }

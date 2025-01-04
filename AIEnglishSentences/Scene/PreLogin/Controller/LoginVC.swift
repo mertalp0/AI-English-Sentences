@@ -87,7 +87,7 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel> {
         forgotPasswordLabel.text = "Forgot Password?"
         forgotPasswordLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         forgotPasswordLabel.textAlignment = .center
-        forgotPasswordLabel.textColor = .init(hex: "1F41BB")
+        forgotPasswordLabel.textColor = .mainColor
         view.addSubview(forgotPasswordLabel)
         
         // SocialButton Container
@@ -152,7 +152,7 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel> {
         }
         // Password Text Field
         passwordTextField.snp.makeConstraints { make in
-            make.top.equalTo(emailTextField.snp.bottom).offset(8)
+            make.top.equalTo(subtitleLabel.snp.bottom).offset(130)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
         }

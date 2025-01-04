@@ -63,7 +63,7 @@ final class AuthButton: UIButton {
         
         switch authButtonType {
         case .normal:
-            self.backgroundColor = .init(hex: "1F41BB")
+            self.backgroundColor = .mainColor
             self.setTitleColor(.white, for: .normal)
         case .google, .apple:
             self.backgroundColor = .white

@@ -71,7 +71,7 @@ final class CountSelectorView: UIView {
         optionsStackView.distribution = .fillEqually
         optionsStackView.spacing = 10
         optionsStackView.layer.cornerRadius = 16
-        optionsStackView.backgroundColor = UIColor(hex: "E9F1FF")
+        optionsStackView.backgroundColor = .background
         
         container.addSubview(titleLabel)
         container.addSubview(optionsStackView)
@@ -103,7 +103,7 @@ final class CountSelectorView: UIView {
             let button = UIButton(type: .system)
             button.setTitle("\(value)", for: .normal)
             button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
-            button.setTitleColor(.systemBlue, for: .normal)
+            button.setTitleColor(.mainColor, for: .normal)
             button.backgroundColor = .white
             button.layer.cornerRadius = 10
             button.addTarget(self, action: #selector(optionTapped(_:)), for: .touchUpInside)
@@ -112,7 +112,7 @@ final class CountSelectorView: UIView {
         
         // Varsayılan seçimi ayarla
         if let firstButton = optionsStackView.arrangedSubviews.first as? UIButton {
-            firstButton.backgroundColor = .systemBlue.withAlphaComponent(0.2)
+            firstButton.backgroundColor = .mainColor?.withAlphaComponent(0.2)
         }
     }
     
@@ -129,6 +129,6 @@ final class CountSelectorView: UIView {
                 button.backgroundColor = .white
             }
         }
-        sender.backgroundColor = .systemBlue.withAlphaComponent(0.2)
+        sender.backgroundColor = .mainColor?.withAlphaComponent(0.2)
     }
 }

@@ -63,6 +63,7 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         
         // Login Button
         loginButton = AuthButton(type: .normal(title: .login))
+        loginButton.backgroundColor = .main
         loginButton.delegate = self
         view.addSubview(loginButton)
         

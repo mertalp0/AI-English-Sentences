@@ -30,13 +30,13 @@ final class CustomTextField: UIView {
     }()
     
     private let textField: UITextField = {
-        let tf = UITextField()
-        tf.borderStyle = .none
-        tf.textColor = .black
-        tf.backgroundColor = .clear
-        tf.font = UIFont.systemFont(ofSize: 16)
-        return tf
-    }()
+            let tf = UITextField()
+            tf.borderStyle = .none
+            tf.textColor = .black
+            tf.backgroundColor = .clear
+            tf.font = UIFont.systemFont(ofSize: 16)
+            return tf
+        }()
     
     private let containerView: UIView = {
         let view = UIView()
@@ -93,7 +93,7 @@ final class CustomTextField: UIView {
         
         validationLabel = UILabel()
         validationLabel.textColor = .red
-        validationLabel.font = UIFont.systemFont(ofSize: 14)
+        validationLabel.font = UIFont.systemFont(ofSize: 10)
         validationLabel.numberOfLines = 0
         validationLabel.isHidden = true
         addSubview(validationLabel)
@@ -116,7 +116,7 @@ final class CustomTextField: UIView {
         }
         
         validationLabel.snp.makeConstraints { make in
-            make.top.equalTo(containerView.snp.bottom).offset(4)
+            make.top.equalTo(containerView.snp.bottom)
             make.leading.trailing.equalToSuperview()
             make.bottom.lessThanOrEqualToSuperview()
         }
@@ -130,18 +130,22 @@ final class CustomTextField: UIView {
     }
     
     // MARK: - Public Configuration
-    func configure(placeholder: String, type: CustomTextFieldType, title: String?) {
-        self.placeholder = placeholder
-        self.type = type
-        if let title = title {
-            titleLabel.text = title
-        }
-        
-        if type == .password {
-            textField.isSecureTextEntry = true
-            addPasswordToggle()
-        }
-    }
+      func configure(placeholder: String, type: CustomTextFieldType, title: String?) {
+          self.type = type
+          titleLabel.text = title
+          textField.attributedPlaceholder = NSAttributedString(
+              string: placeholder,
+              attributes: [
+                  .foregroundColor: UIColor.lightGray,
+                  .font: UIFont.systemFont(ofSize: 16)
+              ]
+          )
+          
+          if type == .password {
+              textField.isSecureTextEntry = true
+              addPasswordToggle()
+          }
+      }
     
     private func addPasswordToggle() {
         containerView.addSubview(togglePasswordButton)
@@ -171,7 +175,7 @@ final class CustomTextField: UIView {
     private func updateFocusState(isFocused: Bool) {
         UIView.animate(withDuration: 0.3) {
             if isFocused {
-                self.containerView.layer.borderColor = UIColor.systemBlue.cgColor
+                self.containerView.layer.borderColor = UIColor.mainColor?.cgColor
                 self.containerView.layer.borderWidth = 1.5
                 self.shadowLayer.shadowOpacity = 0.4
                 self.shadowLayer.shadowRadius = 8

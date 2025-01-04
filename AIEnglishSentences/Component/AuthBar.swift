@@ -21,7 +21,7 @@ final class AuthBar: UIView {
         let backIcon = UIImage(systemName: "chevron.left")
         let resizedRightIcon = backIcon?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 22, weight: .bold))
         button.setImage(resizedRightIcon, for: .normal)
-        button.tintColor = .init(hex: "1F41BB")
+        button.tintColor = .mainColor
         button.contentHorizontalAlignment = .leading
         button.imageView?.contentMode = .scaleAspectFit
         return button
@@ -31,7 +31,7 @@ final class AuthBar: UIView {
         let label = UILabel()
         label.text = "Title"
         label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
-        label.textColor = .init(hex: "1F41BB")
+        label.textColor = .mainColor
         label.textAlignment = .center
         return label
     }()
