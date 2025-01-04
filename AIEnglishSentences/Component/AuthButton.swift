@@ -11,13 +11,13 @@ import SnapKit
 
 
 enum AuthButtonType {
-    case normal
+    case normal(title: NormalButtonTitle)
     case google
     case apple
     
     var title: String {
         switch self {
-        case .normal: return "Login"
+        case .normal(let title): return title.rawValue
         case .google: return "Continue with Google"
         case .apple: return "Continue with Apple"
         }
@@ -26,12 +26,16 @@ enum AuthButtonType {
     var image: UIImage? {
         switch self {
         case .google: return UIImage(named: "google_icon")
-        case .apple: return UIImage(systemName: "applelogo") 
-        default: return nil
+        case .apple: return UIImage(systemName: "applelogo")
+        case .normal: return nil
         }
     }
 }
 
+enum NormalButtonTitle: String {
+    case login = "Login"
+    case signup = "Sign up"
+}
 
 protocol AuthButtonDelegate: AnyObject {
     func didTapButton(type: AuthButtonType)

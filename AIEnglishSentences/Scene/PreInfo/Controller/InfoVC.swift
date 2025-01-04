@@ -17,8 +17,6 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
     private var subtitleLabel: UILabel!
     private var loginButton: AuthButton!
     private var socialButtonsView: SocialButtonsView!
-    private var socialButtonsViewModel: SocialButtonsViewModel!
-
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -44,7 +42,6 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         
         // Subtitle Label
         subtitleLabel = UILabel()
-        subtitleLabel.text = "Create. Listen. Inspire.\nAiLex makes words come alive."
         subtitleLabel.textAlignment = .center
         subtitleLabel.numberOfLines = 0
         subtitleLabel.textColor = UIColor.darkGray
@@ -65,12 +62,12 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         view.addSubview(subtitleLabel)
         
         // Login Button
-        loginButton = AuthButton(type: .normal)
+        loginButton = AuthButton(type: .normal(title: .login))
         loginButton.delegate = self
         view.addSubview(loginButton)
         
     
-         socialButtonsViewModel = SocialButtonsViewModel(
+        let socialButtonsViewModel = SocialButtonsViewModel(
             actionText: "You don’t have an account?",
             actionHighlightedText: "Sign up",
             googleButtonTitle: "Continue with Google",
@@ -125,7 +122,7 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         
         // Login Button
         loginButton.snp.makeConstraints { make in
-            make.bottom.equalTo(socialButtonsView.snp.top).offset(-20)
+            make.bottom.equalTo(socialButtonsView.snp.top).offset(-30)
             make.leading.trailing.equalToSuperview().inset(32)
             make.height.equalTo(50)
         }

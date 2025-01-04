@@ -88,7 +88,7 @@ final class SocialButtonsView: UIView {
         }
         
         googleButton.snp.makeConstraints { make in
-            make.top.equalTo(orLabel.snp.bottom).offset(20)
+            make.top.equalTo(orLabel.snp.bottom).offset(30)
             make.leading.trailing.equalToSuperview().inset(32)
             make.height.equalTo(50)
         }

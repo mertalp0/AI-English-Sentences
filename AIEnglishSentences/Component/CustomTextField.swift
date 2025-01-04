@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 enum CustomTextFieldType {
     case normal
@@ -20,13 +21,20 @@ final class CustomTextField: UIView {
     private var validationLabel: UILabel!
     
     // MARK: - Subviews
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .darkGray
+        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.textAlignment = .left
+        return label
+    }()
+    
     private let textField: UITextField = {
         let tf = UITextField()
         tf.borderStyle = .none
         tf.textColor = .black
         tf.backgroundColor = .clear
         tf.font = UIFont.systemFont(ofSize: 16)
-        tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
     
@@ -36,7 +44,6 @@ final class CustomTextField: UIView {
         view.layer.borderWidth = 1
         view.layer.borderColor = UIColor.lightGray.cgColor
         view.backgroundColor = .white
-        view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
@@ -45,7 +52,6 @@ final class CustomTextField: UIView {
         let image = UIImage(systemName: "eye.slash")
         button.setImage(image, for: .normal)
         button.tintColor = .gray
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -80,34 +86,41 @@ final class CustomTextField: UIView {
     }
     
     private func setupUI() {
+        addSubview(titleLabel)
         addSubview(containerView)
         containerView.layer.addSublayer(shadowLayer)
         containerView.addSubview(textField)
         
         validationLabel = UILabel()
         validationLabel.textColor = .red
-        validationLabel.font = UIFont.systemFont(ofSize: 12)
+        validationLabel.font = UIFont.systemFont(ofSize: 14)
         validationLabel.numberOfLines = 0
         validationLabel.isHidden = true
-        validationLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(validationLabel)
         
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: topAnchor),
-            containerView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            
-            textField.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 8),
-            textField.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8),
-            textField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 12),
-            
-            validationLabel.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 4),
-            validationLabel.leadingAnchor.constraint(equalTo: leadingAnchor),
-            validationLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
-            validationLabel.bottomAnchor.constraint(equalTo: bottomAnchor)
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(20)
+        }
         
-        // Delegate for focus handling
+        containerView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(50)
+        }
+        
+        textField.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(10)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().inset(16)
+        }
+        
+        validationLabel.snp.makeConstraints { make in
+            make.top.equalTo(containerView.snp.bottom).offset(4)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.lessThanOrEqualToSuperview()
+        }
+        
         textField.delegate = self
     }
     
@@ -117,26 +130,32 @@ final class CustomTextField: UIView {
     }
     
     // MARK: - Public Configuration
-    func configure(placeholder: String, type: CustomTextFieldType) {
-           self.placeholder = placeholder
-           self.type = type
-           
-           if type == .password {
-               textField.isSecureTextEntry = true
-               addPasswordToggle()
-           }
-       }
+    func configure(placeholder: String, type: CustomTextFieldType, title: String?) {
+        self.placeholder = placeholder
+        self.type = type
+        if let title = title {
+            titleLabel.text = title
+        }
+        
+        if type == .password {
+            textField.isSecureTextEntry = true
+            addPasswordToggle()
+        }
+    }
     
     private func addPasswordToggle() {
         containerView.addSubview(togglePasswordButton)
-        NSLayoutConstraint.activate([
-            togglePasswordButton.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-            togglePasswordButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -12),
-            togglePasswordButton.widthAnchor.constraint(equalToConstant: 24),
-            togglePasswordButton.heightAnchor.constraint(equalToConstant: 24),
-            
-            textField.trailingAnchor.constraint(equalTo: togglePasswordButton.leadingAnchor, constant: -8)
-        ])
+        togglePasswordButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.trailing.equalToSuperview().inset(12)
+            make.width.height.equalTo(24)
+        }
+        
+        textField.snp.remakeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(10)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalTo(togglePasswordButton.snp.leading).offset(-8)
+        }
         
         togglePasswordButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
     }
@@ -148,15 +167,18 @@ final class CustomTextField: UIView {
         togglePasswordButton.setImage(image, for: .normal)
     }
     
-    // MARK: - Focus State Handling
+    // MARK: - Focus Animasyon
     private func updateFocusState(isFocused: Bool) {
         UIView.animate(withDuration: 0.3) {
             if isFocused {
                 self.containerView.layer.borderColor = UIColor.systemBlue.cgColor
-                self.shadowLayer.shadowOpacity = 0.3
+                self.containerView.layer.borderWidth = 1.5
+                self.shadowLayer.shadowOpacity = 0.4
+                self.shadowLayer.shadowRadius = 8
             } else {
                 self.containerView.layer.borderColor = UIColor.lightGray.cgColor
                 self.shadowLayer.shadowOpacity = 0.1
+                self.shadowLayer.shadowRadius = 4
             }
         }
     }
