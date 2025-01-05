@@ -16,14 +16,20 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
     private var optionsTableView: UITableView!
     private var logoutButton: UIButton!
     
-    private let options = [
-        ("Language", UIImage(systemName: "globe")),
-        ("Rate App", UIImage(systemName: "star.fill")),
-//        ("Terms & Conditions", UIImage(systemName: "shield")),
-        ("Privacy Policy", UIImage(systemName: "doc.text.magnifyingglass")),
-        ("Invite Friends", UIImage(systemName: "envelope.fill")),
-        ("Apps by Developer", UIImage(systemName: "app.badge.fill"))
-    ]
+    private let options: [(String, UIImage?)] = {
+        var items: [(String, UIImage?)] = [
+            ("Language", UIImage(systemName: "globe")),
+            ("Privacy Policy", UIImage(systemName: "doc.text.magnifyingglass")),
+            ("Invite Friends", UIImage(systemName: "envelope.fill")),
+            ("Apps by Developer", UIImage(systemName: "app.badge.fill"))
+        ]
+        
+        if #available(iOS 14.0, *) {
+            items.insert(("Rate App", UIImage(systemName: "star.fill")), at: 4)
+        }
+        
+        return items
+    }()
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -136,13 +142,14 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
             print("Invite friends action triggered")
             changeLanguage()
         case 1:
-            rateApp()
-        case 2:
             openPrivacyPolicy()
-        case 3:
+        case 2:
             inviteFriends()
-        case 4:
+        case 3:
             openAppsByDeveloper()
+        case 4:
+            rateApp()
+          
         default:
             break
         }
@@ -154,19 +161,23 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
 extension ProfileVC {
     
     private func changeLanguage() {
-       
+        coordinator?.showLanguagePage()
     }
     
     private func rateApp() {
-
+        if #available(iOS 14.0, *) {
+            viewModel.rateAppInAppStore()
+        } else {
+            
+        }
     }
     
     private func openPrivacyPolicy() {
- 
+        coordinator?.showPrivacyPolicy()
     }
     
     private func openAppsByDeveloper() {
-   
+        coordinator?.showApps()
     }
     
     private func inviteFriends() {

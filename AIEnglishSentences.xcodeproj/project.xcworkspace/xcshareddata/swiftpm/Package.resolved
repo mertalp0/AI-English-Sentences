@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/mertalp0/BaseMVVMCKit.git",
       "state" : {
-        "revision" : "1bed3e2088e028f9c4957dec1b497bbfafed4628",
-        "version" : "1.0.8"
+        "revision" : "8a76303fdfdc61c50b2be5de2937f7b329b904e2",
+        "version" : "1.0.10"
       }
     },
     {

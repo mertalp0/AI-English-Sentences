@@ -30,9 +30,6 @@ final class GenerateCoordinator: BaseCoordinator {
         resultCoordinator.sentences = sentences
         resultCoordinator.start()
 
-        if let tabBarController = navigationController.tabBarController {
-            tabBarController.setTabBar(hidden: true, animated: false)
-        }
     }
     
     func back() {

@@ -1,5 +1,6 @@
 import Foundation
 import BaseMVVMCKit
+import StoreKit
 
 final class ProfileViewModel: BaseViewModel {
     
@@ -63,5 +64,12 @@ final class ProfileViewModel: BaseViewModel {
         let appStoreURL = AppConstants.URLs.iqTestAppStoreURL
         
         appLauncher.openApp(appURLScheme: appURLScheme, appStoreURL: appStoreURL, completion: completion)
+    }
+    
+    @available(iOS 14.0, *)
+    func rateAppInAppStore() {
+        if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            SKStoreReviewController.requestReview(in: scene)
+        }
     }
 }

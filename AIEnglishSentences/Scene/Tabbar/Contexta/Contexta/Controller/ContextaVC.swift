@@ -29,7 +29,7 @@ final class ContextaVC: BaseViewController<ContextaCoordinator, ContextaViewMode
     private func setupUI() {
         view.backgroundColor = .white
         
-        // Page Title
+        // AppBar 
         appBar = AppBar(type: .contexta)
         view.addSubview(appBar)
         appBar.snp.makeConstraints { make in

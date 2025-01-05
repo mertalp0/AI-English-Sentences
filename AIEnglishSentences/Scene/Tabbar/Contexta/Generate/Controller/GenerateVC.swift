@@ -169,7 +169,6 @@ extension GenerateVC {
         guard let button = generateButton else { return }
         print("Generate button tapped: \(button)")
         
-        // UI'dan alınan değerler
         let inputWords = textField.text ?? ""
         let maxWords = wordSelector.selectedValue
         let sentenceCount = sentenceSelector.selectedValue
