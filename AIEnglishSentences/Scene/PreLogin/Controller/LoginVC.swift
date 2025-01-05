@@ -12,125 +12,180 @@ import AuthenticationServices
 final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel> {
     
     //MARK: - UI Elements
-    private var pageTitle: UILabel!
-    private var loginButton: CustomButton!
-    private var registerButton: CustomButton!
-    private var backButton: CustomButton!
-    private var googleButton: CustomButton!
-    private var appleButton: ASAuthorizationAppleIDButton!
+    private var backgroundImageView: UIImageView!
+    private var socialButtonsView: SocialButtonsView!
+    private var authBar: AuthBar!
+    private var subtitleLabel: UILabel!
     private var emailTextField: CustomTextField!
     private var passwordTextField: CustomTextField!
+    private var loginButton: AuthButton!
+    private var forgotPasswordLabel: UILabel!
     
+    //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         setupUI()
-        setupActions()
+        setupConstraints()
         setupKeyboardDismissRecognizer()
+        
     }
     
     private func setupUI() {
         
-        view.backgroundColor = .white
+        // Background Image
+        backgroundImageView = UIImageView()
+        backgroundImageView.image = UIImage(named: "background")
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.clipsToBounds = true
+        view.addSubview(backgroundImageView)
         
-        // Page Title
-        pageTitle = UILabel()
-        pageTitle.text = String(describing: type(of: self))
-        pageTitle.textColor = .black
+        // AuthBar
+        authBar = AuthBar(title: "Login here")
+        authBar.delegate = self
+        view.addSubview(authBar)
         
-        view.addSubview(pageTitle)
-        pageTitle.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
+        // SubTitle Label
+        subtitleLabel = UILabel()
+        subtitleLabel.textAlignment = .center
+        subtitleLabel.numberOfLines = 0
+        subtitleLabel.textColor = UIColor.darkGray
+        subtitleLabel.attributedText = NSAttributedString(
+            string: "Welcome back you’ve \nbeen missed!",
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 22, weight: .bold),
+                .foregroundColor: UIColor.darkGray,
+                .kern: 1.0,
+                .paragraphStyle: {
+                    let style = NSMutableParagraphStyle()
+                    style.lineSpacing = 5
+                    style.alignment = .center
+                    return style
+                }()
+            ]
+        )
+        view.addSubview(subtitleLabel)
         
-        setupTextFields()
-        setupButtons()
-    }
-    
-    private func setupTextFields() {
         // Email TextField
         emailTextField = CustomTextField()
-        emailTextField.configure(placeholder: "Enter your email", type: .normal)
+        emailTextField.configure(placeholder: "Enter your email", type: .normal, title: "Email address")
         view.addSubview(emailTextField)
-        emailTextField.snp.makeConstraints { make in
-            make.top.equalTo(view.snp.top).offset(140)
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-        }
+        
         
         // Password TextField
         passwordTextField = CustomTextField()
-        passwordTextField.configure(placeholder: "Enter your password", type: .password)
+        passwordTextField.configure(placeholder: "Enter your password", type: .password, title: "Password")
         view.addSubview(passwordTextField)
-        passwordTextField.snp.makeConstraints { make in
-            make.top.equalTo(emailTextField.snp.bottom).offset(20)
+        
+        // Login Button
+        loginButton = AuthButton(type: .normal(title: .login))
+        loginButton.delegate = self
+        view.addSubview(loginButton)
+        
+        // Forgot Password Label
+        forgotPasswordLabel = UILabel()
+        forgotPasswordLabel.text = "Forgot Password?"
+        forgotPasswordLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        forgotPasswordLabel.textAlignment = .center
+        forgotPasswordLabel.textColor = .mainColor
+        view.addSubview(forgotPasswordLabel)
+        
+        // SocialButton Container
+        let socialButtonsViewModel = SocialButtonsViewModel(
+            actionText: "You don’t have an account?",
+            actionHighlightedText: "Sign up",
+            googleButtonTitle: "Continue with Google",
+            appleButtonTitle: "Continue with Apple"
+        )
+        
+        socialButtonsViewModel.onGoogleButtonTapped = {
+            self.viewModel.googleSignIn(from: self) {  [weak self] isSuccess in
+                if isSuccess {
+                    self?.coordinator?.showDashboard()
+                }
+            }
+        }
+        
+        socialButtonsViewModel.onAppleButtonTapped = {
+            self.viewModel.signInWithApple(presentationAnchor: self.view.window!) { [weak self] isSuccess in
+                if isSuccess {
+                    self?.coordinator?.showDashboard()
+                }
+            }
+        }
+        
+        socialButtonsViewModel.onActionLabelTapped = {
+            self.coordinator?.showRegister()
+        }
+        
+        socialButtonsView = SocialButtonsView(viewModel: socialButtonsViewModel)
+        view.addSubview(socialButtonsView)
+        
+        
+    }
+    
+    private func setupConstraints(){
+        
+        // Background ImageView
+        backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        // AuthBar
+        authBar.snp.makeConstraints { make in
+            make.top.equalTo(UIHelper.statusBarHeight + 10)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(60)
+            
+        }
+        // Subtitle Label
+        subtitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(authBar.snp.bottom).offset(22)
+            make.leading.trailing.equalToSuperview().inset(32)
+        }
+        
+        // Email Text Field
+        emailTextField.snp.makeConstraints { make in
+            make.top.equalTo(subtitleLabel.snp.bottom).offset(48)
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
         }
-    }
-    
-    private func setupButtons() {
+        // Password Text Field
+        passwordTextField.snp.makeConstraints { make in
+            make.top.equalTo(subtitleLabel.snp.bottom).offset(130)
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+        }
+        
         // Login Button
-        loginButton = CustomButton()
-        loginButton.configure(title: "Login", backgroundColor: .systemGreen, textColor: .white)
-        view.addSubview(loginButton)
         loginButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-50)
-        }
-        
-        // Register Button
-        registerButton = CustomButton()
-        registerButton.configure(title: "Register", backgroundColor: .systemGreen, textColor: .white)
-        view.addSubview(registerButton)
-        registerButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-120)
-        }
-        
-        // Back Button
-        backButton = CustomButton()
-        backButton.configure(title: "Back", backgroundColor: .systemGreen, textColor: .white)
-        view.addSubview(backButton)
-        backButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-240)
-        }
-        
-        // Google Button
-        googleButton = CustomButton()
-        googleButton.configure(title: "Google", backgroundColor: .cyan, textColor: .white)
-        view.addSubview(googleButton)
-        googleButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(registerButton.snp.top).offset(-50)
-        }
-        
-       
-        // Apple Button
-        appleButton = ASAuthorizationAppleIDButton()
-        view.addSubview(appleButton)
-        appleButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalTo(googleButton.snp.top).offset(-20)
+            make.bottom.equalTo(socialButtonsView.snp.top).offset(-30)
+            make.leading.trailing.equalToSuperview().inset(32)
             make.height.equalTo(50)
-            make.width.equalTo(280)
         }
-    }
-    
-    private func setupActions() {
-        loginButton.addTarget(self, action: #selector(onTapLogin), for: .touchUpInside)
-        registerButton.addTarget(self, action: #selector(onTapRegister), for: .touchUpInside)
-        backButton.addTarget(self, action: #selector(onTapBack), for: .touchUpInside)
-        googleButton.addTarget(self, action: #selector(onTapGoogleSignIn), for: .touchUpInside)
-        appleButton.addTarget(self, action: #selector(onTapAppleSignIn), for: .touchUpInside)
+        
+        forgotPasswordLabel.snp.makeConstraints { make in
+            make.top.equalTo(passwordTextField.snp.bottom).offset(5)
+            make.trailing.equalTo(passwordTextField.snp.trailing)
+        }
+        
+        // Social Buttons View
+        socialButtonsView.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+            make.leading.trailing.equalToSuperview()
+        }
+        
     }
 }
 
-// MARK: - Actions
-extension LoginVC {
-    
-    @objc private func onTapLogin() {
+extension LoginVC: AuthBarDelegate {
+    func didTapBackButton() {
+        coordinator?.pop()
+    }
+}
+
+extension LoginVC: AuthButtonDelegate {
+    func didTapButton(type: AuthButtonType) {
         let isEmailValid = emailTextField.validate(with: "Please enter your email.")
         let isPasswordValid = passwordTextField.validate(with: "Please enter your password.")
         
@@ -142,30 +197,6 @@ extension LoginVC {
         viewModel.login(email: emailTextField.text!, password: passwordTextField.text!) { isSuccess in
             if isSuccess {
                 self.coordinator?.showDashboard()
-            }
-        }
-    }
-    
-    @objc func onTapRegister() {
-        coordinator?.showRegister()
-    }
-    
-    @objc func onTapBack() {
-        coordinator?.pop()
-    }
-    
-    @objc private func onTapGoogleSignIn() {
-        viewModel.googleSignIn(from: self) { isSuccess in
-            if isSuccess {
-                self.coordinator?.showDashboard()
-            }
-        }
-    }
-    
-    @objc private func onTapAppleSignIn() {
-        viewModel.signInWithApple(presentationAnchor: view.window!) { [weak self] isSuccess in
-            if isSuccess {
-                self?.coordinator?.showDashboard()
             }
         }
     }

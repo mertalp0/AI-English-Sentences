@@ -11,123 +11,186 @@ import SnapKit
 
 final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewModel>{
     
-    //MARK: - UI Elements
-    private var pageTitle : UILabel!
-    private var loginButton : CustomButton!
-    private var registerButton : CustomButton!
-    private var backButton : CustomButton!
-    private var emailTextField : CustomTextField!
-    private var passwordTextField : CustomTextField!
-    private var nameTextField : CustomTextField!
     private var gender : Gender = .preferNotToSay
+
+    //MARK: - UI Elements
+    private var backgroundImageView: UIImageView!
+    private var socialButtonsView: SocialButtonsView!
+    private var authBar: AuthBar!
+    private var subtitleLabel: UILabel!
+    private var emailTextField: CustomTextField!
+    private var passwordTextField: CustomTextField!
+    private var nameTextField: CustomTextField!
+    private var loginButton: AuthButton!
+    private var forgotPasswordLabel: UILabel!
     
     
+    //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
         
         setupUI()
-        setupActions()
+        setupConstraints()
         setupKeyboardDismissRecognizer()
-    }
-    
-    private func setupUI(){
-        
-        //Page Title
-        pageTitle = UILabel()
-        pageTitle.text = String(describing: type(of: self))
-        pageTitle.textColor = .black
-        
-        view.addSubview(pageTitle)
-        pageTitle.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
-        
-        setupTextFields()
-        setupButtons()
-       
         
     }
     
-    private func setupTextFields(){
+    private func setupUI() {
+        
+        // Background Image
+        backgroundImageView = UIImageView()
+        backgroundImageView.image = UIImage(named: "background")
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.clipsToBounds = true
+        view.addSubview(backgroundImageView)
+        
+        // AuthBar
+        authBar = AuthBar(title: "Create Account")
+        authBar.delegate = self
+        view.addSubview(authBar)
+        
+        // SubTitle Label
+        subtitleLabel = UILabel()
+        subtitleLabel.textAlignment = .center
+        subtitleLabel.numberOfLines = 0
+        subtitleLabel.textColor = UIColor.darkGray
+        subtitleLabel.attributedText = NSAttributedString(
+            string: "Join us and explore \nthe power of sentences!",
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 22, weight: .bold),
+                .foregroundColor: UIColor.darkGray,
+                .kern: 1.0,
+                .paragraphStyle: {
+                    let style = NSMutableParagraphStyle()
+                    style.lineSpacing = 5
+                    style.alignment = .center
+                    return style
+                }()
+            ]
+        )
+        view.addSubview(subtitleLabel)
+        
         // Email TextField
         emailTextField = CustomTextField()
-        emailTextField.configure(placeholder: "Enter your email",type: .normal)
+        emailTextField.configure(placeholder: "Enter your email", type: .normal, title: "Email address")
         view.addSubview(emailTextField)
-        emailTextField.snp.makeConstraints { make in
-            make.top.equalTo(view.snp.top).offset(140)
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-        }
-    
+        
         // Name TextField
         nameTextField = CustomTextField()
-        nameTextField.configure(placeholder: "Enter your Name",type: .normal)
+        nameTextField.configure(placeholder: "Enter your Name", type: .normal, title: "Name")
         view.addSubview(nameTextField)
-        nameTextField.snp.makeConstraints { make in
-            make.top.equalTo(emailTextField.snp.bottom).offset(20)
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-        }
+        
         
         // Password TextField
         passwordTextField = CustomTextField()
-        passwordTextField.configure(placeholder: "Enter your password",type: .password)
+        passwordTextField.configure(placeholder: "Enter your password", type: .password, title: "Password")
         view.addSubview(passwordTextField)
-        passwordTextField.snp.makeConstraints { make in
-            make.top.equalTo(nameTextField.snp.bottom).offset(20)
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-        }
-    }
-    
-    private func setupButtons(){
-        //Login button
-        loginButton = CustomButton()
-        loginButton.configure(title: "Login", backgroundColor: .systemGreen, textColor: .white)
         
+        // Login Button
+        loginButton = AuthButton(type: .normal(title: .signup))
+        loginButton.delegate = self
         view.addSubview(loginButton)
-        loginButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-50)
+        
+        // SocialButton Container
+        let socialButtonsViewModel = SocialButtonsViewModel(
+            actionText: "Already have an account? ",
+            actionHighlightedText: "Login",
+            googleButtonTitle: "Continue with Google",
+            appleButtonTitle: "Continue with Apple"
+        )
+        
+        socialButtonsViewModel.onGoogleButtonTapped = {
+            self.viewModel.googleSignIn(from: self) {  [weak self] isSuccess in
+                if isSuccess {
+                    self?.coordinator?.showDashboard()
+                }
+            }
         }
         
-        //Register button
-        registerButton = CustomButton()
-        registerButton.configure(title: "Register", backgroundColor: .systemGreen, textColor: .white)
-        
-        view.addSubview(registerButton)
-        registerButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-120)
+        socialButtonsViewModel.onAppleButtonTapped = {
+            self.viewModel.signInWithApple(presentationAnchor: self.view.window!) { [weak self] isSuccess in
+                if isSuccess {
+                    self?.coordinator?.showDashboard()
+                }
+            }
         }
         
-        //Login button
-        backButton = CustomButton()
-        backButton.configure(title: "Back", backgroundColor: .systemGreen, textColor: .white)
-        
-        view.addSubview(backButton)
-        backButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-240)
+        socialButtonsViewModel.onActionLabelTapped = {
+            self.coordinator?.showLogin()
         }
+        
+        socialButtonsView = SocialButtonsView(viewModel: socialButtonsViewModel)
+        view.addSubview(socialButtonsView)
+        
+        
     }
     
-    private func setupActions(){
-        loginButton.addTarget(self, action: #selector(onTapLogin) , for: .touchUpInside)
-        registerButton.addTarget(self, action: #selector(onTapRegister), for: .touchUpInside)
-        backButton.addTarget(self, action: #selector(onTapBack), for: .touchUpInside)
+    private func setupConstraints(){
+        
+        // Background ImageView
+        backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        // AuthBar
+        authBar.snp.makeConstraints { make in
+            make.top.equalTo(UIHelper.statusBarHeight + 10)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(60)
+            
+        }
+        // Subtitle Label
+        subtitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(authBar.snp.bottom).offset(22)
+            make.leading.trailing.equalToSuperview().inset(32)
+        }
+        
+        // Name Text Field
+        nameTextField.snp.makeConstraints { make in
+            make.top.equalTo(subtitleLabel.snp.bottom).offset(42)
+            make.leading.equalToSuperview().offset(22)
+            make.trailing.equalToSuperview().offset(-22)
+        }
+        
+        // Email Text Field
+        emailTextField.snp.makeConstraints { make in
+            make.top.equalTo(subtitleLabel.snp.bottom).offset(124)
+            make.leading.equalToSuperview().offset(22)
+            make.trailing.equalToSuperview().offset(-22)
+        }
+        
+     
+        // Password Text Field
+        passwordTextField.snp.makeConstraints { make in
+            make.top.equalTo(subtitleLabel.snp.bottom).offset(206)
+            make.leading.equalToSuperview().offset(22)
+            make.trailing.equalToSuperview().offset(-22)
+        }
+        
+        // Login Button
+        loginButton.snp.makeConstraints { make in
+            make.bottom.equalTo(socialButtonsView.snp.top).offset(-30)
+            make.leading.trailing.equalToSuperview().inset(32)
+            make.height.equalTo(50)
+        }
+
+        // Social Buttons View
+        socialButtonsView.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+            make.leading.trailing.equalToSuperview()
+        }
+        
     }
 }
 
-//MARK: - Actions
-extension RegisterVC {
-    
-    @objc func onTapLogin(){
-        coordinator?.showLogin()
+extension RegisterVC: AuthBarDelegate {
+    func didTapBackButton() {
+        coordinator?.pop()
     }
-    
-    @objc func onTapRegister(){
+}
+
+extension RegisterVC: AuthButtonDelegate {
+    func didTapButton(type: AuthButtonType) {
         let isEmailValid = emailTextField.validate(with: "Please enter your email.")
         let isNameValid = nameTextField.validate(with: "Please enter your name.")
         let isPasswordValid = passwordTextField.validate(with: "Please enter your password.")
@@ -136,8 +199,7 @@ extension RegisterVC {
             print("Validation failed.")
             return
         }
-
-        viewModel.register(email: emailTextField.text!, name:nameTextField.text!, password: passwordTextField.text!, gender: gender ) { isSucces in
+        viewModel.register(email: emailTextField.text!, name: nameTextField.text!, password: passwordTextField.text!, gender: gender ) { isSucces in
             switch isSucces {
             case true:
                 self.coordinator?.showDashboard()
@@ -147,9 +209,5 @@ extension RegisterVC {
         
             }
         }
-    }
-    
-    @objc func onTapBack(){
-        coordinator?.pop()
     }
 }

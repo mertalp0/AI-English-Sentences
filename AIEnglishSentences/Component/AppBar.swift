@@ -13,61 +13,29 @@ protocol AppBarDelegate: AnyObject {
     func rightButtonTapped()
 }
 
-enum AppBarType {
-    case generate
-    case history
-    
-    var title: String {
-        switch self {
-        case .generate:
-            return "Generate"
-        case .history:
-            return "History"
-        }
-    }
-    
-    var rightIcon: UIImage? {
-        switch self {
-        case .generate:
-            return UIImage(systemName: "square.and.arrow.up.circle")
-        case .history:
-            return UIImage(systemName: "gear")
-        }
-    }
-    
-    var leftIcon: UIImage? {
-        switch self {
-        case .generate:
-            return UIImage(systemName: "chevron.left")
-        case .history:
-            return nil
-        }
-    }
-}
-
 final class AppBar: UIView {
     
     // MARK: - Properties
     weak var delegate: AppBarDelegate?
     
     //MARK: - UI Elements
-    private let titleLabel: UILabel = {
+     var titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.boldSystemFont(ofSize: 24)
-        label.textColor = .black
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
         return label
     }()
     
     private let leftButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .black
+        button.tintColor = .main
         return button
     }()
     
     private let rightButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .black
+        button.tintColor = .main
         return button
     }()
     
@@ -84,7 +52,7 @@ final class AppBar: UIView {
     
     // MARK: - Setup
     private func setupView() {
-        backgroundColor = .init(hex: "F2F2F2")
+        backgroundColor = .clear
         
         addSubview(titleLabel)
         addSubview(leftButton)
@@ -131,8 +99,13 @@ final class AppBar: UIView {
             rightButton.setImage(resizedRightIcon, for: .normal)
         }
         
-        leftButton.isHidden = (type.leftIcon == nil)
-        rightButton.isHidden = (type.rightIcon == nil)
+        titleLabel.textColor = type.titleColor
+        
+        rightButton.setTitleColor(type.titleColor, for: .normal)
+        leftButton.setTitleColor(type.titleColor, for: .normal)
+
+        leftButton.isHidden = type.leftIcon == nil
+        rightButton.isHidden = type.rightIcon == nil
     }
     
     // MARK: - Actions
@@ -146,3 +119,102 @@ final class AppBar: UIView {
         delegate?.rightButtonTapped()
     }
 }
+
+
+enum AppBarType {
+    case generate(pageCellType: CellType)
+    case history
+    case profile
+    case contexta
+    case result
+    case privacyPolicy
+    case myApps
+    case languages
+    
+    var title: String {
+        switch self {
+        case .generate(let pageCellType):
+            return pageCellType.title
+        case .history:
+            return "History"
+        case .profile:
+            return "My Profile"
+        case .contexta:
+            return "Contexta"
+        case .result:
+            return "Sentences"
+        case .privacyPolicy:
+            return "Privacy Policy"
+        case .myApps:
+            return "My Apps"
+        case .languages:
+            return "Languages"
+        }
+
+    }
+    
+    var rightIcon: UIImage? {
+        switch self {
+        case .generate:
+            return nil
+        case .history:
+            return nil
+        case .profile:
+            return nil
+        case .contexta:
+            return nil
+        case .result:
+            return nil
+        case .privacyPolicy:
+            return nil
+        case .myApps:
+            return nil
+        case .languages:
+            return nil
+        }
+    }
+    
+    var leftIcon: UIImage? {
+        switch self {
+        case .generate:
+            return UIImage(systemName: "chevron.left")
+        case .history:
+            return nil
+        case .profile:
+            return nil
+        case .contexta:
+            return nil
+        case .result:
+            return UIImage(systemName: "chevron.left")
+        case .privacyPolicy:
+            return UIImage(systemName: "chevron.left")
+        case .myApps:
+            return UIImage(systemName: "chevron.left")
+        case .languages:
+            return UIImage(systemName: "chevron.left")
+        }
+        
+    }
+    
+    var titleColor: UIColor {
+        switch self {
+        case .generate:
+            return .main
+        case .history:
+            return .main
+        case .profile:
+            return .white
+        case .contexta:
+            return .main
+        case .result:
+            return .main
+        case .privacyPolicy:
+            return .main
+        case .myApps:
+            return .main
+        case .languages:
+            return .main
+        }
+    }
+}
+

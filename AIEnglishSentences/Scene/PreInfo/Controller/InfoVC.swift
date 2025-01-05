@@ -9,73 +9,147 @@ import UIKit
 import BaseMVVMCKit
 import SnapKit
 
-final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel>{
+final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
     
-    //MARK: - UI Elements
-    private var  pageTitle : UILabel!
-    private var  loginButton : CustomButton!
-    private var  registerButton : CustomButton!
+    // MARK: - UI Elements
+    private var backgroundImageView: UIImageView!
+    private var logoImageView: UIImageView!
+    private var subtitleLabel: UILabel!
+    private var loginButton: AuthButton!
+    private var socialButtonsView: SocialButtonsView!
     
-    //MARK: - Deinit
-    deinit {
-        print("\(self) deallocated")
-    }
-    
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        
         setupUI()
-        setupActions()
+        setupConstraints()
     }
-
-    private func setupUI(){
+    
+    // MARK: - Setup UI
+    private func setupUI() {
+        // Background Image
+        backgroundImageView = UIImageView()
+        backgroundImageView.image = UIImage(named: "background")
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.clipsToBounds = true
+        view.addSubview(backgroundImageView)
         
-        //Page Title
-        pageTitle = UILabel()
-        pageTitle.text = "infoVC"
-        pageTitle.textColor = .black
+        // Logo Image
+        logoImageView = UIImageView()
+        logoImageView.image = UIImage(named: "AiLex")
+        logoImageView.contentMode = .scaleAspectFit
+        view.addSubview(logoImageView)
         
-        view.addSubview(pageTitle)
-        pageTitle.snp.makeConstraints { make in
-            make.center.equalToSuperview()
-        }
+        // Subtitle Label
+        subtitleLabel = UILabel()
+        subtitleLabel.textAlignment = .center
+        subtitleLabel.numberOfLines = 0
+        subtitleLabel.textColor = UIColor.darkGray
+        subtitleLabel.attributedText = NSAttributedString(
+            string: "Create. Listen. Inspire.\nAiLex makes words come alive.",
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 22, weight: .bold),
+                .foregroundColor: UIColor.darkGray,
+                .kern: 1.0,
+                .paragraphStyle: {
+                    let style = NSMutableParagraphStyle()
+                    style.lineSpacing = 5
+                    style.alignment = .center
+                    return style
+                }()
+            ]
+        )
+        view.addSubview(subtitleLabel)
         
-        //Login button
-        loginButton = CustomButton()
-        loginButton.configure(title: "Login", backgroundColor: .systemGreen, textColor: .white)
-        
+        // Login Button
+        loginButton = AuthButton(type: .normal(title: .login))
+        loginButton.backgroundColor = .main
+        loginButton.delegate = self
         view.addSubview(loginButton)
-        loginButton.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-50)
+        
+    
+        let socialButtonsViewModel = SocialButtonsViewModel(
+            actionText: "You don’t have an account?",
+            actionHighlightedText: "Sign up",
+            googleButtonTitle: "Continue with Google",
+            appleButtonTitle: "Continue with Apple"
+        )
+        
+        socialButtonsViewModel.onGoogleButtonTapped = {
+            self.viewModel.googleSignIn(from: self) {  [weak self] isSuccess in
+                if isSuccess {
+                    self?.coordinator?.showDashboard()
+                }
+            }
         }
         
-        //Register button
-        registerButton = CustomButton()
-        registerButton.configure(title: "Register", backgroundColor: .systemGreen, textColor: .white)
+        socialButtonsViewModel.onAppleButtonTapped = {
+            self.viewModel.signInWithApple(presentationAnchor: self.view.window!) { [weak self] isSuccess in
+                if isSuccess {
+                    self?.coordinator?.showDashboard()
+                }
+            }
+        }
         
-        view.addSubview(registerButton)
-        registerButton.snp.makeConstraints { make in
+        socialButtonsViewModel.onActionLabelTapped = {
+            self.coordinator?.showRegister()
+        }
+        
+        socialButtonsView = SocialButtonsView(viewModel: socialButtonsViewModel)
+        view.addSubview(socialButtonsView)
+    }
+    
+    // MARK: - Setup Constraints
+    private func setupConstraints() {
+    
+        // Background ImageView
+        backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        // Logo ImageView
+        logoImageView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(90)
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-120)
+            make.width.equalTo(250)
+            make.height.equalTo(80)
+        }
+        
+        // Subtitle Label
+        subtitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(logoImageView.snp.bottom).offset(32)
+            make.leading.trailing.equalToSuperview().inset(32)
+        }
+        
+        // Login Button
+        loginButton.snp.makeConstraints { make in
+            make.bottom.equalTo(socialButtonsView.snp.top).offset(-30)
+            make.leading.trailing.equalToSuperview().inset(32)
+            make.height.equalTo(50)
+        }
+        
+        socialButtonsView.snp.makeConstraints { make in
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+            make.leading.trailing.equalToSuperview()
         }
     }
     
-    private func setupActions(){
-        loginButton.addTarget(self, action: #selector(onTapLogin) , for: .touchUpInside)
-        registerButton.addTarget(self, action: #selector(onTapRegister), for: .touchUpInside)
-    }
+      // MARK: - Actions
+      @objc private func didTapSignUp() {
+          print("Sign up tapped")
+      }
 }
 
-//MARK: - Actions
-extension InfoVC {
-    
-    @objc func onTapLogin(){
-        coordinator?.showLogin()
-    }
-    
-    @objc func onTapRegister(){
-        coordinator?.showRegister()
+// MARK: - AuthButtonDelegate
+extension InfoVC: AuthButtonDelegate {
+    func didTapButton(type: AuthButtonType) {
+        switch type {
+        case .normal:
+            coordinator?.showLogin()
+        case .google:
+            print("Google login tapped")
+        case .apple:
+            print("Apple login tapped")
+        }
     }
 }

@@ -9,9 +9,14 @@ import UIKit
 import SwiftUI
 
 extension UIColor {
-    static let mainColor = UIColor(named: "MainColor") ?? UIColor(red: 9/255, green: 97/255, blue: 245/255, alpha: 1)
+    static let mainColor = UIColor(named: "MainColor")
+    static let backgroundColor = UIColor(named: "Background")
+    static let mainBlur = UIColor(named: "BlurMain")
 }
 
 extension Color {
     static let mainColor = Color("MainColor")
+    static let backgroundColor = Color("Background")
+    static let mainBlur = Color("BlurMain")
 }
+
