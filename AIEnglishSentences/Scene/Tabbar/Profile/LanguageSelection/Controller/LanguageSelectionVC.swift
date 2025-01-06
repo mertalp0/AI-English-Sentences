@@ -63,12 +63,12 @@ final class LanguageSelectionVC: BaseViewController<LanguageSelectionCoordinator
         // AppBar
         appBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(UIHelper.statusBarHeight + 10)
+            make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
         }
         
         // TableView
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(appBar.snp.bottom).offset(20)
+            make.top.equalTo(appBar.snp.bottom).offset(UIHelper.dynamicHeight(20))
             make.bottom.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(16)
         }

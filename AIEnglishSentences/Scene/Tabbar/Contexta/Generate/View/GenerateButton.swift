@@ -30,7 +30,7 @@ final class GenerateButton: UIButton {
         
         self.setTitle("Generate Sentence", for: .normal)
         self.setTitleColor(.white, for: .normal)
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        self.titleLabel?.font = .dynamicFont(size: 16, weight: .semibold)
         
         let icon = UIImage(named: "wand.and.stars")
         self.setImage(icon?.withRenderingMode(.alwaysTemplate), for: .normal)
@@ -44,7 +44,7 @@ final class GenerateButton: UIButton {
         self.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
         
         self.snp.makeConstraints { make in
-            make.height.equalTo(50)
+            make.height.equalTo(UIHelper.dynamicHeight(40))
         }
     }
     

@@ -41,4 +41,8 @@ struct AppConstants {
         AppModel(appIcon: UIImage(named: "app_icon_ailex")!, appName: "AILex", appDescription: "AILex helps you improve your English skills by generating sentences using AI-provided words. Practice listening to these sentences and enhance your vocabulary and comprehension. In just a few minutes a day, boost your confidence in English while tracking your progress and mastering the language."),
        
     ]
+    
+    static let baseDeviceHeight:  CGFloat = 812.0
+    static let baseDeviceWidth: CGFloat = 375.0
+    
 }

@@ -58,7 +58,7 @@ final class AuthButton: UIButton {
     
     private func setupButton() {
         self.setTitle(authButtonType.title, for: .normal)
-        self.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        self.titleLabel?.font = .dynamicFont(size: 16, weight: .medium)
         self.layer.cornerRadius = 8
         
         switch authButtonType {

@@ -20,7 +20,7 @@ final class GenerateLoadingView: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Generating Sentence..."
-        label.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        label.font = .dynamicFont(size: 18, weight: .semibold)
         label.textColor = UIColor.black
         label.textAlignment = .center
         return label
@@ -29,7 +29,7 @@ final class GenerateLoadingView: UIView {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "Please wait while your sentence is being processed.\nThis may take a few moments."
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.font = .dynamicFont(size: 14, weight: .regular)
         label.textColor = UIColor.gray
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -57,18 +57,18 @@ final class GenerateLoadingView: UIView {
         
         animatedIcon.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().offset(204)
-            make.width.equalTo(345)
-            make.height.equalTo(259)
+            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(204))
+            make.width.equalTo(UIHelper.dynamicWidth(345))
+            make.height.equalTo(UIHelper.dynamicHeight(259))
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(animatedIcon.snp.bottom).offset(74)
+            make.top.equalTo(animatedIcon.snp.bottom).offset(UIHelper.dynamicHeight(74))
             make.leading.trailing.equalToSuperview().inset(24)
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(16)
+            make.top.equalTo(titleLabel.snp.bottom).offset(UIHelper.dynamicHeight(16))
             make.leading.trailing.equalToSuperview().inset(24)
         }
     }

@@ -51,7 +51,7 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
         view.addSubview(appBar)
         appBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(UIHelper.statusBarHeight + 10)
+            make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
         }
         
         // Custom Segmented Control
@@ -59,10 +59,10 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
         historySegmentedControl.delegate = self
         view.addSubview(historySegmentedControl)
         historySegmentedControl.snp.makeConstraints { make in
-            make.top.equalTo(appBar.snp.bottom).offset(10)
+            make.top.equalTo(appBar.snp.bottom).offset(UIHelper.dynamicHeight(10))
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
-            make.height.equalTo(40)
+            make.height.equalTo(UIHelper.dynamicHeight(40))
         }
         
         // TableView
@@ -75,7 +75,7 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
         view.addSubview(tableView)
         
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(historySegmentedControl.snp.bottom).offset(10)
+            make.top.equalTo(historySegmentedControl.snp.bottom).offset(UIHelper.dynamicHeight(10))
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }

@@ -109,27 +109,27 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         
         // Logo ImageView
         logoImageView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(90)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(UIHelper.dynamicHeight(90))
             make.centerX.equalToSuperview()
-            make.width.equalTo(250)
-            make.height.equalTo(80)
+            make.width.equalTo(UIHelper.dynamicWidth(250))
+            make.height.equalTo(UIHelper.dynamicHeight(80))
         }
         
         // Subtitle Label
         subtitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(logoImageView.snp.bottom).offset(32)
+            make.top.equalTo(logoImageView.snp.bottom).offset(UIHelper.dynamicHeight(32))
             make.leading.trailing.equalToSuperview().inset(32)
         }
         
         // Login Button
         loginButton.snp.makeConstraints { make in
-            make.bottom.equalTo(socialButtonsView.snp.top).offset(-30)
+            make.bottom.equalTo(socialButtonsView.snp.top).offset(-UIHelper.dynamicHeight(30))
             make.leading.trailing.equalToSuperview().inset(32)
-            make.height.equalTo(50)
+            make.height.equalTo(UIHelper.dynamicHeight(40))
         }
         
         socialButtonsView.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-UIHelper.dynamicHeight(20))
             make.leading.trailing.equalToSuperview()
         }
     }

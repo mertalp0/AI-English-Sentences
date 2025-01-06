@@ -6,7 +6,7 @@ final class GenerateTextView: UITextView {
     // MARK: - Placeholder Label
     private let placeholderLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
+        label.font = .dynamicFont(size: 14)
         label.textColor = .gray
         label.text = "Write your sentence topic here...?"
         return label
@@ -34,7 +34,7 @@ final class GenerateTextView: UITextView {
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.lightGray.cgColor
         self.textColor = .black
-        self.font = UIFont.systemFont(ofSize: 16)
+        self.font = .dynamicFont(size: 16)
         self.isScrollEnabled = false
         self.textContainerInset = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
         self.delegate = self
@@ -42,7 +42,7 @@ final class GenerateTextView: UITextView {
         addSubview(placeholderLabel)
         placeholderLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
-            make.top.equalToSuperview().offset(8)
+            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(8))
         }
     }
 

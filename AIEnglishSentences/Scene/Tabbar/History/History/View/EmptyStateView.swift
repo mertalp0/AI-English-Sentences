@@ -32,12 +32,12 @@ final class EmptyStateView: UIView {
         addSubview(imageView)
         
         titleLabel.textAlignment = .center
-        titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        titleLabel.font = .dynamicFont(size: 18, weight: .bold)
         titleLabel.textColor = .darkGray
         addSubview(titleLabel)
         
         descriptionLabel.textAlignment = .center
-        descriptionLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        descriptionLabel.font = .dynamicFont(size: 14, weight: .regular)
         descriptionLabel.textColor = .gray
         descriptionLabel.numberOfLines = 0
         addSubview(descriptionLabel)
@@ -45,16 +45,16 @@ final class EmptyStateView: UIView {
         imageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.centerX.equalToSuperview()
-            make.width.height.equalTo(250)
+            make.width.height.equalTo(UIHelper.dynamicHeight(250))
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(imageView.snp.bottom).offset(16)
+            make.top.equalTo(imageView.snp.bottom).offset(UIHelper.dynamicHeight(16))
             make.leading.trailing.equalToSuperview()
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.top.equalTo(titleLabel.snp.bottom).offset(UIHelper.dynamicHeight(8))
             make.leading.trailing.equalToSuperview().inset(16)
         }
     }

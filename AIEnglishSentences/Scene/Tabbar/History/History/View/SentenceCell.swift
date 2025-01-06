@@ -40,7 +40,7 @@ final class SentenceCell: UITableViewCell {
     
     private let sentenceLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = .dynamicFont(size: 16, weight: .regular)
         label.textColor = .black
         label.numberOfLines = 0
         return label
@@ -90,7 +90,7 @@ final class SentenceCell: UITableViewCell {
 
     private let writingToneLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        label.font = .dynamicFont(size: 12, weight: .medium)
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 1
@@ -107,7 +107,7 @@ final class SentenceCell: UITableViewCell {
 
     private let writingStyleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        label.font = .dynamicFont(size: 12, weight: .medium)
         label.textColor = .white
         label.textAlignment = .center
         label.numberOfLines = 1
@@ -116,7 +116,7 @@ final class SentenceCell: UITableViewCell {
     
     private let createdAtLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12, weight: .light)
+        label.font = .dynamicFont(size: 12, weight: .light)
         label.textColor = .darkGray
         label.textAlignment = .right
         return label
@@ -149,30 +149,30 @@ final class SentenceCell: UITableViewCell {
         containerView.addSubview(metadataStackView)
         
         sentenceLabel.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().offset(16)
+            make.top.leading.equalToSuperview().offset(UIHelper.dynamicHeight(16))
             make.trailing.equalTo(playButton.snp.leading).offset(-8)
         }
         
         playButton.snp.makeConstraints { make in
             make.trailing.equalTo(saveAndFavoriteButton.snp.leading).offset(-8)
-            make.top.equalToSuperview().offset(16)
-            make.width.height.equalTo(24)
+            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(16))
+            make.width.height.equalTo(UIHelper.dynamicHeight(24))
         }
         
         saveAndFavoriteButton.snp.makeConstraints { make in
             make.trailing.equalTo(copyButton.snp.leading).offset(-8)
-            make.top.equalToSuperview().offset(16)
-            make.width.height.equalTo(24)
+            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(16))
+            make.width.height.equalTo(UIHelper.dynamicHeight(24))
         }
         
         copyButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-16)
-            make.top.equalToSuperview().offset(16)
-            make.width.height.equalTo(24)
+            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(16))
+            make.width.height.equalTo(UIHelper.dynamicHeight(24))
         }
         
         separatorLine.snp.makeConstraints { make in
-            make.top.equalTo(sentenceLabel.snp.bottom).offset(8)
+            make.top.equalTo(sentenceLabel.snp.bottom).offset(UIHelper.dynamicHeight(8))
             make.leading.trailing.equalToSuperview().inset(16)
             make.height.equalTo(1)
         }
@@ -192,7 +192,7 @@ final class SentenceCell: UITableViewCell {
         metadataStackView.addArrangedSubview(createdAtLabel)
         
         metadataStackView.snp.makeConstraints { make in
-            make.top.equalTo(separatorLine.snp.bottom).offset(8)
+            make.top.equalTo(separatorLine.snp.bottom).offset(UIHelper.dynamicHeight(8))
             make.leading.trailing.bottom.equalToSuperview().inset(16)
         }
         

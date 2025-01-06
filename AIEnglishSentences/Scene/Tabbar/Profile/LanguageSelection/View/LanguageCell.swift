@@ -34,7 +34,7 @@ final class LanguageCell: UITableViewCell {
         contentView.backgroundColor = .white
         
         titleLabel = UILabel()
-        titleLabel.font = .systemFont(ofSize: 18, weight: .medium)
+        titleLabel.font = .dynamicFont(size: 18, weight: .medium)
         titleLabel.textColor = .black
         contentView.addSubview(titleLabel)
         
@@ -52,7 +52,7 @@ final class LanguageCell: UITableViewCell {
         checkmarkImageView.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
-            make.width.height.equalTo(24)
+            make.width.height.equalTo(UIHelper.dynamicHeight(25))
         }
     }
     

@@ -11,6 +11,8 @@
 		942A53642D19A19800BC0697 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 942A53632D19A19800BC0697 /* FirebaseAuthCombine-Community */; };
 		942A53672D19A20200BC0697 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 942A53662D19A20200BC0697 /* GoogleSignIn */; };
 		942A53692D19A20200BC0697 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 942A53682D19A20200BC0697 /* GoogleSignInSwift */; };
+		94302F742D2AC08C0079D8DC /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 94302F732D2AC08C0079D8DC /* RevenueCat */; };
+		94302F762D2AC08C0079D8DC /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 94302F752D2AC08C0079D8DC /* RevenueCatUI */; };
 		945B5D9D2D0E2D230023A3D9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 945B5D9C2D0E2D230023A3D9 /* SnapKit */; };
 		945B5DA02D0E2D360023A3D9 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 945B5D9F2D0E2D360023A3D9 /* Alamofire */; };
 		945EFC4A2D0F1ECB000819E6 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 945EFC492D0F1ECB000819E6 /* FirebaseAnalytics */; };
@@ -84,6 +86,7 @@
 			files = (
 				941688272D0F8E2A0082A73F /* BaseMVVMCKit in Frameworks */,
 				945EFC4C2D0F1ECB000819E6 /* FirebaseAuth in Frameworks */,
+				94302F762D2AC08C0079D8DC /* RevenueCatUI in Frameworks */,
 				942A53672D19A20200BC0697 /* GoogleSignIn in Frameworks */,
 				942A53692D19A20200BC0697 /* GoogleSignInSwift in Frameworks */,
 				945EFC542D0F1ECB000819E6 /* FirebaseStorage in Frameworks */,
@@ -91,6 +94,7 @@
 				945EFC502D0F1ECB000819E6 /* FirebaseCrashlytics in Frameworks */,
 				945EFC4A2D0F1ECB000819E6 /* FirebaseAnalytics in Frameworks */,
 				945EFC522D0F1ECB000819E6 /* FirebaseFirestore in Frameworks */,
+				94302F742D2AC08C0079D8DC /* RevenueCat in Frameworks */,
 				945EFC4E2D0F1ECB000819E6 /* FirebaseCore in Frameworks */,
 				945B5D9D2D0E2D230023A3D9 /* SnapKit in Frameworks */,
 				942A53642D19A19800BC0697 /* FirebaseAuthCombine-Community in Frameworks */,
@@ -176,6 +180,8 @@
 				942A53632D19A19800BC0697 /* FirebaseAuthCombine-Community */,
 				942A53662D19A20200BC0697 /* GoogleSignIn */,
 				942A53682D19A20200BC0697 /* GoogleSignInSwift */,
+				94302F732D2AC08C0079D8DC /* RevenueCat */,
+				94302F752D2AC08C0079D8DC /* RevenueCatUI */,
 			);
 			productName = AIEnglishSentences;
 			productReference = 94918F052D0DA32B00FDC538 /* AIEnglishSentences.app */;
@@ -266,6 +272,7 @@
 				945EFC482D0F1ECB000819E6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				941688252D0F8E2A0082A73F /* XCRemoteSwiftPackageReference "BaseMVVMCKit" */,
 				942A53652D19A20200BC0697 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				94302F722D2AC08C0079D8DC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 94918F062D0DA32B00FDC538 /* Products */;
@@ -660,6 +667,14 @@
 				minimumVersion = 8.0.0;
 			};
 		};
+		94302F722D2AC08C0079D8DC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios-spm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.14.5;
+			};
+		};
 		945B5D9B2D0E2D230023A3D9 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -706,6 +721,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 942A53652D19A20200BC0697 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		94302F732D2AC08C0079D8DC /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 94302F722D2AC08C0079D8DC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCat;
+		};
+		94302F752D2AC08C0079D8DC /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 94302F722D2AC08C0079D8DC /* XCRemoteSwiftPackageReference "purchases-ios-spm" */;
+			productName = RevenueCatUI;
 		};
 		945B5D9C2D0E2D230023A3D9 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;

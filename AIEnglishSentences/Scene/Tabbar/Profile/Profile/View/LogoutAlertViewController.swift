@@ -48,33 +48,33 @@ final class LogoutAlertViewController: UIViewController {
         containerView.addSubview(iconImageView)
 
         iconImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(20)
+            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(20))
             make.centerX.equalToSuperview()
-            make.width.height.equalTo(40)
+            make.width.height.equalTo(UIHelper.dynamicHeight(40))
         }
 
         // Title Label
         titleLabel.text = "Logout?"
-        titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        titleLabel.font = .dynamicFont(size: 18, weight: .semibold)
         titleLabel.textColor = .mainColor
         titleLabel.textAlignment = .center
         containerView.addSubview(titleLabel)
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(iconImageView.snp.bottom).offset(10)
+            make.top.equalTo(iconImageView.snp.bottom).offset(UIHelper.dynamicHeight(10))
             make.leading.trailing.equalToSuperview().inset(16)
         }
 
         // Message Label
         messageLabel.text = "Are you sure you want to log out? You'll need to log in again to access your account."
-        messageLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        messageLabel.font = .dynamicFont(size: 14, weight: .regular)
         messageLabel.textColor = .darkGray
         messageLabel.numberOfLines = 0
         messageLabel.textAlignment = .center
         containerView.addSubview(messageLabel)
 
         messageLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.top.equalTo(titleLabel.snp.bottom).offset(UIHelper.dynamicHeight(8))
             make.leading.trailing.equalToSuperview().inset(16)
         }
 
@@ -86,16 +86,16 @@ final class LogoutAlertViewController: UIViewController {
         containerView.addSubview(cancelButton)
 
         cancelButton.snp.makeConstraints { make in
-            make.top.equalTo(messageLabel.snp.bottom).offset(20)
+            make.top.equalTo(messageLabel.snp.bottom).offset(UIHelper.dynamicHeight(20))
             make.leading.equalToSuperview().offset(16)
-            make.height.equalTo(44)
-            make.bottom.equalToSuperview().offset(-16)
+            make.height.equalTo(UIHelper.dynamicHeight(44))
+            make.bottom.equalToSuperview().offset(-UIHelper.dynamicHeight(16))
         }
 
         // Logout Button
         logoutButton.setTitle("Logout", for: .normal)
         logoutButton.setTitleColor(.systemRed, for: .normal)
-        logoutButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        logoutButton.titleLabel?.font = .dynamicFont(size: 16, weight: .medium)
         logoutButton.addTarget(self, action: #selector(onLogoutTapped), for: .touchUpInside)
         containerView.addSubview(logoutButton)
 

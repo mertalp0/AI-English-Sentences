@@ -76,7 +76,7 @@ final class CategoryCell: UITableViewCell {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 20, weight: .bold)
+        label.font = .dynamicFont(size: 20, weight: .bold)
         label.textColor = .white
         label.numberOfLines = 1
         return label
@@ -84,7 +84,7 @@ final class CategoryCell: UITableViewCell {
     
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .regular)
+        label.font = .dynamicFont(size: 16, weight: .regular)
         label.textColor = .white
         label.numberOfLines = 0
         return label
@@ -111,27 +111,27 @@ final class CategoryCell: UITableViewCell {
         
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(16)
-            make.height.equalTo(150) 
+            make.height.equalTo(UIHelper.dynamicHeight(150))
         }
         
         iconImageView.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-16)
             make.centerY.equalToSuperview()
-            make.width.height.equalTo(120)
+            make.width.height.equalTo(UIHelper.dynamicHeight(120))
             
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16)
+            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(16))
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalTo(iconImageView.snp.leading).offset(-16)
         }
         
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(8)
+            make.top.equalTo(titleLabel.snp.bottom).offset(UIHelper.dynamicHeight(8))
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalTo(iconImageView.snp.leading).offset(-16)
-            make.bottom.equalToSuperview().offset(-16)
+            make.bottom.equalToSuperview().offset(-UIHelper.dynamicHeight(16))
         }
     }
     

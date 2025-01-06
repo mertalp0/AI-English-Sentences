@@ -38,12 +38,12 @@ final class ProfileCell: UITableViewCell {
         iconImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
-            make.width.height.equalTo(28) // İkon biraz daha büyük
+            make.width.height.equalTo(UIHelper.dynamicHeight(28))
         }
         
         // Title Label
         titleLabel = UILabel()
-        titleLabel.font = UIFont.systemFont(ofSize: 18, weight: .medium) // Daha büyük font
+        titleLabel.font = .dynamicFont(size: 18, weight: .medium)
         titleLabel.textColor = .black
         contentView.addSubview(titleLabel)
         

@@ -53,7 +53,7 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel> {
         subtitleLabel.attributedText = NSAttributedString(
             string: "Welcome back you’ve \nbeen missed!",
             attributes: [
-                .font: UIFont.systemFont(ofSize: 22, weight: .bold),
+                .font: UIFont.dynamicFont(size: 22, weight: .bold),
                 .foregroundColor: UIColor.darkGray,
                 .kern: 1.0,
                 .paragraphStyle: {
@@ -85,7 +85,7 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel> {
         // Forgot Password Label
         forgotPasswordLabel = UILabel()
         forgotPasswordLabel.text = "Forgot Password?"
-        forgotPasswordLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        forgotPasswordLabel.font = .dynamicFont(size: 14, weight: .regular)
         forgotPasswordLabel.textAlignment = .center
         forgotPasswordLabel.textColor = .mainColor
         view.addSubview(forgotPasswordLabel)
@@ -133,45 +133,45 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel> {
         
         // AuthBar
         authBar.snp.makeConstraints { make in
-            make.top.equalTo(UIHelper.statusBarHeight + 10)
+            make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(60)
+            make.height.equalTo(UIHelper.dynamicHeight(60))
             
         }
         // Subtitle Label
         subtitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(authBar.snp.bottom).offset(22)
+            make.top.equalTo(authBar.snp.bottom).offset(UIHelper.dynamicHeight(22))
             make.leading.trailing.equalToSuperview().inset(32)
         }
         
         // Email Text Field
         emailTextField.snp.makeConstraints { make in
-            make.top.equalTo(subtitleLabel.snp.bottom).offset(48)
+            make.top.equalTo(subtitleLabel.snp.bottom).offset(UIHelper.dynamicHeight(48))
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
         }
         // Password Text Field
         passwordTextField.snp.makeConstraints { make in
-            make.top.equalTo(subtitleLabel.snp.bottom).offset(130)
+            make.top.equalTo(subtitleLabel.snp.bottom).offset(UIHelper.dynamicHeight(130))
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
         }
         
         // Login Button
         loginButton.snp.makeConstraints { make in
-            make.bottom.equalTo(socialButtonsView.snp.top).offset(-30)
+            make.bottom.equalTo(socialButtonsView.snp.top).offset(-UIHelper.dynamicHeight(20))
             make.leading.trailing.equalToSuperview().inset(32)
-            make.height.equalTo(50)
+            make.height.equalTo(UIHelper.dynamicHeight(40))
         }
         
         forgotPasswordLabel.snp.makeConstraints { make in
-            make.top.equalTo(passwordTextField.snp.bottom).offset(5)
+            make.top.equalTo(passwordTextField.snp.bottom).offset(UIHelper.dynamicHeight(5))
             make.trailing.equalTo(passwordTextField.snp.trailing)
         }
         
         // Social Buttons View
         socialButtonsView.snp.makeConstraints { make in
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-20)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-UIHelper.dynamicHeight(10))
             make.leading.trailing.equalToSuperview()
         }
         

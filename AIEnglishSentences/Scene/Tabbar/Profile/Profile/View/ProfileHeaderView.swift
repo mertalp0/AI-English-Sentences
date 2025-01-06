@@ -40,11 +40,25 @@ final class ProfileHeaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+            
+            let cornerRadii = CGSize(width: 16, height: 16)
+            let path = UIBezierPath(
+                roundedRect: self.bounds,
+                byRoundingCorners: [.bottomLeft, .bottomRight],
+                cornerRadii: cornerRadii
+            )
+            let maskLayer = CAShapeLayer()
+            maskLayer.path = path.cgPath
+            self.layer.mask = maskLayer
+    }
+    
     // MARK: - Setup UI
     private func setupUI() {
         self.backgroundColor = .mainColor
-        self.layer.cornerRadius = 16
         self.clipsToBounds = true
+        
         
         // AppBar
         appBar = AppBar(type: .profile)
@@ -52,7 +66,7 @@ final class ProfileHeaderView: UIView {
         
         appBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(UIHelper.statusBarHeight + 10)
+            make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
         }
         
         // Avatar
@@ -66,20 +80,20 @@ final class ProfileHeaderView: UIView {
         
         avatarImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
-            make.top.equalTo(appBar.snp.bottom).offset(16)
-            make.width.height.equalTo(80)
+            make.top.equalTo(appBar.snp.bottom).offset(UIHelper.dynamicHeight(16))
+            make.width.height.equalTo(UIHelper.dynamicHeight(80))
         }
         
         // Name Label
         nameLabel = UILabel()
         nameLabel.text = "Loading..."
         nameLabel.textColor = .white
-        nameLabel.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        nameLabel.font = .dynamicFont(size: 24, weight: .bold)
         nameLabel.isHidden = false
         self.addSubview(nameLabel)
         
         nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(avatarImageView.snp.top).offset(8)
+            make.top.equalTo(avatarImageView.snp.top).offset(UIHelper.dynamicHeight(8))
             make.leading.equalTo(avatarImageView.snp.trailing).offset(16)
             make.trailing.equalToSuperview().offset(-60)
         }
@@ -87,7 +101,7 @@ final class ProfileHeaderView: UIView {
         // Name TextField
         nameTextField = UITextField()
         nameTextField.textColor = .black
-        nameTextField.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        nameTextField.font = .dynamicFont(size: 24, weight: .bold)
         nameTextField.backgroundColor = .white
         nameTextField.layer.cornerRadius = 8
         nameTextField.layer.borderWidth = 1
@@ -101,18 +115,18 @@ final class ProfileHeaderView: UIView {
         
         nameTextField.snp.makeConstraints { make in
             make.edges.equalTo(nameLabel)
-            make.height.equalTo(40)
+            make.height.equalTo(UIHelper.dynamicHeight(40))
         }
         
         // Email Label
         emailLabel = UILabel()
         emailLabel.text = "Loading..."
         emailLabel.textColor = .white
-        emailLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        emailLabel.font = .dynamicFont(size: 16, weight: .medium)
         self.addSubview(emailLabel)
         
         emailLabel.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(4)
+            make.top.equalTo(nameLabel.snp.bottom).offset(UIHelper.dynamicHeight(4))
             make.leading.trailing.equalTo(nameLabel)
         }
         
@@ -126,7 +140,7 @@ final class ProfileHeaderView: UIView {
         editButton.snp.makeConstraints { make in
             make.centerY.equalTo(nameLabel)
             make.trailing.equalToSuperview().offset(-16)
-            make.width.height.equalTo(30)
+            make.width.height.equalTo(UIHelper.dynamicHeight(30))
         }
     }
     

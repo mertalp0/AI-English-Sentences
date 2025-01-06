@@ -51,7 +51,7 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
         profileHeaderView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(250)
+            make.height.equalTo(UIHelper.dynamicHeight(250))
         }
         
         // Options TableView
@@ -59,7 +59,7 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
         optionsTableView.delegate = self
         optionsTableView.dataSource = self
         optionsTableView.register(ProfileCell.self, forCellReuseIdentifier: "ProfileCell")
-        optionsTableView.rowHeight = 60
+        optionsTableView.rowHeight = UIHelper.dynamicHeight(60)
         optionsTableView.isScrollEnabled = false
         optionsTableView.backgroundColor = .clear
         view.addSubview(optionsTableView)
@@ -80,10 +80,10 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
         view.addSubview(logoutButton)
         
         logoutButton.snp.makeConstraints { make in
-            make.top.equalTo(optionsTableView.snp.bottom).offset(16)
+            make.top.equalTo(optionsTableView.snp.bottom).offset(UIHelper.dynamicHeight(16))
             make.leading.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(50)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-22)
+            make.height.equalTo(UIHelper.dynamicHeight(40))
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-UIHelper.dynamicHeight(22))
         }
     }
     
