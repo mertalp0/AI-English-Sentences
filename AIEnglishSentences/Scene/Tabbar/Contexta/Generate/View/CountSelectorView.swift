@@ -41,7 +41,7 @@ final class CountSelectorView: UIView {
     private let container = UIView()
     private let titleLabel = UILabel()
     private let optionsStackView = UIStackView()
-    private(set) var selectedValue: Int? // Seçilen değer
+    private(set) var selectedValue: Int?
     
     weak var delegate: CountSelectorViewDelegate?
     
@@ -51,7 +51,7 @@ final class CountSelectorView: UIView {
         setupViews()
         setupConstraints()
         setupOptions()
-        selectedValue = type.values.first // Varsayılan değer
+        selectedValue = type.values.first
     }
     
     required init?(coder: NSCoder) {
@@ -63,7 +63,7 @@ final class CountSelectorView: UIView {
         container.layer.cornerRadius = 16
         
         titleLabel.text = type.title
-        titleLabel.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        titleLabel.font = .dynamicFont(size: 14, weight: .medium)
         titleLabel.textColor = .gray
         
         optionsStackView.axis = .horizontal
@@ -86,15 +86,15 @@ final class CountSelectorView: UIView {
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(10)
+            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(10))
             make.leading.trailing.equalToSuperview().inset(16)
         }
 
         optionsStackView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(10)
+            make.top.equalTo(titleLabel.snp.bottom).offset(UIHelper.dynamicHeight(10))
             make.leading.trailing.equalToSuperview().inset(16)
-            make.bottom.equalToSuperview().offset(-10)
-            make.height.equalTo(50)
+            make.bottom.equalToSuperview().offset(-UIHelper.dynamicHeight(10))
+            make.height.equalTo(UIHelper.dynamicHeight(50))
         }
     }
     
@@ -102,7 +102,7 @@ final class CountSelectorView: UIView {
         for value in type.values {
             let button = UIButton(type: .system)
             button.setTitle("\(value)", for: .normal)
-            button.titleLabel?.font = UIFont.systemFont(ofSize: 18, weight: .medium)
+            button.titleLabel?.font = .dynamicFont(size: 18, weight: .medium)
             button.setTitleColor(.mainColor, for: .normal)
             button.backgroundColor = .white
             button.layer.cornerRadius = 10
@@ -110,7 +110,6 @@ final class CountSelectorView: UIView {
             optionsStackView.addArrangedSubview(button)
         }
         
-        // Varsayılan seçimi ayarla
         if let firstButton = optionsStackView.arrangedSubviews.first as? UIButton {
             firstButton.backgroundColor = .mainColor?.withAlphaComponent(0.2)
         }
@@ -119,11 +118,9 @@ final class CountSelectorView: UIView {
     @objc private func optionTapped(_ sender: UIButton) {
         guard let value = sender.titleLabel?.text, let intValue = Int(value) else { return }
         
-        // Seçilen değeri güncelle
         selectedValue = intValue
         delegate?.countSelectorView(self, didSelectValue: intValue)
         
-        // Seçilen butonu vurgula
         optionsStackView.arrangedSubviews.forEach { view in
             if let button = view as? UIButton {
                 button.backgroundColor = .white

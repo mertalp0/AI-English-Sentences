@@ -37,7 +37,7 @@ final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel> {
         view.addSubview(appBar)
         appBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(UIHelper.statusBarHeight + 10)
+            make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
         }
     
         // Sentences TableView

@@ -41,7 +41,7 @@ final class PrivacyPolicyVC: BaseViewController<PrivacyPolicyCoordinator, Privac
         contentTextView.isScrollEnabled = true
         contentTextView.textColor = .black
         contentTextView.backgroundColor = .clear
-        contentTextView.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        contentTextView.font = .dynamicFont(size: 18, weight: .semibold)
         contentTextView.text = AppConstants.privacyPolicy
         view.addSubview(contentTextView)
     }
@@ -55,14 +55,14 @@ final class PrivacyPolicyVC: BaseViewController<PrivacyPolicyCoordinator, Privac
         // AppBar
         appBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(UIHelper.statusBarHeight + 10)
+            make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
         }
         
         // Content TextView
         contentTextView.snp.makeConstraints { make in
-            make.top.equalTo(appBar.snp.bottom).offset(16)
+            make.top.equalTo(appBar.snp.bottom).offset(UIHelper.dynamicHeight(16))
             make.leading.trailing.equalToSuperview().inset(16)
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-16)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-UIHelper.dynamicHeight(16))
         }
     }
 }

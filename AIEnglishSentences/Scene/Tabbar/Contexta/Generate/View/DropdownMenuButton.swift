@@ -50,11 +50,11 @@ final class DropdownMenuButton: UIView, UITableViewDelegate, UITableViewDataSour
     // MARK: - Setup Views
     private func setupViews() {
         titleLabel.text = title
-        titleLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        titleLabel.font = .dynamicFont(size: 14, weight: .medium)
         titleLabel.textColor = .darkGray
         
         selectedOptionLabel.text = options.first
-        selectedOptionLabel.font = UIFont.systemFont(ofSize: 18, weight: .semibold)
+        selectedOptionLabel.font = .dynamicFont(size: 16, weight: .semibold)
         selectedOptionLabel.textColor = .black
         
         dropdownIcon.image = UIImage(systemName: "chevron.down")
@@ -71,20 +71,20 @@ final class DropdownMenuButton: UIView, UITableViewDelegate, UITableViewDataSour
         self.layer.borderColor = UIColor.systemGray4.cgColor
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
+            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(8))
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
         }
         
         selectedOptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.top.equalTo(titleLabel.snp.bottom).offset(UIHelper.dynamicHeight(4))
             make.leading.equalToSuperview().offset(16)
         }
         
         dropdownIcon.snp.makeConstraints { make in
             make.centerY.equalTo(selectedOptionLabel)
             make.trailing.equalToSuperview().offset(-16)
-            make.width.height.equalTo(20)
+            make.width.height.equalTo(UIHelper.dynamicHeight(20))
         }
         
         self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toggleDropdown)))
@@ -106,7 +106,7 @@ final class DropdownMenuButton: UIView, UITableViewDelegate, UITableViewDataSour
         
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: self.bottomAnchor, constant: 8),
+            tableView.topAnchor.constraint(equalTo: self.bottomAnchor, constant: UIHelper.dynamicHeight(8)),
             tableView.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -16)
         ])
@@ -157,7 +157,7 @@ final class DropdownMenuButton: UIView, UITableViewDelegate, UITableViewDataSour
         let cell = tableView.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath)
         cell.textLabel?.text = options[indexPath.row]
         cell.selectionStyle = .none
-        cell.textLabel?.font = UIFont.systemFont(ofSize: 16)
+        cell.textLabel?.font = .dynamicFont(size: 16)
         
         if options[indexPath.row] == selectedOption {
             cell.backgroundColor = .mainColor

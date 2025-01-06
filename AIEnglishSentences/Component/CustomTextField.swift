@@ -24,7 +24,7 @@ final class CustomTextField: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .darkGray
-        label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        label.font = .dynamicFont(size: 14, weight: .medium)
         label.textAlignment = .left
         return label
     }()
@@ -34,7 +34,7 @@ final class CustomTextField: UIView {
             tf.borderStyle = .none
             tf.textColor = .black
             tf.backgroundColor = .clear
-            tf.font = UIFont.systemFont(ofSize: 16)
+            tf.font = .dynamicFont(size: 16)
             return tf
         }()
     
@@ -93,24 +93,24 @@ final class CustomTextField: UIView {
         
         validationLabel = UILabel()
         validationLabel.textColor = .red
-        validationLabel.font = UIFont.systemFont(ofSize: 10)
+        validationLabel.font = .dynamicFont(size: 10)
         validationLabel.numberOfLines = 0
         validationLabel.isHidden = true
         addSubview(validationLabel)
         
         titleLabel.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(20)
+            make.height.equalTo(UIHelper.dynamicHeight(20))
         }
         
         containerView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(50)
+            make.height.equalTo(UIHelper.dynamicHeight(40))
         }
         
         textField.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(10)
+            make.top.bottom.equalToSuperview().inset(UIHelper.dynamicHeight(10))
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().inset(16)
         }
@@ -137,7 +137,7 @@ final class CustomTextField: UIView {
               string: placeholder,
               attributes: [
                   .foregroundColor: UIColor.lightGray,
-                  .font: UIFont.systemFont(ofSize: 16)
+                  .font: UIFont.dynamicFont(size: 16)
               ]
           )
           
@@ -156,7 +156,7 @@ final class CustomTextField: UIView {
         }
         
         textField.snp.remakeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(10)
+            make.top.bottom.equalToSuperview().inset(UIHelper.dynamicHeight(10))
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalTo(togglePasswordButton.snp.leading).offset(-8)
         }

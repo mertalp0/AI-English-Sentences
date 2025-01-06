@@ -19,7 +19,7 @@ final class AuthBar: UIView {
     private let backButton: UIButton = {
         let button = UIButton(type: .system)
         let backIcon = UIImage(systemName: "chevron.left")
-        let resizedRightIcon = backIcon?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 22, weight: .bold))
+        let resizedRightIcon = backIcon?.resizedIcon(dynamicSize: 22, weight: .bold)
         button.setImage(resizedRightIcon, for: .normal)
         button.tintColor = .mainColor
         button.contentHorizontalAlignment = .leading
@@ -30,7 +30,7 @@ final class AuthBar: UIView {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Title"
-        label.font = UIFont.systemFont(ofSize: 30, weight: .bold)
+        label.font = .dynamicFont(size: 27, weight: .bold )
         label.textColor = .mainColor
         label.textAlignment = .center
         return label
@@ -63,7 +63,7 @@ final class AuthBar: UIView {
         backButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
-            make.width.height.equalTo(24) // İkon boyutu
+            make.width.height.equalTo(UIHelper.dynamicHeight(24))
         }
 
         titleLabel.snp.makeConstraints { make in

@@ -37,7 +37,7 @@ final class SocialButtonsView: UIView {
         // Or Label
         orLabel = UILabel()
         orLabel.text = "or"
-        orLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        orLabel.font = .dynamicFont(size: 14, weight: .regular)
         orLabel.textAlignment = .center
         orLabel.textColor = .mainColor
         addSubview(orLabel)
@@ -70,7 +70,7 @@ final class SocialButtonsView: UIView {
             ]
         ))
         actionLabel.attributedText = attributedString
-        actionLabel.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        actionLabel.font = .dynamicFont(size: 14, weight: .regular)
         actionLabel.textAlignment = .center
         actionLabel.isUserInteractionEnabled = true
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapActionLabel))
@@ -88,19 +88,19 @@ final class SocialButtonsView: UIView {
         }
         
         googleButton.snp.makeConstraints { make in
-            make.top.equalTo(orLabel.snp.bottom).offset(30)
+            make.top.equalTo(orLabel.snp.bottom).offset(UIHelper.dynamicHeight(20))
             make.leading.trailing.equalToSuperview().inset(32)
-            make.height.equalTo(50)
+            make.height.equalTo(UIHelper.dynamicHeight(40))
         }
         
         appleButton.snp.makeConstraints { make in
-            make.top.equalTo(googleButton.snp.bottom).offset(20)
+            make.top.equalTo(googleButton.snp.bottom).offset(UIHelper.dynamicHeight(10))
             make.leading.trailing.equalToSuperview().inset(32)
-            make.height.equalTo(50)
+            make.height.equalTo(UIHelper.dynamicHeight(40))
         }
         
         actionLabel.snp.makeConstraints { make in
-            make.top.equalTo(appleButton.snp.bottom).offset(20)
+            make.top.equalTo(appleButton.snp.bottom).offset(UIHelper.dynamicHeight(20))
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview()
         }

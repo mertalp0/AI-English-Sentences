@@ -22,7 +22,7 @@ final class AppBar: UIView {
      var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.font = .systemFont(ofSize: 24, weight: .bold)
+        label.font = .dynamicFont(size: 24, weight: .bold)
         label.textAlignment = .center
         return label
     }()
@@ -59,19 +59,19 @@ final class AppBar: UIView {
         addSubview(rightButton)
         
         self.snp.makeConstraints { make in
-            make.height.equalTo(60)
+            make.height.equalTo(UIHelper.dynamicHeight(60))
         }
         
         leftButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
-            make.size.equalTo(50)
+            make.size.equalTo(UIHelper.dynamicHeight(50))
         }
         
         rightButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
             make.centerY.equalToSuperview()
-            make.size.equalTo(50)
+            make.size.equalTo(UIHelper.dynamicHeight(50))
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -90,12 +90,12 @@ final class AppBar: UIView {
         titleLabel.text = type.title
 
         if let leftIcon = type.leftIcon {
-            let resizedLeftIcon = leftIcon.withConfiguration(UIImage.SymbolConfiguration(pointSize: 22, weight: .bold))
+            let resizedLeftIcon = leftIcon.resizedIcon(dynamicSize: 22, weight: .bold)
             leftButton.setImage(resizedLeftIcon, for: .normal)
         }
 
         if let rightIcon = type.rightIcon {
-            let resizedRightIcon = rightIcon.withConfiguration(UIImage.SymbolConfiguration(pointSize: 22, weight: .bold))
+            let resizedRightIcon = rightIcon.resizedIcon(dynamicSize: 22, weight: .bold)
             rightButton.setImage(resizedRightIcon, for: .normal)
         }
         

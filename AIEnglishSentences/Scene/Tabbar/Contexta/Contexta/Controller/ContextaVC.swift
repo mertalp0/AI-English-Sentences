@@ -29,36 +29,36 @@ final class ContextaVC: BaseViewController<ContextaCoordinator, ContextaViewMode
     private func setupUI() {
         view.backgroundColor = .white
         
-        // AppBar 
+        // AppBar
         appBar = AppBar(type: .contexta)
         view.addSubview(appBar)
         appBar.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(UIHelper.statusBarHeight + 10)
+            make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
         }
         
         // SubTitle
         subTitle = UILabel()
         subTitle.text = "Where ideas take shape"
         subTitle.textColor = .mainColor
-        subTitle.font = .systemFont(ofSize: 16, weight: .medium)
+        subTitle.font = .dynamicFont(size: 16, weight: .medium)
         subTitle.textAlignment = .center
         view.addSubview(subTitle)
         subTitle.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalTo(appBar.snp.bottom).offset(5)
+            make.top.equalTo(appBar.snp.bottom).offset(UIHelper.dynamicHeight(5))
         }
         
         // CategoriesTitle
         categoriesTitle = UILabel()
         categoriesTitle.text = "Categories"
         categoriesTitle.textColor = .black
-        categoriesTitle.font = .systemFont(ofSize: 24, weight: .medium)
+        categoriesTitle.font = .dynamicFont(size: 24, weight: .medium)
         categoriesTitle.textAlignment = .center
         view.addSubview(categoriesTitle)
         categoriesTitle.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(10)
-            make.top.equalTo(subTitle.snp.bottom).offset(25)
+            make.top.equalTo(subTitle.snp.bottom).offset(UIHelper.dynamicHeight(25))
         }
     }
     

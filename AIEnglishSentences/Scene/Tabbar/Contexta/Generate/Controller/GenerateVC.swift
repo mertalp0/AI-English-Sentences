@@ -40,29 +40,29 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
         view.addSubview(appBar)
         appBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(UIHelper.statusBarHeight + 10)
+            make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
         }
         
         // Question Label
         questionLabel = UILabel()
         questionLabel.text = "What will you generate today?"
         questionLabel.textColor = .main
-        questionLabel.font = .systemFont(ofSize: 20, weight: .light)
+        questionLabel.font = .dynamicFont(size: 20, weight: .light)
         view.addSubview(questionLabel)
         questionLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
-            make.top.equalTo(appBar.snp.bottom).offset(13)
+            make.top.equalTo(appBar.snp.bottom).offset(UIHelper.dynamicHeight(13))
         }
         
         // Text Field
         textField = GenerateTextView()
         view.addSubview(textField)
         textField.snp.makeConstraints { make in
-            make.top.equalTo(questionLabel.snp.bottom).offset(16)
+            make.top.equalTo(questionLabel.snp.bottom).offset(UIHelper.dynamicHeight(16))
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
-            make.height.equalTo(160)
+            make.height.equalTo(UIHelper.dynamicHeight(160))
         }
         
         writingTone = DropdownMenuButton(
@@ -76,17 +76,17 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
             ]
         )
         writingTone.onDropdownTapped = { [weak self] in
-            self?.view.endEditing(true) // Klavyeyi kapat
+            self?.view.endEditing(true)
         }
         writingTone.onOptionSelected = { selectedOption in
             print("Selected Writing Tone: \(selectedOption)")
         }
         view.addSubview(writingTone)
         writingTone.snp.makeConstraints { make in
-            make.top.equalTo(textField.snp.bottom).offset(8)
+            make.top.equalTo(textField.snp.bottom).offset(UIHelper.dynamicHeight(8))
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
-            make.height.equalTo(70)
+            make.height.equalTo(UIHelper.dynamicHeight(60))
         }
         
         writingStyle = DropdownMenuButton(
@@ -107,10 +107,10 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
         }
         view.addSubview(writingStyle)
         writingStyle.snp.makeConstraints { make in
-            make.top.equalTo(writingTone.snp.bottom).offset(8)
+            make.top.equalTo(writingTone.snp.bottom).offset(UIHelper.dynamicHeight(8))
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
-            make.height.equalTo(70)
+            make.height.equalTo(UIHelper.dynamicHeight(60))
         }
         
         // Sentence Selector
@@ -118,7 +118,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
         sentenceSelector.delegate = self
         view.addSubview(sentenceSelector)
         sentenceSelector.snp.makeConstraints { make in
-            make.top.equalTo(writingStyle.snp.bottom).offset(8)
+            make.top.equalTo(writingStyle.snp.bottom).offset(UIHelper.dynamicHeight(8))
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
         }
@@ -128,7 +128,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
         wordSelector.delegate = self
         view.addSubview(wordSelector)
         wordSelector.snp.makeConstraints { make in
-            make.top.equalTo(sentenceSelector.snp.bottom).offset(8)
+            make.top.equalTo(sentenceSelector.snp.bottom).offset(UIHelper.dynamicHeight(8))
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
         }
@@ -137,7 +137,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
         let generateBtn = GenerateButton()
         view.addSubview(generateBtn)
         generateBtn.snp.makeConstraints { make in
-            make.top.equalTo(wordSelector.snp.bottom).offset(32)
+            make.top.equalTo(wordSelector.snp.bottom).offset(UIHelper.dynamicHeight(22))
             make.leading.equalToSuperview().offset(24)
             make.trailing.equalToSuperview().offset(-24)
         }

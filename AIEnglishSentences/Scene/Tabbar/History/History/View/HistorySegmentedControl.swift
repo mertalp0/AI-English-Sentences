@@ -61,7 +61,7 @@ final class HistorySegmentedControl: UIView {
         selectionIndicator.backgroundColor = .mainColor
         addSubview(selectionIndicator)
         selectionIndicator.snp.makeConstraints { make in
-            make.height.equalTo(2)
+            make.height.equalTo(UIHelper.dynamicHeight(2))
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()
             make.width.equalToSuperview().dividedBy(items.count)
@@ -78,7 +78,7 @@ final class HistorySegmentedControl: UIView {
 
         UIView.animate(withDuration: 0.3) {
             self.selectionIndicator.snp.remakeConstraints { make in
-                make.height.equalTo(2)
+                make.height.equalTo(UIHelper.dynamicHeight(2))
                 make.leading.equalTo(self.stackView.snp.leading).offset(sender.frame.origin.x)
                 make.bottom.equalToSuperview()
                 make.width.equalToSuperview().dividedBy(self.buttons.count)

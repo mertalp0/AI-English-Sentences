@@ -56,12 +56,12 @@ final class MyAppsVC: BaseViewController<MyAppsCoordinator, MyAppsViewModel> {
         // AppBar
         appBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.top.equalTo(UIHelper.statusBarHeight + 10)
+            make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
         }
         
         // TableView
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(appBar.snp.bottom).offset(10)
+            make.top.equalTo(appBar.snp.bottom).offset(UIHelper.dynamicHeight(10))
             make.leading.trailing.bottom.equalToSuperview()
         }
     }
@@ -137,16 +137,16 @@ final class AppCell: UITableViewCell {
     
     private let appNameLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        label.font = .dynamicFont(size: 16, weight: .semibold)
         label.textColor = .black
         return label
     }()
     
     private let appDescriptionLabel: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
+        label.font = .dynamicFont(size: 14, weight: .regular)
         label.textColor = .darkGray
-        label.numberOfLines = 0 // Dinamik yükseklik için sınırsız satır
+        label.numberOfLines = 0
         return label
     }()
     
@@ -155,7 +155,7 @@ final class AppCell: UITableViewCell {
         button.setTitle("Open", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .mainColor
-        button.titleLabel?.font = UIFont.systemFont(ofSize: 12, weight: .medium)
+        button.titleLabel?.font = .dynamicFont(size: 12, weight: .medium)
         button.layer.cornerRadius = 8
         return button
     }()
@@ -177,30 +177,30 @@ final class AppCell: UITableViewCell {
         contentView.addSubview(containerView)
         
         containerView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(8)
+            make.top.bottom.equalToSuperview().inset(UIHelper.dynamicHeight(8))
             make.leading.trailing.equalToSuperview().inset(16)
         }
         
         containerView.addSubview(appIconImageView)
         appIconImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16)
+            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(16))
             make.leading.equalToSuperview().inset(16)
-            make.width.height.equalTo(60)
+            make.width.height.equalTo(UIHelper.dynamicHeight(60))
         }
         
         containerView.addSubview(appNameLabel)
         appNameLabel.snp.makeConstraints { make in
             make.leading.equalTo(appIconImageView.snp.trailing).offset(16)
             make.trailing.equalToSuperview().inset(16)
-            make.top.equalToSuperview().offset(16)
+            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(16))
         }
         
         containerView.addSubview(openButton)
         openButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
             make.centerY.equalTo(appNameLabel)
-            make.width.equalTo(50)
-            make.height.equalTo(20)
+            make.width.equalTo(UIHelper.dynamicWidth(50))
+            make.height.equalTo(UIHelper.dynamicHeight(20))
         }
         openButton.addTarget(self, action: #selector(openButtonTapped), for: .touchUpInside)
 
@@ -208,8 +208,8 @@ final class AppCell: UITableViewCell {
         appDescriptionLabel.snp.makeConstraints { make in
             make.leading.equalTo(appNameLabel)
             make.trailing.equalToSuperview().inset(16)
-            make.top.equalTo(appNameLabel.snp.bottom).offset(8)
-            make.bottom.equalToSuperview().inset(16)
+            make.top.equalTo(appNameLabel.snp.bottom).offset(UIHelper.dynamicHeight(8))
+            make.bottom.equalToSuperview().inset(UIHelper.dynamicHeight(16))
         }
     }
     
