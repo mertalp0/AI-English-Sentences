@@ -67,7 +67,7 @@ final class RegisterViewModel: BaseViewModel {
         authService.signInWithGoogle(with: viewController) { [weak self] result in
             switch result {
             case .success(let user):
-                self?.saveUserToFirestore(
+                self?.saveUserToFirestoreForGoogle(
                     userId: user.uid,
                     name: user.displayName ?? "Unknown",
                     email: user.email ?? "No Email",
@@ -108,7 +108,7 @@ final class RegisterViewModel: BaseViewModel {
                    let email = authResult.user.email ?? "No Email"
                    let name = authResult.user.displayName ?? "Apple User"
                    
-                   self?.saveUserToFirestore(userId: userId, name: name, email: email, gender: .preferNotToSay) { success in
+                   self?.saveUserToFirestoreForGoogle(userId: userId, name: name, email: email, gender: .preferNotToSay) { success in
                        self?.stopLoading()
                        if success {
                            print("Firestore kaydı başarılı: \(userId)")
