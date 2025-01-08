@@ -11,6 +11,7 @@ import Foundation
 final class GenerateViewModel: BaseViewModel {
  
     let openAIService = OpenAIService()
+    let subscriptionService = SubscriptionService.shared
 
   
     
@@ -40,5 +41,10 @@ final class GenerateViewModel: BaseViewModel {
             }
         }
     }
+    
+    func checkUserPremium(completion: @escaping (Bool) -> Void ){
+        subscriptionService.checkPremiumStatus(completion: completion)
+    }
+    
     
 }

@@ -7,6 +7,8 @@ final class ProfileViewModel: BaseViewModel {
     private let authService = AuthService.shared
     private let userService = UserService.shared
     private var appLauncher = AppLauncher.shared
+    private let subscriptionService = SubscriptionService.shared
+
     
     var user: UserModel? {
         didSet {
@@ -50,7 +52,10 @@ final class ProfileViewModel: BaseViewModel {
                 self.stopLoading()
                 switch result {
                 case .success:
-                    completion(true)
+                    self.subscriptionService.logout { isSucces in
+                        completion(isSucces)
+                    }
+                   
                 case .failure(let error):
                     self.handleError(message: error.localizedDescription)
                     completion(false)
