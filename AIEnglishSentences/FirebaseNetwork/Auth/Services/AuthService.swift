@@ -96,6 +96,7 @@ final class AuthService {
         }
     }
     
+    
     // MARK: - Sign In With Apple
     func signInWithApple(presentationAnchor: ASPresentationAnchor, completion: @escaping (Result<AuthDataResult, Error>) -> Void) {
         AppleAuthorizationHandler.shared.signInWithApple(
@@ -110,6 +111,22 @@ final class AuthService {
             completion(.success(()))
         } catch {
             completion(.failure(error))
+        }
+    }
+    
+    //MARK: - Delete
+    func deleteAccount(completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let user = Auth.auth().currentUser else {
+            completion(.failure(AuthError.userNotLoggedIn))
+            return
+        }
+
+        user.delete { error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
         }
     }
     

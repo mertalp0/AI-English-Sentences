@@ -20,6 +20,7 @@ enum Gender: String{
 final class RegisterViewModel: BaseViewModel {
     private let authService = AuthService.shared
     private let userService = UserService.shared
+    private let subscriptionService = SubscriptionService.shared
     
     func register(email: String, name: String, password: String, gender: Gender, completion: @escaping (Bool) -> Void) {
         startLoading()
@@ -36,7 +37,14 @@ final class RegisterViewModel: BaseViewModel {
                     gender: gender
                 ) { success in
                     self.stopLoading()
-                    completion(success)
+                    if(success){
+                        self.subscriptionService.login(userId: user.uid) { isSucces in
+                            completion(isSucces)
+                        }
+                    }else {
+                        completion(false)
+                    }
+                    
                 }
                 
             case .failure(let error):
@@ -59,7 +67,7 @@ final class RegisterViewModel: BaseViewModel {
         authService.signInWithGoogle(with: viewController) { [weak self] result in
             switch result {
             case .success(let user):
-                self?.saveUserToFirestore(
+                self?.saveUserToFirestoreForGoogle(
                     userId: user.uid,
                     name: user.displayName ?? "Unknown",
                     email: user.email ?? "No Email",
@@ -68,7 +76,9 @@ final class RegisterViewModel: BaseViewModel {
                     self?.stopLoading()
                     if success {
                         print("Firestore kaydı başarılı: \(user.email ?? "")")
-                        completion(true)
+                        self?.subscriptionService.login(userId: user.uid) { isSucces in
+                            completion(isSucces)
+                        }
                     } else {
                         print("Firestore kaydı başarısız: \(user.email ?? "")")
                         completion(false)
@@ -98,11 +108,14 @@ final class RegisterViewModel: BaseViewModel {
                    let email = authResult.user.email ?? "No Email"
                    let name = authResult.user.displayName ?? "Apple User"
                    
-                   self?.saveUserToFirestore(userId: userId, name: name, email: email, gender: .preferNotToSay) { success in
+                   self?.saveUserToFirestoreForGoogle(userId: userId, name: name, email: email, gender: .preferNotToSay) { success in
                        self?.stopLoading()
                        if success {
                            print("Firestore kaydı başarılı: \(userId)")
-                           completion(true)
+                           self?.subscriptionService.login(userId: userId) { isSucces in
+                               completion(isSucces)
+                           }
+
                        } else {
                            print("Firestore kaydı başarısız: \(userId)")
                            completion(false)
@@ -143,3 +156,33 @@ final class RegisterViewModel: BaseViewModel {
     }
 }
 
+extension RegisterViewModel {
+    private  func saveUserToFirestoreForGoogle(userId: String, name: String, email: String, gender: Gender, completion: @escaping (Bool) -> Void) {
+        let userModel = UserModel(
+            id: userId,
+            name: name,
+            email: email,
+            gender: gender.rawValue,
+            createdAt: Date(),
+            generate: []
+        )
+        
+        userService.saveUser(user: userModel) { result in
+            switch result {
+            case .success():
+                print("Firestore kaydı tamamlandı: \(email)")
+                completion(true)
+            case .failure(let error):
+#warning("must be error enum type ")
+                if error.localizedDescription == "The document already exists in the database."{
+                    completion(true)
+                }else {
+                    self.handleError(message: error.localizedDescription)
+                    print("Firestore kaydı hatası: \(error.localizedDescription)")
+                    completion(false)
+                }
+                
+            }
+        }
+    }
+}

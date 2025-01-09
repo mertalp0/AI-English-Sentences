@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import GoogleSignIn
 import AuthenticationServices
+import AppTrackingTransparency
 
 final class InfoViewModel: BaseViewModel {
     private let authService = AuthService.shared
@@ -79,6 +80,28 @@ final class InfoViewModel: BaseViewModel {
                }
            }
        }
+    
+    func requestTrackingPermission() {
+        if #available(iOS 14, *) {
+            ATTrackingManager.requestTrackingAuthorization { status in
+                DispatchQueue.main.async {
+                    print("ATT Status: \(status.rawValue)")
+                    switch status {
+                    case .authorized:
+                        print("Tracking permission granted.")
+                    case .denied:
+                        print("Tracking permission denied.")
+                    case .notDetermined:
+                        print("Tracking permission not determined.")
+                    case .restricted:
+                        print("Tracking permission restricted.")
+                    @unknown default:
+                        print("Unknown tracking status.")
+                    }
+                }
+            }
+        }
+    }
 }
 
 //MARK: - Helper func saveUserToFirestore

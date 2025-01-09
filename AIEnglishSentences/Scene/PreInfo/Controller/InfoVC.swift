@@ -25,6 +25,10 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         setupConstraints()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        viewModel.requestTrackingPermission()
+    }
+    
     // MARK: - Setup UI
     private func setupUI() {
         // Background Image
@@ -48,7 +52,7 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         subtitleLabel.attributedText = NSAttributedString(
             string: "Create. Listen. Inspire.\nAiLex makes words come alive.",
             attributes: [
-                .font: UIFont.systemFont(ofSize: 22, weight: .bold),
+                .font: UIFont.dynamicFont(size: 22, weight: .bold),
                 .foregroundColor: UIColor.darkGray,
                 .kern: 1.0,
                 .paragraphStyle: {

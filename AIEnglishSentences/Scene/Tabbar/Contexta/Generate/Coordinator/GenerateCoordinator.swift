@@ -32,6 +32,14 @@ final class GenerateCoordinator: BaseCoordinator {
 
     }
     
+    func showPaywall(){
+        guard let navigationController = navigationController else {
+            fatalError("Navigation controller is nil in showResult")
+        }
+        let paywallCoordinator = PaywallCoordinator(navigationController: navigationController)
+        paywallCoordinator.start()
+    }
+    
     func back() {
         guard let navigationController = navigationController else {
             fatalError("Navigation controller is nil in ResultCoordinator")

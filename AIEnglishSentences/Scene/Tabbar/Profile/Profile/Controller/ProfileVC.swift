@@ -21,11 +21,12 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
             ("Language", UIImage(systemName: "globe")),
             ("Privacy Policy", UIImage(systemName: "doc.text.magnifyingglass")),
             ("Invite Friends", UIImage(systemName: "envelope.fill")),
-            ("Apps by Developer", UIImage(systemName: "app.badge.fill"))
+            ("Apps by Developer", UIImage(systemName: "app.badge.fill")),
+            ("Delete Account", UIImage(systemName: "xmark.bin.circle.fill"))
         ]
         
         if #available(iOS 14.0, *) {
-            items.insert(("Rate App", UIImage(systemName: "star.fill")), at: 4)
+            items.insert(("Rate App", UIImage(systemName: "star.fill")), at: 5)
         }
         
         return items
@@ -148,8 +149,10 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
         case 3:
             openAppsByDeveloper()
         case 4:
+            deleteAccount()
+        case 5:
             rateApp()
-          
+            
         default:
             break
         }
@@ -185,20 +188,33 @@ extension ProfileVC {
         coordinator?.shareApp()
     }
     
-    @objc private func onLogoutButtonPressed() {
-        let logoutAlertVC = LogoutAlertViewController()
-        logoutAlertVC.onCancel = {
-            print("Logout canceled")
-        }
-        logoutAlertVC.onLogout = { [weak self] in
-            guard let self = self else { return }
-            self.performLogout()
-        }
-        logoutAlertVC.modalPresentationStyle = .overFullScreen
-        logoutAlertVC.modalTransitionStyle = .crossDissolve
-        present(logoutAlertVC, animated: true)
+    private func deleteAccount(){
+        let deletePopup = PopupViewController(
+            popupType: .delete,
+            icon: UIImage(systemName: "trash"),
+            cancelText: "Cancel",
+            confirmText: "Delete"
+        )
+        deletePopup.delegate = self
+        deletePopup.modalPresentationStyle = .overFullScreen
+        deletePopup.modalTransitionStyle = .crossDissolve
+        present(deletePopup, animated: true)
     }
-
+    
+    @objc private func onLogoutButtonPressed() {
+        let logoutPopup = PopupViewController(
+            popupType: .logout,
+            icon: UIImage(systemName: "rectangle.portrait.and.arrow.right"),
+            cancelText: "Cancel",
+            confirmText: "Logout"
+        )
+        logoutPopup.delegate = self
+        logoutPopup.modalPresentationStyle = .overFullScreen
+        logoutPopup.modalTransitionStyle = .crossDissolve
+        present(logoutPopup, animated: true)
+        
+    }
+    
     private func performLogout() {
         tabBarController?.tabBar.isUserInteractionEnabled = false
         viewModel.logout { isSuccess in
@@ -210,5 +226,41 @@ extension ProfileVC {
             }
         }
     }
+    
+    private func performDelete() {
+        tabBarController?.tabBar.isUserInteractionEnabled = false
+        viewModel.deleteAccount { isSuccess in
+            if isSuccess {
+                self.coordinator?.showInfo()
+            } else {
+                self.tabBarController?.tabBar.isUserInteractionEnabled = true
+                print("Delete Account error.")
+            }
+        }
+    }
 }
 
+
+extension ProfileVC: PopupViewControllerDelegate {
+    func popupDidCancel(popupType: PopupType) {
+        switch popupType {
+        case .logout:
+            coordinator?.navigationController?.dismiss(animated: true)
+        case .delete:
+            coordinator?.navigationController?.dismiss(animated: true)
+        case .custom(let title, _):
+            print("\(title) cancelled")
+        }
+    }
+    
+    func popupDidConfirm(popupType: PopupType) {
+        switch popupType {
+        case .logout:
+            performLogout()
+        case .delete:
+            performDelete()
+        case .custom(let title, _):
+            print("\(title) confirmed")
+        }
+    }
+}

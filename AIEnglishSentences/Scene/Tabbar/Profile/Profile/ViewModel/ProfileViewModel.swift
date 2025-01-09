@@ -7,12 +7,14 @@ final class ProfileViewModel: BaseViewModel {
     private let authService = AuthService.shared
     private let userService = UserService.shared
     private var appLauncher = AppLauncher.shared
+    private let subscriptionService = SubscriptionService.shared
+    
     
     var user: UserModel? {
         didSet {
         }
     }
-        
+    
     func getUser(completion: @escaping (UserModel) -> Void) {
         userService.getUser(by: authService.getCurrentUserId()!) { result in
             switch result {
@@ -51,12 +53,52 @@ final class ProfileViewModel: BaseViewModel {
                 switch result {
                 case .success:
                     completion(true)
+//                    self.subscriptionService.logout { isSucces in
+//                        completion(isSucces)
+//                    }
                 case .failure(let error):
                     self.handleError(message: error.localizedDescription)
                     completion(false)
                 }
             }
         }
+    }
+    
+    func deleteAccount(completion: @escaping (Bool) -> Void) {
+        startLoading()
+        guard let userId = authService.getCurrentUserId() else {
+            handleError(message: "User is not logged in.")
+            completion(false)
+            return
+        }
+        
+
+        self.authService.deleteAccount { deleteResult in
+            switch deleteResult {
+            case .success:
+                self.stopLoading()
+                completion(true)
+//                        self.userService.deleteUserData(by: userId) { userDataResult in
+//                            switch userDataResult {
+//                            case .success:
+//                                self.stopLoading()
+//                                completion(true)
+//                            case .failure(let error):
+//                                self.handleError(message: error.localizedDescription)
+//                                completion(false)
+//                            }
+//                        }
+                
+            case .failure(let error):
+                self.stopLoading()
+                self.handleError(message: error.localizedDescription)
+                completion(false)
+            }
+        }
+    
+            
+    
+        
     }
     
     func openIqTestApp(completion: @escaping (Bool) -> Void) {

@@ -13,6 +13,7 @@ final class LoginViewModel: BaseViewModel {
     
     private let authService = AuthService.shared
     private let userService = UserService.shared
+    private let subscriptionService = SubscriptionService.shared
     
     func login(email: String, password: String, completion: @escaping (Bool) -> Void) {
         startLoading()
@@ -21,7 +22,9 @@ final class LoginViewModel: BaseViewModel {
             case .success(let user):
                 self?.stopLoading()
                 print("Giriş başarılı: \(user.email ?? "")")
-                completion(true)
+                self?.subscriptionService.login(userId: user.uid) { isSucces in
+                    completion(isSucces)
+                }
             case .failure(let error):
                 self?.stopLoading()
                 self?.handleError(message: error.localizedDescription)
@@ -45,7 +48,9 @@ final class LoginViewModel: BaseViewModel {
                     self?.stopLoading()
                     if success {
                         print("Firestore kaydı başarılı: \(user.email ?? "")")
-                        completion(true)
+                        self?.subscriptionService.login(userId: user.uid) { isSucces in
+                            completion(isSucces)
+                        }
                     } else {
                         print("Firestore kaydı başarısız: \(user.email ?? "")")
                         completion(false)
@@ -79,7 +84,10 @@ final class LoginViewModel: BaseViewModel {
                        self?.stopLoading()
                        if success {
                            print("Firestore kaydı başarılı: \(userId)")
-                           completion(true)
+                           self?.subscriptionService.login(userId: userId) { isSucces in
+                               completion(isSucces)
+                           }
+
                        } else {
                            print("Firestore kaydı başarısız: \(userId)")
                            completion(false)
