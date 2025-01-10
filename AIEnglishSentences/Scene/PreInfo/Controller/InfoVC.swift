@@ -26,7 +26,7 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        viewModel.requestTrackingPermission()
+//        viewModel.requestTrackingPermission()
     }
     
     // MARK: - Setup UI
