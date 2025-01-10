@@ -12,7 +12,7 @@ final class GenerateLoadingView: UIView {
     // MARK: - UI Elements
     private let animatedIcon: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "loading_image")
+        imageView.image =  .appImage(.loadingImage)
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()

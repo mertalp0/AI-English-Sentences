@@ -51,7 +51,7 @@ final class HistoryViewModel: BaseViewModel {
         handleError(message: message)
     }
     
-    func addFavoriteSentence(sentence: NewSentence, completion: @escaping (Bool) -> Void) {
+    func addFavoriteSentence(sentence: Sentence, completion: @escaping (Bool) -> Void) {
         startLoading()
         
         generateService.addFavoriteSentence(sentence: sentence) { [weak self] result in
@@ -69,7 +69,7 @@ final class HistoryViewModel: BaseViewModel {
         }
     }
     
-    func deleteFavoriteSentence(sentence: NewSentence, completion: @escaping (Bool) -> Void) {
+    func deleteFavoriteSentence(sentence: Sentence, completion: @escaping (Bool) -> Void) {
         startLoading()
         
         generateService.deleteFavoriteSentence(sentence: sentence) { [weak self] result in
@@ -87,7 +87,7 @@ final class HistoryViewModel: BaseViewModel {
         }
     }
     
-    func deleteSentence(sentence: NewSentence, completion: @escaping (Bool) -> Void) {
+    func deleteSentence(sentence: Sentence, completion: @escaping (Bool) -> Void) {
         startLoading()
         
         generateService.deleteSentence(sentence: sentence) { [weak self] result in

@@ -39,7 +39,7 @@ final class LanguageCell: UITableViewCell {
         contentView.addSubview(titleLabel)
         
         checkmarkImageView = UIImageView()
-        checkmarkImageView.image = UIImage(systemName: "checkmark.circle.fill")
+        checkmarkImageView.image = .appIcon(.checkmarkCircle)
         checkmarkImageView.tintColor = .mainColor
         checkmarkImageView.isHidden = true
         contentView.addSubview(checkmarkImageView)

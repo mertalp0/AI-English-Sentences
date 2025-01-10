@@ -19,15 +19,15 @@ final class OpenAIService {
         self.apiKey = key
     }
 
-    func generateSentences(inputWords: String, maxWords: Int, sentenceCount: Int, category: String, writingTone: String, writingStyle: String , completion: @escaping (Result<[NewSentence], Error>) -> Void) {
+    func generateSentences(inputWords: String, maxWords: Int, sentenceCount: Int, category: String, writingTone: String, writingStyle: String , completion: @escaping (Result<[Sentence], Error>) -> Void) {
         let endpoint = OpenAIEndpoint.generateSentences(inputWords: inputWords, maxWords: maxWords, sentenceCount: sentenceCount, category: category, writingTone: writingTone, writingStyle: writingStyle,  apiKey: apiKey)
         
         provider.request(endpoint, responseType: OpenAIResponse.self) { result in
             switch result {
             case .success(let response):
     
-                let sentences: [NewSentence] = response.choices.enumerated().map { (index, choice) in
-                    NewSentence(
+                let sentences: [Sentence] = response.choices.enumerated().map { (index, choice) in
+                    Sentence(
                         id: UUID().uuidString,
                         sentence: choice.message.content.trimmingCharacters(in: .whitespacesAndNewlines),
                         favorite: false,

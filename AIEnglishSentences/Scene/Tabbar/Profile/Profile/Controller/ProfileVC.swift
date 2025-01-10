@@ -18,17 +18,16 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
     
     private let options: [(String, UIImage?)] = {
         var items: [(String, UIImage?)] = [
-            ("Language", UIImage(systemName: "globe")),
-            ("Privacy Policy", UIImage(systemName: "doc.text.magnifyingglass")),
-            ("Invite Friends", UIImage(systemName: "envelope.fill")),
-            ("Apps by Developer", UIImage(systemName: "app.badge.fill")),
-            ("Delete Account", UIImage(systemName: "xmark.bin.circle.fill"))
+            ("Language", .appIcon(.globe)),
+            ("Privacy Policy", .appIcon(.textMagnifyingGlass)),
+            ("Invite Friends", .appIcon(.envelope)),
+            ("Apps by Developer", .appIcon(.appBadge)),
+            ("Delete Account", .appIcon(.binCircle))
         ]
-        
+
         if #available(iOS 14.0, *) {
-            items.insert(("Rate App", UIImage(systemName: "star.fill")), at: 5)
+            items.insert(("Rate App", .appIcon(.star)), at: 5)
         }
-        
         return items
     }()
     
@@ -191,7 +190,7 @@ extension ProfileVC {
     private func deleteAccount(){
         let deletePopup = PopupViewController(
             popupType: .delete,
-            icon: UIImage(systemName: "trash"),
+            icon: .appIcon(.trash),
             cancelText: "Cancel",
             confirmText: "Delete"
         )
@@ -204,7 +203,7 @@ extension ProfileVC {
     @objc private func onLogoutButtonPressed() {
         let logoutPopup = PopupViewController(
             popupType: .logout,
-            icon: UIImage(systemName: "rectangle.portrait.and.arrow.right"),
+            icon: .appIcon(.logout),
             cancelText: "Cancel",
             confirmText: "Logout"
         )

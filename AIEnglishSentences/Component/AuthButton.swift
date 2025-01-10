@@ -25,8 +25,8 @@ enum AuthButtonType {
     
     var image: UIImage? {
         switch self {
-        case .google: return UIImage(named: "google_icon")
-        case .apple: return UIImage(systemName: "applelogo")
+        case .google: return .appImage(.google)
+        case .apple: return .appImage(.apple)
         case .normal: return nil
         }
     }

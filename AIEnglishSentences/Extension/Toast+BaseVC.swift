@@ -13,7 +13,7 @@ extension BaseViewController {
     func showToast(message: String) {
         let toastLabel = UILabel()
         toastLabel.text = message
-        toastLabel.font = UIFont.systemFont(ofSize: 14, weight: .medium)
+        toastLabel.font = UIFont.dynamicFont(size: 14, weight: .medium)
         toastLabel.textColor = .white
         toastLabel.textAlignment = .center
         toastLabel.numberOfLines = 0

@@ -71,7 +71,7 @@ final class ProfileHeaderView: UIView {
         
         // Avatar
         avatarImageView = UIImageView()
-        avatarImageView.image = UIImage(systemName: "person.circle.fill")
+        avatarImageView.image = .appIcon(.personCircle)
         avatarImageView.tintColor = .white
         avatarImageView.contentMode = .scaleAspectFit
         avatarImageView.layer.cornerRadius = 40
@@ -132,7 +132,7 @@ final class ProfileHeaderView: UIView {
         
         // Edit Button
         editButton = UIButton()
-        editButton.setImage(UIImage(systemName: "square.and.pencil"), for: .normal)
+        editButton.setImage(.appIcon(.squareAndPencil), for: .normal)
         editButton.tintColor = .white
         editButton.addTarget(self, action: #selector(didTapEditButton), for: .touchUpInside)
         self.addSubview(editButton)
@@ -155,8 +155,8 @@ final class ProfileHeaderView: UIView {
         nameLabel.isHidden = isEditingName
         nameTextField.isHidden = !isEditingName
         
-        let editIcon = isEditingName ? "checkmark.circle.fill" : "square.and.pencil"
-        editButton.setImage(UIImage(systemName: editIcon), for: .normal)
+         let editIcon: UIImage = isEditingName ? .appIcon(.checkmarkCircle)! : .appIcon(.squareAndPencil)!
+         editButton.setImage(editIcon, for: .normal)
         
         if !isEditingName {
             if let newName = nameTextField.text, !newName.isEmpty {

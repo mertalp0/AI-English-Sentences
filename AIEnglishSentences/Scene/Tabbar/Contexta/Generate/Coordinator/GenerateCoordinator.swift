@@ -22,7 +22,7 @@ final class GenerateCoordinator: BaseCoordinator {
         
     }
     
-    func showResult(sentences: [NewSentence]) {
+    func showResult(sentences: [Sentence]) {
         guard let navigationController = navigationController else {
             fatalError("Navigation controller is nil in showResult")
         }

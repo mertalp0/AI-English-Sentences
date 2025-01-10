@@ -35,7 +35,7 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel> {
         
         // Background Image
         backgroundImageView = UIImageView()
-        backgroundImageView.image = UIImage(named: "background")
+        backgroundImageView.image = .appImage(.backgroundImage)
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
         view.addSubview(backgroundImageView)

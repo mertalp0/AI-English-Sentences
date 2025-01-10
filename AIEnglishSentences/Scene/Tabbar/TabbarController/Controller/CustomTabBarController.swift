@@ -35,7 +35,7 @@ final class DashboardController: UITabBarController {
         let historyNavigationController = historyCoordinator.navigationController!
         historyNavigationController.tabBarItem = UITabBarItem(
             title: "History",
-            image: UIImage(systemName: "clock"),
+            image: .appIcon(.clock),
             tag: 0
         )
         historyNavigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -45,7 +45,7 @@ final class DashboardController: UITabBarController {
         let generateSentenceNavigationController = generateSentenceCoordinator.navigationController!
         generateSentenceNavigationController.tabBarItem = UITabBarItem(
             title: "Generate",
-            image: UIImage(systemName: "text.badge.plus"),
+            image: .appIcon(.textBadgePlus),
             tag: 1
         )
         generateSentenceNavigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)
@@ -55,7 +55,7 @@ final class DashboardController: UITabBarController {
         let profileNavigationController = profileCoordinator.navigationController!
         profileNavigationController.tabBarItem = UITabBarItem(
             title: "Profile",
-            image: UIImage(systemName: "person.crop.circle"),
+            image: .appIcon(.personCropCircle),
             tag: 2
         )
         profileNavigationController.navigationBar.setBackgroundImage(UIImage(), for: .default)

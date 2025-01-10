@@ -49,7 +49,7 @@ final class CustomTextField: UIView {
     
     private let togglePasswordButton: UIButton = {
         let button = UIButton(type: .custom)
-        let image = UIImage(systemName: "eye.slash")
+        let image = UIImage.appIcon(.eyeSlash)
         button.setImage(image, for: .normal)
         button.tintColor = .gray
         return button

@@ -10,9 +10,9 @@ import UIKit
 
 final class ResultCoordinator: BaseCoordinator {
     
-    var sentences : [NewSentence]?
+    var sentences : [Sentence]?
     
-    init(navigationController: UINavigationController, sentences: [NewSentence]? = nil) {
+    init(navigationController: UINavigationController, sentences: [Sentence]? = nil) {
         super.init(navigationController: navigationController)
         self.sentences = sentences
     }

@@ -33,14 +33,14 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
     private func setupUI() {
         // Background Image
         backgroundImageView = UIImageView()
-        backgroundImageView.image = UIImage(named: "background")
+        backgroundImageView.image = .appImage(.backgroundImage)
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
         view.addSubview(backgroundImageView)
         
         // Logo Image
         logoImageView = UIImageView()
-        logoImageView.image = UIImage(named: "AiLex")
+        logoImageView.image = .appImage(.aiLexText)
         logoImageView.contentMode = .scaleAspectFit
         view.addSubview(logoImageView)
         
@@ -65,7 +65,6 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         )
         view.addSubview(subtitleLabel)
         
-        // Login Button
         loginButton = AuthButton(type: .normal(title: .login))
         loginButton.backgroundColor = .main
         loginButton.delegate = self

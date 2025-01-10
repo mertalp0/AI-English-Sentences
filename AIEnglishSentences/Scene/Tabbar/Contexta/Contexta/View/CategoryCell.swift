@@ -25,14 +25,14 @@ enum CellType {
         }
     }
     
-    var image: String {
+    var image: UIImage? {
         switch self {
         case .professional:
-            return "icon_professional"
+            return .appImage(.professional)
         case .personal:
-            return "icon_personal"
+            return  .appImage(.personal)
         case .educational:
-            return "icon_educational"
+            return  .appImage(.educational)
         }
     }
     
@@ -139,7 +139,7 @@ final class CategoryCell: UITableViewCell {
     func configure(with type: CellType) {
         titleLabel.text = type.title
         descriptionLabel.text = type.text
-        iconImageView.image = UIImage(named: type.image)
+        iconImageView.image = type.image
         containerView.backgroundColor = type.backgroundColor
     }
 }
