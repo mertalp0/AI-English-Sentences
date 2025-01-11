@@ -10,7 +10,7 @@ import BaseMVVMCKit
 final class ResultViewModel: BaseViewModel {
     
     private let generateService = GenerateService.shared
-    private let authService = AuthService.shared
+    private let authService : AuthService = AuthServiceImpl.shared
     private let userService = UserService.shared
     
     func saveSentence(sentence: Sentence, completion: @escaping (Bool) -> Void) {

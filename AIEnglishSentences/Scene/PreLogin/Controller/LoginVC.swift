@@ -99,17 +99,29 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel> {
         )
         
         socialButtonsViewModel.onGoogleButtonTapped = {
-            self.viewModel.googleSignIn(from: self) {  [weak self] isSuccess in
-                if isSuccess {
+            
+            self.viewModel.loginWithGoogle(from: self) { [weak self] result in
+                switch result {
+                case .success(_):
                     self?.coordinator?.showDashboard()
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
                 }
             }
         }
         
         socialButtonsViewModel.onAppleButtonTapped = {
-            self.viewModel.signInWithApple(presentationAnchor: self.view.window!) { [weak self] isSuccess in
-                if isSuccess {
+            
+            guard let window = self.view.window else {
+                return
+            }
+            
+            self.viewModel.loginWithApple(presentationAnchor: window) { [weak self] result in
+                switch result {
+                case .success(_):
                     self?.coordinator?.showDashboard()
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
                 }
             }
         }
@@ -194,10 +206,14 @@ extension LoginVC: AuthButtonDelegate {
             return
         }
         
-        viewModel.login(email: emailTextField.text!, password: passwordTextField.text!) { isSuccess in
-            if isSuccess {
+        viewModel.loginWithEmail(email: emailTextField.text!, password: passwordTextField.text!) { result in
+            switch result {
+            case .success(_):
                 self.coordinator?.showDashboard()
+            case .failure(_):
+                print("Error")
             }
         }
+        
     }
 }

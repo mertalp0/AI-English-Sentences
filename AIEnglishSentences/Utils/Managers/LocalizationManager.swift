@@ -9,12 +9,11 @@ import Foundation
 
 final class LocalizationManager {
     
-    // Singleton instance
     static let shared = LocalizationManager()
     
     // App Strings
-    enum LocalizationKeys {
-        static let example = "example"
+    enum LocalizationKeys: String{
+        case example = "example"
        
     }
     
@@ -27,6 +26,6 @@ final class LocalizationManager {
     
     
     func example() -> String {
-        return LocalizationManager.localizedString(forKey: LocalizationKeys.example)
+        return LocalizationManager.localizedString(forKey: LocalizationKeys.example.rawValue)
     }
 }

@@ -101,7 +101,7 @@ final class GenerateService {
             let request = FirebaseRequest(
                 collection: "sentences",
                 documentID: sentence.id,
-                data: nil // Veriyi silmek için boş bırakıyoruz
+                data: nil
             )
             
             client.delete(request: request) { result in

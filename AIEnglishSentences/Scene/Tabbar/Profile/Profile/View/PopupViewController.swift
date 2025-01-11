@@ -42,6 +42,7 @@ final class PopupViewController: UIViewController {
         self.iconImage = icon
         self.cancelButtonText = cancelText
         self.confirmButtonText = confirmText
+        
     }
 
     required init?(coder: NSCoder) {

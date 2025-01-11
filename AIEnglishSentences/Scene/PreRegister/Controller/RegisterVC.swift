@@ -12,7 +12,7 @@ import SnapKit
 final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewModel>{
     
     private var gender : Gender = .preferNotToSay
-
+    
     //MARK: - UI Elements
     private var backgroundImageView: UIImageView!
     private var socialButtonsView: SocialButtonsView!
@@ -100,17 +100,29 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
         )
         
         socialButtonsViewModel.onGoogleButtonTapped = {
-            self.viewModel.googleSignIn(from: self) {  [weak self] isSuccess in
-                if isSuccess {
+            
+            self.viewModel.googleSignIn(from: self) { [weak self] result in
+                switch result {
+                case .success(_):
                     self?.coordinator?.showDashboard()
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
                 }
             }
         }
         
         socialButtonsViewModel.onAppleButtonTapped = {
-            self.viewModel.signInWithApple(presentationAnchor: self.view.window!) { [weak self] isSuccess in
-                if isSuccess {
+            
+            guard let window = self.view.window else {
+                return
+            }
+            
+            self.viewModel.appleSignIn(presentationAnchor: window) { [weak self] result in
+                switch result {
+                case .success(_):
                     self?.coordinator?.showDashboard()
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
                 }
             }
         }
@@ -159,7 +171,7 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
             make.trailing.equalToSuperview().offset(-22)
         }
         
-     
+        
         // Password Text Field
         passwordTextField.snp.makeConstraints { make in
             make.top.equalTo(subtitleLabel.snp.bottom).offset(UIHelper.dynamicHeight(206))
@@ -173,7 +185,7 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
             make.leading.trailing.equalToSuperview().inset(32)
             make.height.equalTo(UIHelper.dynamicHeight(40))
         }
-
+        
         // Social Buttons View
         socialButtonsView.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-UIHelper.dynamicHeight(10))
@@ -199,14 +211,14 @@ extension RegisterVC: AuthButtonDelegate {
             print("Validation failed.")
             return
         }
-        viewModel.register(email: emailTextField.text!, name: nameTextField.text!, password: passwordTextField.text!, gender: gender ) { isSucces in
-            switch isSucces {
-            case true:
-                self.coordinator?.showDashboard()
-                
-            case false:
-                print("Register failed.")
         
+        viewModel.registerWithEmail(email: emailTextField.text!,password: passwordTextField.text!, name: nameTextField.text! , gender: gender ){  result in
+            switch result {
+            case .success(let user):
+                print("Registration successful! User: \(user)")
+                self.coordinator?.showDashboard()
+            case .failure(let error):
+                print("Registration failed with error: \(error.errorDescription ?? "Unknown error")")
             }
         }
     }

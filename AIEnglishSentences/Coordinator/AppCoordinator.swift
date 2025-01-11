@@ -9,8 +9,8 @@ import BaseMVVMCKit
 
 final class AppCoordinator: BaseCoordinator{
     
-    private let authService = AuthService.shared
-    
+    private let authService : AuthService = AuthServiceImpl.shared
+
     override func start() {
         navigationController?.navigationBar.isHidden = true
         

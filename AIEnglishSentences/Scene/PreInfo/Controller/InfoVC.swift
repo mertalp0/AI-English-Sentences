@@ -26,7 +26,7 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-//        viewModel.requestTrackingPermission()
+        //        viewModel.requestTrackingPermission()
     }
     
     // MARK: - Setup UI
@@ -70,7 +70,7 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         loginButton.delegate = self
         view.addSubview(loginButton)
         
-    
+        
         let socialButtonsViewModel = SocialButtonsViewModel(
             actionText: "You don’t have an account?",
             actionHighlightedText: "Sign up",
@@ -79,17 +79,29 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         )
         
         socialButtonsViewModel.onGoogleButtonTapped = {
-            self.viewModel.googleSignIn(from: self) {  [weak self] isSuccess in
-                if isSuccess {
+            
+            self.viewModel.loginWithGoogle(from: self) { [weak self] result in
+                switch result {
+                case .success(_):
                     self?.coordinator?.showDashboard()
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
                 }
             }
         }
         
         socialButtonsViewModel.onAppleButtonTapped = {
-            self.viewModel.signInWithApple(presentationAnchor: self.view.window!) { [weak self] isSuccess in
-                if isSuccess {
+            
+            guard let window = self.view.window else {
+                return
+            }
+            
+            self.viewModel.loginWithApple(presentationAnchor: window) { [weak self] result in
+                switch result {
+                case .success(_):
                     self?.coordinator?.showDashboard()
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
                 }
             }
         }
@@ -104,7 +116,7 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
     
     // MARK: - Setup Constraints
     private func setupConstraints() {
-    
+        
         // Background ImageView
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -137,10 +149,10 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         }
     }
     
-      // MARK: - Actions
-      @objc private func didTapSignUp() {
-          print("Sign up tapped")
-      }
+    // MARK: - Actions
+    @objc private func didTapSignUp() {
+        print("Sign up tapped")
+    }
 }
 
 // MARK: - AuthButtonDelegate

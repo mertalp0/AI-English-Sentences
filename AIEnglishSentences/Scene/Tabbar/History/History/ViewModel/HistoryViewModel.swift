@@ -10,7 +10,7 @@ import BaseMVVMCKit
 final class HistoryViewModel: BaseViewModel {
     
     private let userService = UserService.shared
-    private let authService = AuthService.shared
+    private let authService : AuthService = AuthServiceImpl.shared
     private let generateService = GenerateService.shared
     
     func fetchSentences(completion: @escaping(Bool)-> Void) {

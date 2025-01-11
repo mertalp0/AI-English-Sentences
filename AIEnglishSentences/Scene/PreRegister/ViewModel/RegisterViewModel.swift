@@ -11,177 +11,68 @@ import FirebaseAuth
 import AuthenticationServices
 import GoogleSignIn
 
-enum Gender: String{
-    case male = "Male"
-    case female = "Female"
-    case preferNotToSay = "PreferNottoSay"
-}
 
 final class RegisterViewModel: BaseViewModel {
-    private let authService = AuthService.shared
-    private let userService = UserService.shared
-    private let subscriptionService = SubscriptionService.shared
-    
-    func register(email: String, name: String, password: String, gender: Gender, completion: @escaping (Bool) -> Void) {
-        startLoading()
-        
-        createUser(email: email, password: password) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let user):
-                self.saveUserToFirestore(
-                    userId: user.uid,
-                    name: name,
-                    email: email,
-                    gender: gender
-                ) { success in
-                    self.stopLoading()
-                    if(success){
-                        self.subscriptionService.login(userId: user.uid) { isSucces in
-                            completion(isSucces)
-                        }
-                    }else {
-                        completion(false)
-                    }
-                    
-                }
-                
-            case .failure(let error):
-                self.stopLoading()
-                self.handleError(message: error.localizedDescription)
-                print("Registration failed: \(error.localizedDescription)")
-                completion(false)
-            }
-        }
-    }
-    
-    private func createUser(email: String, password: String, completion: @escaping (Result<User, Error>) -> Void) {
-        authService.signUpWithEmail(email: email, password: password) { result in
-            completion(result)
-        }
-    }
-    
-    func googleSignIn(from viewController: UIViewController, completion: @escaping (Bool) -> Void) {
-        startLoading()
-        authService.signInWithGoogle(with: viewController) { [weak self] result in
-            switch result {
-            case .success(let user):
-                self?.saveUserToFirestoreForGoogle(
-                    userId: user.uid,
-                    name: user.displayName ?? "Unknown",
-                    email: user.email ?? "No Email",
-                    gender: .preferNotToSay
-                ) { success in
-                    self?.stopLoading()
-                    if success {
-                        print("Firestore kaydı başarılı: \(user.email ?? "")")
-                        self?.subscriptionService.login(userId: user.uid) { isSucces in
-                            completion(isSucces)
-                        }
-                    } else {
-                        print("Firestore kaydı başarısız: \(user.email ?? "")")
-                        completion(false)
-                    }
-                }
-            case .failure(let error):
-                self?.stopLoading()
-                if let signInError = error as? GIDSignInError, signInError.code == .canceled {
-                    
-                    print("Google Sign-In canceled by user.")
-                    completion(false)
-                } else {
-                    self?.handleError(message: error.localizedDescription)
-                    print("Google Sign-In Error: \(error.localizedDescription)")
-                    completion(false)
-                }
-            }
-        }
-    }
-    
-    func signInWithApple(presentationAnchor: ASPresentationAnchor, completion: @escaping (Bool) -> Void) {
-            startLoading()
-           authService.signInWithApple(presentationAnchor: presentationAnchor) { [weak self] result in
-               switch result {
-               case .success(let authResult):
-                   let userId = authResult.user.uid
-                   let email = authResult.user.email ?? "No Email"
-                   let name = authResult.user.displayName ?? "Apple User"
-                   
-                   self?.saveUserToFirestoreForGoogle(userId: userId, name: name, email: email, gender: .preferNotToSay) { success in
-                       self?.stopLoading()
-                       if success {
-                           print("Firestore kaydı başarılı: \(userId)")
-                           self?.subscriptionService.login(userId: userId) { isSucces in
-                               completion(isSucces)
-                           }
+    private let authService: AuthService
 
-                       } else {
-                           print("Firestore kaydı başarısız: \(userId)")
-                           completion(false)
-                       }
-                       
-                }
-                   
-               case .failure(let error):
-                   self?.stopLoading()
-                   self?.handleError(message: error.localizedDescription)
-                   print("Apple Sign-In Failed: \(error.localizedDescription)")
-                   completion(false)
-               }
-           }
-       }
-    
-    private func saveUserToFirestore(userId: String, name: String, email: String, gender: Gender, completion: @escaping (Bool) -> Void) {
-        let userModel = UserModel(
-            id: userId,
-            name: name,
-            email: email,
-            gender: gender.rawValue,
-            createdAt: Date(),
-            generate: []
-        )
-        
-        userService.saveUser(user: userModel) { result in
+    // ViewModel Initialization
+    init(authService: AuthService = AuthServiceImpl.shared) {
+        self.authService = authService
+    }
+
+    // MARK: - Register with Email
+    func registerWithEmail(
+        email: String,
+        password: String,
+        name: String,
+        gender: Gender,
+        completion: @escaping (Result<UserModel, AuthError>) -> Void
+    ) {
+        startLoading()
+        authService.registerWithEmail(email: email, password: password, name: name, gender: gender) { [weak self] result in
+            self?.stopLoading()
             switch result {
-            case .success():
-                print("User successfully saved to Firestore: \(email)")
-                completion(true)
+            case .success(let userModel):
+                completion(.success(userModel))
             case .failure(let error):
-                self.handleError(message: error.localizedDescription)
-                print("Failed to save user to Firestore: \(error.localizedDescription)")
-                completion(false)
+                self?.handleError(message: error.errorDescription ?? "An error occurred during registration.")
+                completion(.failure(error))
             }
         }
     }
-}
 
-extension RegisterViewModel {
-    private  func saveUserToFirestoreForGoogle(userId: String, name: String, email: String, gender: Gender, completion: @escaping (Bool) -> Void) {
-        let userModel = UserModel(
-            id: userId,
-            name: name,
-            email: email,
-            gender: gender.rawValue,
-            createdAt: Date(),
-            generate: []
-        )
-        
-        userService.saveUser(user: userModel) { result in
+    // MARK: - Google Registration
+    func googleSignIn(
+        from viewController: UIViewController,
+        completion: @escaping (Result<UserModel, AuthError>) -> Void
+    ) {
+        startLoading()
+        authService.googleSignIn(from: viewController) { [weak self] result in
+            self?.stopLoading()
             switch result {
-            case .success():
-                print("Firestore kaydı tamamlandı: \(email)")
-                completion(true)
+            case .success(let userModel):
+                completion(.success(userModel))
             case .failure(let error):
-#warning("must be error enum type ")
-                if error.localizedDescription == "The document already exists in the database."{
-                    completion(true)
-                }else {
-                    self.handleError(message: error.localizedDescription)
-                    print("Firestore kaydı hatası: \(error.localizedDescription)")
-                    completion(false)
-                }
-                
+                self?.handleError(message: error.errorDescription ?? "An error occurred during Google Sign-In.")
+                completion(.failure(error))
+            }
+        }
+    }
+
+    // MARK: - Apple Registration
+    func appleSignIn(
+        presentationAnchor: ASPresentationAnchor,
+        completion: @escaping (Result<UserModel, AuthError>) -> Void
+    ) {
+        startLoading()
+        authService.appleSignIn(presentationAnchor: presentationAnchor) { [weak self] result in
+            self?.stopLoading()
+            switch result {
+            case .success(let userModel):
+                completion(.success(userModel))
+            case .failure(let error):
+                self?.handleError(message: error.errorDescription ?? "An error occurred during Apple Sign-In.")
+                completion(.failure(error))
             }
         }
     }

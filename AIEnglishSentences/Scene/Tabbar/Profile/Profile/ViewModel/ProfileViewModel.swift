@@ -4,19 +4,23 @@ import StoreKit
 
 final class ProfileViewModel: BaseViewModel {
     
-    private let authService = AuthService.shared
+    private let authService : AuthService = AuthServiceImpl.shared
     private let userService = UserService.shared
     private var appLauncher = AppLauncher.shared
     private let subscriptionService = SubscriptionService.shared
     
     
     var user: UserModel? {
-        didSet {
-        }
+        didSet {}
     }
     
     func getUser(completion: @escaping (UserModel) -> Void) {
-        userService.getUser(by: authService.getCurrentUserId()!) { result in
+        
+        guard let userId = authService.getCurrentUserId() else {
+            return
+        }
+        
+        userService.getUser(by: userId) { result in
             switch result {
             case .success(let user):
                 self.user = user
@@ -28,7 +32,7 @@ final class ProfileViewModel: BaseViewModel {
     }
     
     func updateUser(name: String, completion: @escaping (Bool) -> Void) {
-        guard let userId = AuthService.shared.getCurrentUserId() else {
+        guard let userId = authService.getCurrentUserId() else {
             completion(false)
             return
         }
@@ -51,11 +55,8 @@ final class ProfileViewModel: BaseViewModel {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 self.stopLoading()
                 switch result {
-                case .success:
+                case .success(_):
                     completion(true)
-//                    self.subscriptionService.logout { isSucces in
-//                        completion(isSucces)
-//                    }
                 case .failure(let error):
                     self.handleError(message: error.localizedDescription)
                     completion(false)
@@ -66,18 +67,12 @@ final class ProfileViewModel: BaseViewModel {
     
     func deleteAccount(completion: @escaping (Bool) -> Void) {
         startLoading()
-        guard let userId = authService.getCurrentUserId() else {
-            handleError(message: "User is not logged in.")
-            completion(false)
-            return
-        }
-        
-
-        self.authService.deleteAccount { deleteResult in
-            switch deleteResult {
-            case .success:
+        authService.deleteAccount { result in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 self.stopLoading()
-                completion(true)
+                switch result {
+                case .success(_):
+                    completion(true)
 //                        self.userService.deleteUserData(by: userId) { userDataResult in
 //                            switch userDataResult {
 //                            case .success:
@@ -88,17 +83,13 @@ final class ProfileViewModel: BaseViewModel {
 //                                completion(false)
 //                            }
 //                        }
-                
-            case .failure(let error):
-                self.stopLoading()
-                self.handleError(message: error.localizedDescription)
-                completion(false)
+                    
+                case .failure(let error):
+                    self.handleError(message: error.localizedDescription)
+                    completion(false)
+                }
             }
         }
-    
-            
-    
-        
     }
     
     func openIqTestApp(completion: @escaping (Bool) -> Void) {
