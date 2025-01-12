@@ -45,7 +45,7 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
         view.addSubview(backgroundImageView)
         
         // AuthBar
-        authBar = AuthBar(title: "Create Account")
+        authBar = AuthBar(title: .localized(for: .createAccountTitle))
         authBar.delegate = self
         view.addSubview(authBar)
         
@@ -55,7 +55,7 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
         subtitleLabel.numberOfLines = 0
         subtitleLabel.textColor = UIColor.darkGray
         subtitleLabel.attributedText = NSAttributedString(
-            string: "Join us and explore \nthe power of sentences!",
+            string: .localized(for: .registerSubtitle),
             attributes: [
                 .font: UIFont.dynamicFont(size: 22, weight: .bold),
                 .foregroundColor: UIColor.darkGray,
@@ -72,18 +72,30 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
         
         // Email TextField
         emailTextField = CustomTextField()
-        emailTextField.configure(placeholder: "Enter your email", type: .normal, title: "Email address")
+        emailTextField.configure(
+            placeholder: .localized(for: .emailPlaceholder),
+            type: .normal,
+            title: .localized(for: .emailTitle)
+        )
         view.addSubview(emailTextField)
         
         // Name TextField
         nameTextField = CustomTextField()
-        nameTextField.configure(placeholder: "Enter your Name", type: .normal, title: "Name")
+        nameTextField.configure(
+            placeholder: .localized(for: .namePlaceholder),
+            type: .normal,
+            title: .localized(for: .nameTitle)
+        )
         view.addSubview(nameTextField)
         
         
         // Password TextField
         passwordTextField = CustomTextField()
-        passwordTextField.configure(placeholder: "Enter your password", type: .password, title: "Password")
+        passwordTextField.configure(
+            placeholder: .localized(for: .passwordPlaceholder),
+            type: .password,
+            title: .localized(for: .passwordTitle)
+        )
         view.addSubview(passwordTextField)
         
         // Login Button
@@ -93,10 +105,10 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
         
         // SocialButton Container
         let socialButtonsViewModel = SocialButtonsViewModel(
-            actionText: "Already have an account? ",
-            actionHighlightedText: "Login",
-            googleButtonTitle: "Continue with Google",
-            appleButtonTitle: "Continue with Apple"
+            actionText: .localized(for: .alreadyHaveAccount),
+            actionHighlightedText: .localized(for: .login),
+            googleButtonTitle: .localized(for: .googleButtonTitle),
+            appleButtonTitle: .localized(for: .appleButtonTitle)
         )
         
         socialButtonsViewModel.onGoogleButtonTapped = {
@@ -203,9 +215,9 @@ extension RegisterVC: AuthBarDelegate {
 
 extension RegisterVC: AuthButtonDelegate {
     func didTapButton(type: AuthButtonType) {
-        let isEmailValid = emailTextField.validate(with: "Please enter your email.")
-        let isNameValid = nameTextField.validate(with: "Please enter your name.")
-        let isPasswordValid = passwordTextField.validate(with: "Please enter your password.")
+        let isEmailValid = emailTextField.validate(with: .localized(for: .validationEmail))
+        let isNameValid = nameTextField.validate(with: .localized(for: .validationName))
+        let isPasswordValid = passwordTextField.validate(with: .localized(for: .validationPassword))
         
         guard isEmailValid, isPasswordValid, isNameValid else {
             print("Validation failed.")

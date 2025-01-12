@@ -26,6 +26,7 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         //        viewModel.requestTrackingPermission()
     }
     
@@ -50,7 +51,7 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         subtitleLabel.numberOfLines = 0
         subtitleLabel.textColor = UIColor.darkGray
         subtitleLabel.attributedText = NSAttributedString(
-            string: "Create. Listen. Inspire.\nAiLex makes words come alive.",
+            string: .localized(for: .infoSubTitle),
             attributes: [
                 .font: UIFont.dynamicFont(size: 22, weight: .bold),
                 .foregroundColor: UIColor.darkGray,
@@ -72,10 +73,10 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         
         
         let socialButtonsViewModel = SocialButtonsViewModel(
-            actionText: "You don’t have an account?",
-            actionHighlightedText: "Sign up",
-            googleButtonTitle: "Continue with Google",
-            appleButtonTitle: "Continue with Apple"
+            actionText: .localized(for: .dontHaveAccount),
+            actionHighlightedText:  .localized(for: .signup),
+            googleButtonTitle: .localized(for: .googleButtonTitle),
+            appleButtonTitle: .localized(for: .appleButtonTitle)
         )
         
         socialButtonsViewModel.onGoogleButtonTapped = {
