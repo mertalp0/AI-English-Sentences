@@ -41,7 +41,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		94302F8A2D2C81970079D8DC /* StoreKitTestConfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitTestConfig.storekit; sourceTree = "<group>"; };
 		94918F052D0DA32B00FDC538 /* AIEnglishSentences.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIEnglishSentences.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94918F1B2D0DA32D00FDC538 /* AIEnglishSentencesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIEnglishSentencesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94918F252D0DA32D00FDC538 /* AIEnglishSentencesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIEnglishSentencesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,7 +144,6 @@
 			children = (
 				94DE1BA12D121F0100B860D6 /* Debug.xcconfig */,
 				94DE1BA22D121F0D00B860D6 /* Release.xcconfig */,
-				94302F8A2D2C81970079D8DC /* StoreKitTestConfig.storekit */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -264,7 +262,6 @@
 			knownRegions = (
 				en,
 				Base,
-				tr,
 			);
 			mainGroup = 94918EFC2D0DA32B00FDC538;
 			minimizedProjectReferenceProxies = 1;
@@ -357,7 +354,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AIEnglishSentences/AIEnglishSentences.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = J584WC8XJ5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AIEnglishSentences/Info.plist;
@@ -390,7 +387,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AIEnglishSentences/AIEnglishSentences.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = J584WC8XJ5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AIEnglishSentences/Info.plist;

@@ -19,9 +19,9 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
     
     // MARK: - Properties
     private let textToSpeechManager =  TextToSpeechManager.shared
-    private var allData: [NewSentence] = []
-    private var favouritesData: [NewSentence] = []
-    private var currentData: [NewSentence] {
+    private var allData: [Sentence] = []
+    private var favouritesData: [Sentence] = []
+    private var currentData: [Sentence] {
         return historySegmentedControl.selectedIndex == 0 ? allData : favouritesData
     }
     
@@ -121,13 +121,13 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
         if isDataEmpty {
             if historySegmentedControl.selectedIndex == 0 {
                 emptyStateView.configure(
-                    image: UIImage(named: "history_all_empty_image"),
+                    image: .appImage(.historyAllEmpty),
                     title: "No History Found",
                     description: "You haven't created any sentences yet. Start generating by selecting a category."
                 )
             } else {
                 emptyStateView.configure(
-                    image: UIImage(named: "history_favorites_empty_image"),
+                    image: .appImage(.historyFavoritesEmpty),
                     title: "No Favorites Yet!",
                     description: "Looks like you haven't saved anything. Tap the heart icon to add favorites."
                 )
@@ -198,7 +198,7 @@ extension HistoryVC: SentenceCellDelegate {
     }
     
     
-    func didTapSaveAndFavorite(for sentence: NewSentence, in cell: SentenceCell) {
+    func didTapSaveAndFavorite(for sentence: Sentence, in cell: SentenceCell) {
         
         
         if let indexInAllData = SentenceManager.shared.sentences.firstIndex(where: { $0.id == sentence.id }) {
@@ -249,7 +249,7 @@ extension HistoryVC: SentenceCellDelegate {
         }
     }
     
-    func didTapDelete(for sentence: NewSentence, in cell: SentenceCell) {
+    func didTapDelete(for sentence: Sentence, in cell: SentenceCell) {
         let alertController = UIAlertController(
             title: "Delete Sentence",
             message: "Are you sure you want to delete this sentence?",
@@ -264,7 +264,7 @@ extension HistoryVC: SentenceCellDelegate {
         present(alertController, animated: true, completion: nil)
     }
     
-    private func deleteSentence(sentence: NewSentence) {
+    private func deleteSentence(sentence: Sentence) {
         viewModel.deleteSentence(sentence: sentence) { [weak self] isSuccess in
             if isSuccess {
                 print("\(sentence.sentence) başarıyla silindi.")

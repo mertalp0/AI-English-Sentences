@@ -1,22 +1,13 @@
 //
-//  GenerateModel.swift
+//  Sentence.swift
 //  AIEnglishSentences
 //
 //  Created by mert alp on 19.12.2024.
 //
 
 import Foundation
-import FirebaseFirestore
 
-struct GenerateModel: Codable {
-    let id: String?
-    let words: String
-    let sentences: [String]
-}
-
-
-
-struct NewSentence: Codable {
+struct Sentence: Codable {
     let id: String
     let sentence: String
     var favorite: Bool
@@ -26,3 +17,13 @@ struct NewSentence: Codable {
     let writingStyle: String
     let createdAt: Date
 }
+
+
+//struct GenerateModel: Codable {
+//    let id: String?
+//    let words: String
+//    let sentences: [String]
+//}
+
+
+

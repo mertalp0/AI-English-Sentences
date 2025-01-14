@@ -6,4 +6,33 @@
   
 */
 
-"example" = "exmaple";
+// Shared Strings
+"google_button_title" = "Continue with Google";
+"apple_button_title" = "Continue with Apple";
+"login" = "Login";
+"signup" = "Sign up";
+"email_placeholder" = "Enter your email";
+"email_title" = "Email address";
+"password_placeholder" = "Enter your password";
+"password_title" = "Password";
+"validation_email" = "Please enter your email.";
+"validation_password" = "Please enter your password.";
+"or_text" = "or";
+"dont_have_account" = "You don’t have an account?";
+
+// InfoVC Strings
+"info_subtitle" = "Create. Listen. Inspire.\nAiLex makes words come alive.";
+
+// LoginVC Strings
+"login_title" = "Login here";
+"login_subtitle" = "Welcome back you’ve \nbeen missed!";
+"forgot_password" = "Forgot Password?";
+
+// RegisterVC Strings
+"create_account_title" = "Create Account";
+"register_subtitle" = "Join us and explore \nthe power of sentences!";
+"name_placeholder" = "Enter your Name";
+"name_title" = "Name";
+"already_have_account" = "Already have an account?";
+"login_highlighted" = "Login";
+"validation_name" = "Please enter your name.";

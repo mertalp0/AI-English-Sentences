@@ -12,7 +12,7 @@ import SnapKit
 final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewModel>{
     
     private var gender : Gender = .preferNotToSay
-
+    
     //MARK: - UI Elements
     private var backgroundImageView: UIImageView!
     private var socialButtonsView: SocialButtonsView!
@@ -39,13 +39,13 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
         
         // Background Image
         backgroundImageView = UIImageView()
-        backgroundImageView.image = UIImage(named: "background")
+        backgroundImageView.image = .appImage(.backgroundImage)
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
         view.addSubview(backgroundImageView)
         
         // AuthBar
-        authBar = AuthBar(title: "Create Account")
+        authBar = AuthBar(title: .localized(for: .createAccountTitle))
         authBar.delegate = self
         view.addSubview(authBar)
         
@@ -55,7 +55,7 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
         subtitleLabel.numberOfLines = 0
         subtitleLabel.textColor = UIColor.darkGray
         subtitleLabel.attributedText = NSAttributedString(
-            string: "Join us and explore \nthe power of sentences!",
+            string: .localized(for: .registerSubtitle),
             attributes: [
                 .font: UIFont.dynamicFont(size: 22, weight: .bold),
                 .foregroundColor: UIColor.darkGray,
@@ -72,18 +72,30 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
         
         // Email TextField
         emailTextField = CustomTextField()
-        emailTextField.configure(placeholder: "Enter your email", type: .normal, title: "Email address")
+        emailTextField.configure(
+            placeholder: .localized(for: .emailPlaceholder),
+            type: .normal,
+            title: .localized(for: .emailTitle)
+        )
         view.addSubview(emailTextField)
         
         // Name TextField
         nameTextField = CustomTextField()
-        nameTextField.configure(placeholder: "Enter your Name", type: .normal, title: "Name")
+        nameTextField.configure(
+            placeholder: .localized(for: .namePlaceholder),
+            type: .normal,
+            title: .localized(for: .nameTitle)
+        )
         view.addSubview(nameTextField)
         
         
         // Password TextField
         passwordTextField = CustomTextField()
-        passwordTextField.configure(placeholder: "Enter your password", type: .password, title: "Password")
+        passwordTextField.configure(
+            placeholder: .localized(for: .passwordPlaceholder),
+            type: .password,
+            title: .localized(for: .passwordTitle)
+        )
         view.addSubview(passwordTextField)
         
         // Login Button
@@ -93,24 +105,36 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
         
         // SocialButton Container
         let socialButtonsViewModel = SocialButtonsViewModel(
-            actionText: "Already have an account? ",
-            actionHighlightedText: "Login",
-            googleButtonTitle: "Continue with Google",
-            appleButtonTitle: "Continue with Apple"
+            actionText: .localized(for: .alreadyHaveAccount),
+            actionHighlightedText: .localized(for: .login),
+            googleButtonTitle: .localized(for: .googleButtonTitle),
+            appleButtonTitle: .localized(for: .appleButtonTitle)
         )
         
         socialButtonsViewModel.onGoogleButtonTapped = {
-            self.viewModel.googleSignIn(from: self) {  [weak self] isSuccess in
-                if isSuccess {
+            
+            self.viewModel.googleSignIn(from: self) { [weak self] result in
+                switch result {
+                case .success(_):
                     self?.coordinator?.showDashboard()
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
                 }
             }
         }
         
         socialButtonsViewModel.onAppleButtonTapped = {
-            self.viewModel.signInWithApple(presentationAnchor: self.view.window!) { [weak self] isSuccess in
-                if isSuccess {
+            
+            guard let window = self.view.window else {
+                return
+            }
+            
+            self.viewModel.appleSignIn(presentationAnchor: window) { [weak self] result in
+                switch result {
+                case .success(_):
                     self?.coordinator?.showDashboard()
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
                 }
             }
         }
@@ -159,7 +183,7 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
             make.trailing.equalToSuperview().offset(-22)
         }
         
-     
+        
         // Password Text Field
         passwordTextField.snp.makeConstraints { make in
             make.top.equalTo(subtitleLabel.snp.bottom).offset(UIHelper.dynamicHeight(206))
@@ -173,7 +197,7 @@ final class RegisterVC: BaseViewController<RegisterCoordinator, RegisterViewMode
             make.leading.trailing.equalToSuperview().inset(32)
             make.height.equalTo(UIHelper.dynamicHeight(40))
         }
-
+        
         // Social Buttons View
         socialButtonsView.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-UIHelper.dynamicHeight(10))
@@ -191,22 +215,22 @@ extension RegisterVC: AuthBarDelegate {
 
 extension RegisterVC: AuthButtonDelegate {
     func didTapButton(type: AuthButtonType) {
-        let isEmailValid = emailTextField.validate(with: "Please enter your email.")
-        let isNameValid = nameTextField.validate(with: "Please enter your name.")
-        let isPasswordValid = passwordTextField.validate(with: "Please enter your password.")
+        let isEmailValid = emailTextField.validate(with: .localized(for: .validationEmail))
+        let isNameValid = nameTextField.validate(with: .localized(for: .validationName))
+        let isPasswordValid = passwordTextField.validate(with: .localized(for: .validationPassword))
         
         guard isEmailValid, isPasswordValid, isNameValid else {
             print("Validation failed.")
             return
         }
-        viewModel.register(email: emailTextField.text!, name: nameTextField.text!, password: passwordTextField.text!, gender: gender ) { isSucces in
-            switch isSucces {
-            case true:
-                self.coordinator?.showDashboard()
-                
-            case false:
-                print("Register failed.")
         
+        viewModel.registerWithEmail(email: emailTextField.text!,password: passwordTextField.text!, name: nameTextField.text! , gender: gender ){  result in
+            switch result {
+            case .success(let user):
+                print("Registration successful! User: \(user)")
+                self.coordinator?.showDashboard()
+            case .failure(let error):
+                print("Registration failed with error: \(error.errorDescription ?? "Unknown error")")
             }
         }
     }

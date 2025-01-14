@@ -10,7 +10,7 @@ import SnapKit
 
 protocol SentenceCellDelegate: AnyObject {
     func didTapPlayButton(for sentence: String, in cell: SentenceCell)
-    func didTapSaveAndFavorite(for sentence: NewSentence, in cell: SentenceCell)
+    func didTapSaveAndFavorite(for sentence: Sentence, in cell: SentenceCell)
     func didTapCopyButton(for sentence: String, in cell: SentenceCell)
 }
 enum SentenceCellType {
@@ -21,7 +21,7 @@ enum SentenceCellType {
 final class SentenceCell: UITableViewCell {
     // MARK: - Properties
     weak var delegate: SentenceCellDelegate?
-    private var currentSentence: NewSentence?
+    private var currentSentence: Sentence?
     private var type: SentenceCellType? {
         didSet {
             updateSaveAndFavoriteButton()
@@ -48,7 +48,7 @@ final class SentenceCell: UITableViewCell {
     
     private let playButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "play.circle"), for: .normal)
+        button.setImage(.appIcon(.playCircle), for: .normal)
         button.tintColor = .mainColor
         return button
     }()
@@ -61,7 +61,7 @@ final class SentenceCell: UITableViewCell {
     
     private let copyButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "doc.on.doc"), for: .normal)
+        button.setImage(.appIcon(.docOnDoc), for: .normal)
         button.tintColor = .systemGreen
         return button
     }()
@@ -202,7 +202,7 @@ final class SentenceCell: UITableViewCell {
     }
     
     // MARK: - Configure Cell
-    func configure(with sentence: NewSentence, type: SentenceCellType) {
+    func configure(with sentence: Sentence, type: SentenceCellType) {
         self.currentSentence = sentence
         self.type = type
         sentenceLabel.text = sentence.sentence
@@ -214,25 +214,25 @@ final class SentenceCell: UITableViewCell {
     
     func updateSaveAndFavoriteButton() {
         guard let sentence = currentSentence else { return }
-        let icon: String
+        let icon: UIImage?
         switch type {
         case .historyCell:
-            icon = sentence.favorite ? "star.fill" : "star"
+            icon = sentence.favorite ? .appIcon(.starFill) : .appIcon(.star)
         case .resultCell:
             if SentenceManager.shared.sentences.contains(where: { $0.id == sentence.id }) {
-                icon = "bookmark.fill"
+                icon = .appIcon(.bookmarkFill)
             } else {
-                icon = "bookmark"
+                icon = .appIcon(.bookmark)
             }
         case .none:
             return
         }
-        saveAndFavoriteButton.setImage(UIImage(systemName: icon), for: .normal)
+        saveAndFavoriteButton.setImage(icon, for: .normal)
     }
-    
+
     func updatePlayButton(isPlaying: Bool) {
-        let iconName = isPlaying ? "stop.circle" : "play.circle"
-        playButton.setImage(UIImage(systemName: iconName), for: .normal)
+        let icon: UIImage? = isPlaying ? .appIcon(.stopCircle) : .appIcon(.playCircle)
+        playButton.setImage(icon, for: .normal)
     }
     
     // MARK: - Actions
@@ -246,17 +246,18 @@ final class SentenceCell: UITableViewCell {
         delegate?.didTapSaveAndFavorite(for: sentence, in: self)
     }
     
-    func updateSaveAndFavoriteButton(for sentence: NewSentence) {
-        let icon: String
+    func updateSaveAndFavoriteButton(for sentence: Sentence) {
+        let icon: UIImage?
         if SentenceManager.shared.sentences.contains(where: { $0.id == sentence.id }) {
-            icon = "bookmark.fill"
+            icon = .appIcon(.bookmarkFill)
         } else {
-            icon = "bookmark"
+            icon = .appIcon(.bookmark)
         }
         UIView.transition(with: saveAndFavoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
-            self.saveAndFavoriteButton.setImage(UIImage(systemName: icon), for: .normal)
+            self.saveAndFavoriteButton.setImage(icon, for: .normal)
         })
     }
+    
     
     @objc private func onTapCopy() {
           guard let sentence = currentSentence else { return }

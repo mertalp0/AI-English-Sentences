@@ -57,9 +57,9 @@
             <string>iqtest</string>
         </array>
         
-        <key>NSUserTrackingUsageDescription</key>
-        <string>We need your permission to track your activity for better personalization and experience.</string>
-        
+<!--        <key>NSUserTrackingUsageDescription</key>-->
+<!--        <string>We need your permission to track your activity for better personalization and experience.</string>-->
+<!--        -->
         <!-- Scene Manifest -->
         <key>UIApplicationSceneManifest</key>
         <dict>

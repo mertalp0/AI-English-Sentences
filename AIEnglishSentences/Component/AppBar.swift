@@ -177,7 +177,7 @@ enum AppBarType {
     var leftIcon: UIImage? {
         switch self {
         case .generate:
-            return UIImage(systemName: "chevron.left")
+            return .appIcon(.chevronLeft)
         case .history:
             return nil
         case .profile:
@@ -185,13 +185,13 @@ enum AppBarType {
         case .contexta:
             return nil
         case .result:
-            return UIImage(systemName: "chevron.left")
+            return .appIcon(.chevronLeft)
         case .privacyPolicy:
-            return UIImage(systemName: "chevron.left")
+            return .appIcon(.chevronLeft)
         case .myApps:
-            return UIImage(systemName: "chevron.left")
+            return .appIcon(.chevronLeft)
         case .languages:
-            return UIImage(systemName: "chevron.left")
+            return .appIcon(.chevronLeft)
         }
         
     }

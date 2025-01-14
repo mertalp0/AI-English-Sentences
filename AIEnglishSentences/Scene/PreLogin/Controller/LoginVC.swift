@@ -35,13 +35,13 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel> {
         
         // Background Image
         backgroundImageView = UIImageView()
-        backgroundImageView.image = UIImage(named: "background")
+        backgroundImageView.image = .appImage(.backgroundImage)
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
         view.addSubview(backgroundImageView)
         
         // AuthBar
-        authBar = AuthBar(title: "Login here")
+        authBar = AuthBar(title: .localized(for: .loginTitle))
         authBar.delegate = self
         view.addSubview(authBar)
         
@@ -51,7 +51,7 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel> {
         subtitleLabel.numberOfLines = 0
         subtitleLabel.textColor = UIColor.darkGray
         subtitleLabel.attributedText = NSAttributedString(
-            string: "Welcome back you’ve \nbeen missed!",
+            string: .localized(for: .loginSubtitle),
             attributes: [
                 .font: UIFont.dynamicFont(size: 22, weight: .bold),
                 .foregroundColor: UIColor.darkGray,
@@ -68,13 +68,22 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel> {
         
         // Email TextField
         emailTextField = CustomTextField()
-        emailTextField.configure(placeholder: "Enter your email", type: .normal, title: "Email address")
+        emailTextField.configure(
+            placeholder: .localized(for: .emailPlaceholder),
+            type: .normal,
+            title: .localized(for: .emailTitle)
+        )
         view.addSubview(emailTextField)
         
         
         // Password TextField
         passwordTextField = CustomTextField()
-        passwordTextField.configure(placeholder: "Enter your password", type: .password, title: "Password")
+        passwordTextField.configure(
+            placeholder: .localized(for: .passwordPlaceholder),
+            type: .password,
+            title: .localized(for: .passwordTitle)
+        )
+        
         view.addSubview(passwordTextField)
         
         // Login Button
@@ -84,7 +93,7 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel> {
         
         // Forgot Password Label
         forgotPasswordLabel = UILabel()
-        forgotPasswordLabel.text = "Forgot Password?"
+        forgotPasswordLabel.text = .localized(for: .forgotPassword)
         forgotPasswordLabel.font = .dynamicFont(size: 14, weight: .regular)
         forgotPasswordLabel.textAlignment = .center
         forgotPasswordLabel.textColor = .mainColor
@@ -92,24 +101,35 @@ final class LoginVC: BaseViewController<LoginCoordinator, LoginViewModel> {
         
         // SocialButton Container
         let socialButtonsViewModel = SocialButtonsViewModel(
-            actionText: "You don’t have an account?",
-            actionHighlightedText: "Sign up",
-            googleButtonTitle: "Continue with Google",
-            appleButtonTitle: "Continue with Apple"
+            actionText: .localized(for: .dontHaveAccount),            actionHighlightedText:  .localized(for: .signup),
+            googleButtonTitle: .localized(for: .googleButtonTitle),
+            appleButtonTitle: .localized(for: .appleButtonTitle)
         )
         
         socialButtonsViewModel.onGoogleButtonTapped = {
-            self.viewModel.googleSignIn(from: self) {  [weak self] isSuccess in
-                if isSuccess {
+            
+            self.viewModel.loginWithGoogle(from: self) { [weak self] result in
+                switch result {
+                case .success(_):
                     self?.coordinator?.showDashboard()
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
                 }
             }
         }
         
         socialButtonsViewModel.onAppleButtonTapped = {
-            self.viewModel.signInWithApple(presentationAnchor: self.view.window!) { [weak self] isSuccess in
-                if isSuccess {
+            
+            guard let window = self.view.window else {
+                return
+            }
+            
+            self.viewModel.loginWithApple(presentationAnchor: window) { [weak self] result in
+                switch result {
+                case .success(_):
                     self?.coordinator?.showDashboard()
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
                 }
             }
         }
@@ -186,18 +206,22 @@ extension LoginVC: AuthBarDelegate {
 
 extension LoginVC: AuthButtonDelegate {
     func didTapButton(type: AuthButtonType) {
-        let isEmailValid = emailTextField.validate(with: "Please enter your email.")
-        let isPasswordValid = passwordTextField.validate(with: "Please enter your password.")
+        let isEmailValid = emailTextField.validate(with: .localized(for: .validationEmail))
+        let isPasswordValid = passwordTextField.validate(with: .localized(for: .validationPassword))
         
         guard isEmailValid, isPasswordValid else {
             print("Validation failed.")
             return
         }
         
-        viewModel.login(email: emailTextField.text!, password: passwordTextField.text!) { isSuccess in
-            if isSuccess {
+        viewModel.loginWithEmail(email: emailTextField.text!, password: passwordTextField.text!) { result in
+            switch result {
+            case .success(_):
                 self.coordinator?.showDashboard()
+            case .failure(_):
+                print("Error")
             }
         }
+        
     }
 }

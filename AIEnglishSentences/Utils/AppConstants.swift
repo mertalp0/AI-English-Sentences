@@ -90,8 +90,8 @@ struct AppConstants {
     
     
     static let myApps: [AppModel] = [
-        AppModel(appIcon: UIImage(named: "iq_test_logo")!, appName: "IQ Test", appDescription: "The IQ Test application allows you to effectively test your mental skills and quickly evaluate your progress. Complete your tests in just 5 minutes and discover your IQ level while tracking your improvement."),
-        AppModel(appIcon: UIImage(named: "app_icon_ailex")!, appName: "AILex", appDescription: "AILex helps you improve your English skills by generating sentences using AI-provided words. Practice listening to these sentences and enhance your vocabulary and comprehension. In just a few minutes a day, boost your confidence in English while tracking your progress and mastering the language."),
+        AppModel(appIcon: UIImage.appImage(.iqTestLogo)!, appName: "IQ Test", appDescription: "The IQ Test application allows you to effectively test your mental skills and quickly evaluate your progress. Complete your tests in just 5 minutes and discover your IQ level while tracking your improvement."),
+        AppModel(appIcon: UIImage.appImage(.appIcon)!, appName: "AILex", appDescription: "AILex helps you improve your English skills by generating sentences using AI-provided words. Practice listening to these sentences and enhance your vocabulary and comprehension. In just a few minutes a day, boost your confidence in English while tracking your progress and mastering the language."),
        
     ]
     

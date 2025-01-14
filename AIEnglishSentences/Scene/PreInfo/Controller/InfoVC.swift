@@ -26,21 +26,22 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        viewModel.requestTrackingPermission()
+        super.viewDidAppear(animated)
+        //        viewModel.requestTrackingPermission()
     }
     
     // MARK: - Setup UI
     private func setupUI() {
         // Background Image
         backgroundImageView = UIImageView()
-        backgroundImageView.image = UIImage(named: "background")
+        backgroundImageView.image = .appImage(.backgroundImage)
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
         view.addSubview(backgroundImageView)
         
         // Logo Image
         logoImageView = UIImageView()
-        logoImageView.image = UIImage(named: "AiLex")
+        logoImageView.image = .appImage(.aiLexText)
         logoImageView.contentMode = .scaleAspectFit
         view.addSubview(logoImageView)
         
@@ -50,7 +51,7 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         subtitleLabel.numberOfLines = 0
         subtitleLabel.textColor = UIColor.darkGray
         subtitleLabel.attributedText = NSAttributedString(
-            string: "Create. Listen. Inspire.\nAiLex makes words come alive.",
+            string: .localized(for: .infoSubTitle),
             attributes: [
                 .font: UIFont.dynamicFont(size: 22, weight: .bold),
                 .foregroundColor: UIColor.darkGray,
@@ -65,32 +66,43 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         )
         view.addSubview(subtitleLabel)
         
-        // Login Button
         loginButton = AuthButton(type: .normal(title: .login))
         loginButton.backgroundColor = .main
         loginButton.delegate = self
         view.addSubview(loginButton)
         
-    
+        
         let socialButtonsViewModel = SocialButtonsViewModel(
-            actionText: "You don’t have an account?",
-            actionHighlightedText: "Sign up",
-            googleButtonTitle: "Continue with Google",
-            appleButtonTitle: "Continue with Apple"
+            actionText: .localized(for: .dontHaveAccount),
+            actionHighlightedText:  .localized(for: .signup),
+            googleButtonTitle: .localized(for: .googleButtonTitle),
+            appleButtonTitle: .localized(for: .appleButtonTitle)
         )
         
         socialButtonsViewModel.onGoogleButtonTapped = {
-            self.viewModel.googleSignIn(from: self) {  [weak self] isSuccess in
-                if isSuccess {
+            
+            self.viewModel.loginWithGoogle(from: self) { [weak self] result in
+                switch result {
+                case .success(_):
                     self?.coordinator?.showDashboard()
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
                 }
             }
         }
         
         socialButtonsViewModel.onAppleButtonTapped = {
-            self.viewModel.signInWithApple(presentationAnchor: self.view.window!) { [weak self] isSuccess in
-                if isSuccess {
+            
+            guard let window = self.view.window else {
+                return
+            }
+            
+            self.viewModel.loginWithApple(presentationAnchor: window) { [weak self] result in
+                switch result {
+                case .success(_):
                     self?.coordinator?.showDashboard()
+                case .failure(let error):
+                    print("Error: \(error.localizedDescription)")
                 }
             }
         }
@@ -105,7 +117,7 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
     
     // MARK: - Setup Constraints
     private func setupConstraints() {
-    
+        
         // Background ImageView
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -138,10 +150,10 @@ final class InfoVC: BaseViewController<InfoCoordinator, InfoViewModel> {
         }
     }
     
-      // MARK: - Actions
-      @objc private func didTapSignUp() {
-          print("Sign up tapped")
-      }
+    // MARK: - Actions
+    @objc private func didTapSignUp() {
+        print("Sign up tapped")
+    }
 }
 
 // MARK: - AuthButtonDelegate

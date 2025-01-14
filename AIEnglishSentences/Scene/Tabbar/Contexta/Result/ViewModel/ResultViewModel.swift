@@ -10,10 +10,10 @@ import BaseMVVMCKit
 final class ResultViewModel: BaseViewModel {
     
     private let generateService = GenerateService.shared
-    private let authService = AuthService.shared
+    private let authService : AuthService = AuthServiceImpl.shared
     private let userService = UserService.shared
     
-    func saveSentence(sentence: NewSentence, completion: @escaping (Bool) -> Void) {
+    func saveSentence(sentence: Sentence, completion: @escaping (Bool) -> Void) {
         startLoading()
         generateService.saveSentence(sentence: sentence) { [weak self] result in
             guard let self = self else { return }
@@ -29,7 +29,7 @@ final class ResultViewModel: BaseViewModel {
         
     }
     
-    private func handleSentenceeSaveSuccess(sentence: NewSentence, completion: @escaping (Bool) -> Void) {
+    private func handleSentenceeSaveSuccess(sentence: Sentence, completion: @escaping (Bool) -> Void) {
         guard let userId = authService.getCurrentUserId() else {
             handleError(message: "An error occurred")
             completion(false)
@@ -49,7 +49,7 @@ final class ResultViewModel: BaseViewModel {
         }
     }
     
-    func deleteSentence(sentence: NewSentence, completion: @escaping (Bool) -> Void) {
+    func deleteSentence(sentence: Sentence, completion: @escaping (Bool) -> Void) {
         startLoading()
         
         generateService.deleteSentence(sentence: sentence) { [weak self] result in

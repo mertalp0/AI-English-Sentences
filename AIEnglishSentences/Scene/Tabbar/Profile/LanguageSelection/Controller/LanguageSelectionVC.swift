@@ -32,7 +32,7 @@ final class LanguageSelectionVC: BaseViewController<LanguageSelectionCoordinator
         
         // Background Image
         backgroundImageView = UIImageView()
-        backgroundImageView.image = UIImage(named: "background")
+        backgroundImageView.image = .appImage(.backgroundImage)
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
         view.addSubview(backgroundImageView)

@@ -11,7 +11,7 @@ import BaseMVVMCKit
 final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel> {
     
     // MARK: - Properties
-    var sentences: [NewSentence]?
+    var sentences: [Sentence]?
     
     // MARK: - UI Elements
     private var appBar: AppBar!
@@ -83,7 +83,7 @@ extension ResultVC: SentenceTableViewDelegate {
         showToast(message: "Copied to clipboard!")
     }
      
-    func didTapSave(for sentence: NewSentence, in cell: SentenceCell) {
+    func didTapSave(for sentence: Sentence, in cell: SentenceCell) {
         if SentenceManager.shared.sentences.contains(where: { $0.id == sentence.id }) {
             
             viewModel.deleteSentence(sentence: sentence) { [weak self] isSuccess in

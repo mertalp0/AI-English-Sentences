@@ -5,10 +5,8 @@
 //  Created by mert alp on 3.01.2025.
 //
 
-
 import UIKit
 import SnapKit
-
 
 enum AuthButtonType {
     case normal(title: NormalButtonTitle)
@@ -17,24 +15,31 @@ enum AuthButtonType {
     
     var title: String {
         switch self {
-        case .normal(let title): return title.rawValue
-        case .google: return "Continue with Google"
-        case .apple: return "Continue with Apple"
+        case .normal(let title): return title.title
+        case .google: return .localized(for: .googleButtonTitle)
+        case .apple: return .localized(for: .appleButtonTitle)
         }
     }
     
     var image: UIImage? {
         switch self {
-        case .google: return UIImage(named: "google_icon")
-        case .apple: return UIImage(systemName: "applelogo")
+        case .google: return .appImage(.google)
+        case .apple: return .appImage(.apple)
         case .normal: return nil
         }
     }
 }
 
-enum NormalButtonTitle: String {
-    case login = "Login"
-    case signup = "Sign up"
+enum NormalButtonTitle  {
+    case login
+    case signup
+    
+    var title: String {
+        switch self {
+        case .login: return .localized(for: .login)
+        case .signup: return .localized(for: .signup)
+        }
+    }
 }
 
 protocol AuthButtonDelegate: AnyObject {
@@ -92,7 +97,5 @@ final class AuthButton: UIButton {
     // MARK: - Animation Methods
     @objc private func animateDown() {
         self.animateScaleDown()
-
     }
 }
-

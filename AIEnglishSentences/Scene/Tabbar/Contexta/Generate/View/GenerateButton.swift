@@ -32,7 +32,7 @@ final class GenerateButton: UIButton {
         self.setTitleColor(.white, for: .normal)
         self.titleLabel?.font = .dynamicFont(size: 16, weight: .semibold)
         
-        let icon = UIImage(named: "wand.and.stars")
+        let icon = UIImage.appImage(.wandAndStars)
         self.setImage(icon?.withRenderingMode(.alwaysTemplate), for: .normal)
         self.tintColor = .white
         self.imageView?.contentMode = .scaleAspectFit

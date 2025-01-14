@@ -36,7 +36,7 @@ final class SocialButtonsView: UIView {
     private func setupUI() {
         // Or Label
         orLabel = UILabel()
-        orLabel.text = "or"
+        orLabel.text = .localized(for: .orText)
         orLabel.font = .dynamicFont(size: 14, weight: .regular)
         orLabel.textAlignment = .center
         orLabel.textColor = .mainColor
