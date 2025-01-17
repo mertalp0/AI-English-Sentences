@@ -10,17 +10,24 @@ import FirebaseAuth
 
 class SubscriptionService {
     static let shared = SubscriptionService()
-    
-    private init() {}
+    private let apiKey: String
 
-    /// RevenueCat'i başlatma
+    init() {
+        guard let key = Bundle.main.object(forInfoDictionaryKey: "REVENUE_CAT_KEY") as? String else {
+            fatalError("API Key is missing.")
+        }
+        self.apiKey = key
+    }
+
+
+    // MARK: - RevenueCat Configuration
     func configure() {
         let userId = Auth.auth().currentUser?.uid
-        Purchases.configure(withAPIKey: "appl_HdlrAmUjDppEqivJGGBMlREIZIv", appUserID: userId)
+        Purchases.configure(withAPIKey: apiKey, appUserID: userId)
         print("RevenueCat configured with userId: \(userId ?? "Anonymous")")
     }
 
-    /// Kullanıcı giriş yaptıktan sonra RevenueCat kullanıcı ID güncelleme
+    // MARK: - User Login
     func login(userId: String, completion: @escaping (Bool) -> Void) {
         Purchases.shared.logIn(userId) { customerInfo, created, error in
             if let error = error {
@@ -37,7 +44,7 @@ class SubscriptionService {
         }
     }
 
-    /// Kullanıcı çıkış yaptıktan sonra RevenueCat kullanıcı ID sıfırla
+    // MARK: - User Logout
     func logout(completion: @escaping (Bool) -> Void) {
         Purchases.shared.logOut { customerInfo, error in
             if let error = error {
@@ -50,7 +57,7 @@ class SubscriptionService {
         }
     }
 
-    /// Kullanıcının premium olup olmadığını kontrol et
+    // MARK: - Premium Status
     func checkPremiumStatus(completion: @escaping (Bool) -> Void) {
         Purchases.shared.getCustomerInfo { customerInfo, error in
             if let error = error {
@@ -64,7 +71,7 @@ class SubscriptionService {
         }
     }
 
-    /// Abonelik Paketlerini Getir
+    // MARK: - Offerings and Packages
     func fetchPackages(completion: @escaping ([Package]?) -> Void) {
         Purchases.shared.getOfferings { offerings, error in
             if let error = error {
@@ -77,23 +84,7 @@ class SubscriptionService {
         }
     }
 
-    /// Test Amaçlı Kullanıcıyı Premium Yap
-//    func makeUserPremiumForTesting(completion: @escaping (Bool) -> Void) {
-//        let testCustomerInfo = Purchases.shared.getCustomerInfo { customerInfo, error in
-//            guard error == nil else {
-//                print("Error fetching customer info: \(error!.localizedDescription)")
-//                completion(false)
-//                return
-//            }
-//            // Kullanıcıyı manuel olarak premium yap
-//            let isPremium = true // Test amaçlı manuel premium durumu
-//            print("User premium status overridden for testing: \(isPremium)")
-//            completion(isPremium)
-//        }
-//    }
-//
-    
-    /// Müşteri bilgilerini manuel olarak yenile
+    // MARK: - Customer Info
     func refreshCustomerInfo(completion: @escaping (Bool) -> Void) {
         Purchases.shared.syncPurchases { customerInfo, error in
             if let error = error {
@@ -106,8 +97,25 @@ class SubscriptionService {
             completion(isPremium)
         }
     }
-    
-    /// Abonelik Satın Alma İşlemi
+
+    func getCustomerInfo(completion: @escaping (CustomerInfo?) -> Void) {
+        Purchases.shared.getCustomerInfo { customerInfo, error in
+            if let error = error {
+                print("Error fetching customer info: \(error.localizedDescription)")
+                completion(nil)
+                return
+            }
+            let originalAppUserId = customerInfo?.originalAppUserId
+            print("Original App User ID: \(originalAppUserId ?? "Unknown")")
+
+            let currentAppUserId = Purchases.shared.appUserID
+            print("Current App User ID: \(currentAppUserId)")
+            
+            completion(customerInfo)
+        }
+    }
+
+    // MARK: - Purchase Handling
     func purchase(package: Package, completion: @escaping (Bool) -> Void) {
         Purchases.shared.purchase(package: package) { transaction, customerInfo, error, userCancelled in
             if let error = error {
@@ -122,30 +130,7 @@ class SubscriptionService {
             }
             let isPremium = customerInfo?.entitlements["premium"]?.isActive == true
             print("Purchase successful. Premium status: \(isPremium)")
-            
             completion(isPremium)
         }
     }
-
-    /// Kullanıcı bilgilerini getirme
-    func getCustomerInfo(completion: @escaping (CustomerInfo?) -> Void) {
-        Purchases.shared.getCustomerInfo { customerInfo, error in
-            if let error = error {
-                print("Error fetching customer info: \(error.localizedDescription)")
-                completion(nil)
-                return
-            }
-            
-            // Orijinal kullanıcı ID'si
-            let originalAppUserId = customerInfo?.originalAppUserId
-            print("Original App User ID: \(originalAppUserId ?? "Unknown")")
-
-            // Mevcut kullanıcı ID'si
-            let currentAppUserId = Purchases.shared.appUserID
-            print("Current App User ID: \(currentAppUserId)")
-            
-            completion(customerInfo)
-        }
-    }
-    
 }
