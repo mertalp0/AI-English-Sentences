@@ -16,40 +16,38 @@ class SubscriptionService {
     /// RevenueCat'i başlatma
     func configure() {
         let userId = Auth.auth().currentUser?.uid
-        Purchases.configure(withAPIKey: "", appUserID: userId)
+        Purchases.configure(withAPIKey: "appl_HdlrAmUjDppEqivJGGBMlREIZIv", appUserID: userId)
         print("RevenueCat configured with userId: \(userId ?? "Anonymous")")
     }
 
     /// Kullanıcı giriş yaptıktan sonra RevenueCat kullanıcı ID güncelleme
     func login(userId: String, completion: @escaping (Bool) -> Void) {
-        completion(true)
-//        Purchases.shared.logIn(userId) { customerInfo, created, error in
-//            if let error = error {
-//                print("Error logging into RevenueCat: \(error.localizedDescription)")
-//                completion(false)
-//                return
-//            }
-//            if created {
-//                print("New RevenueCat user created.")
-//            } else {
-//                print("RevenueCat user successfully linked.")
-//            }
-//            completion(true)
-//        }
+        Purchases.shared.logIn(userId) { customerInfo, created, error in
+            if let error = error {
+                print("Error logging into RevenueCat: \(error.localizedDescription)")
+                completion(false)
+                return
+            }
+            if created {
+                print("New RevenueCat user created.")
+            } else {
+                print("RevenueCat user successfully linked.")
+            }
+            completion(true)
+        }
     }
 
     /// Kullanıcı çıkış yaptıktan sonra RevenueCat kullanıcı ID sıfırla
     func logout(completion: @escaping (Bool) -> Void) {
-        completion(true)
-//        Purchases.shared.logOut { customerInfo, error in
-//            if let error = error {
-//                print("Error logging out of RevenueCat: \(error.localizedDescription)")
-//                completion(false)
-//                return
-//            }
-//            print("Successfully logged out from RevenueCat.")
-//            completion(true)
-//        }
+        Purchases.shared.logOut { customerInfo, error in
+            if let error = error {
+                print("Error logging out of RevenueCat: \(error.localizedDescription)")
+                completion(false)
+                return
+            }
+            print("Successfully logged out from RevenueCat.")
+            completion(true)
+        }
     }
 
     /// Kullanıcının premium olup olmadığını kontrol et

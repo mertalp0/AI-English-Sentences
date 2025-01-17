@@ -74,7 +74,7 @@ final class AuthServiceImpl: AuthService {
             case .success(let user):
                 self.saveUserToFirestoreForSocial(
                     userId: user.uid,
-                    name: user.displayName ?? "Google User",
+                    name: name,
                     email: user.email ?? "No Email",
                     gender: .preferNotToSay, type: .social
                 ) { success in
@@ -87,7 +87,16 @@ final class AuthServiceImpl: AuthService {
                             createdAt: Date(),
                             generate: []
                         )
-                        completion(.success(userModel))
+                        
+                        self.loginSubscribe(userId: user.uid) { isSucces in
+                            if(isSucces){
+                                completion(.success(userModel))
+                                
+                            }else{
+                                completion(.failure(.unknownError))
+                            }
+                        }
+                        
                     } else {
                         completion(.failure(AuthError.unknownError))
                     }
@@ -114,7 +123,16 @@ final class AuthServiceImpl: AuthService {
                     createdAt: Date(),
                     generate: []
                 )
-                completion(.success(userModel))
+                
+                self.loginSubscribe(userId: user.uid) { isSucces in
+                    if(isSucces){
+                        completion(.success(userModel))
+                        
+                    }else{
+                        completion(.failure(.unknownError))
+                    }
+                }
+                
             case .failure(let error):
                 completion(.failure(AuthError.map(from: error)))
             }
@@ -143,7 +161,16 @@ final class AuthServiceImpl: AuthService {
                             createdAt: Date(),
                             generate: []
                         )
-                        completion(.success(userModel))
+                        
+                        self.loginSubscribe(userId: user.uid) { isSucces in
+                            if(isSucces){
+                                completion(.success(userModel))
+                                
+                            }else{
+                                completion(.failure(.unknownError))
+                            }
+                        }
+                        
                     } else {
                         completion(.failure(AuthError.unknownError))
                     }
@@ -176,7 +203,17 @@ final class AuthServiceImpl: AuthService {
                             createdAt: Date(),
                             generate: []
                         )
-                        completion(.success(userModel))
+                        
+                        self.loginSubscribe(userId: credentials.user.uid) { isSucces in
+                            if(isSucces){
+                                completion(.success(userModel))
+                                
+                            }else{
+                                completion(.failure(.unknownError))
+                            }
+                        }
+                        
+                        
                     } else {
                         completion(.failure(AuthError.unknownError))
                     }
@@ -191,7 +228,16 @@ final class AuthServiceImpl: AuthService {
         authRepository.logout { result in
             switch result {
             case .success:
-                completion(.success(()))
+                
+                self.logoutSubscribe { isSuccess in
+                    if(isSuccess){
+                        completion(.success(()))
+                    }
+                    else{
+                        completion(.failure(.unknownError))
+                    }
+                }
+                
             case .failure(let error):
                 completion(.failure(AuthError.map(from: error)))
             }
@@ -202,7 +248,14 @@ final class AuthServiceImpl: AuthService {
         authRepository.deleteAccount { result in
             switch result {
             case .success:
-                completion(.success(()))
+                self.logoutSubscribe { isSuccess in
+                    if(isSuccess){
+                        completion(.success(()))
+                    }
+                    else{
+                        completion(.failure(.unknownError))
+                    }
+                }
             case .failure(let error):
                 completion(.failure(AuthError.map(from: error)))
             }
@@ -246,6 +299,32 @@ extension AuthServiceImpl {
                     print("Firestore save error: \(error.localizedDescription)")
                     completion(false)
                 }
+            }
+        }
+    }
+}
+
+
+//MARK: -  Helper SubscriptionService
+extension AuthServiceImpl {
+    
+    private func loginSubscribe(userId: String, completion: @escaping (Bool) -> Void) {
+        SubscriptionService.shared.login(userId: userId) { isSuccess in
+            if isSuccess {
+                completion(true)
+            } else {
+                completion(false)
+            }
+        }
+    }
+    
+    private func logoutSubscribe(completion: @escaping (Bool) -> Void) {
+        SubscriptionService.shared.logout { isSuccess in
+            if(isSuccess){
+                completion(true)
+            }
+            else {
+                completion(false)
             }
         }
     }
