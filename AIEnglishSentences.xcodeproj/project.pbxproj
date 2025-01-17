@@ -13,6 +13,7 @@
 		942A53692D19A20200BC0697 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 942A53682D19A20200BC0697 /* GoogleSignInSwift */; };
 		94302F742D2AC08C0079D8DC /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 94302F732D2AC08C0079D8DC /* RevenueCat */; };
 		94302F762D2AC08C0079D8DC /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 94302F752D2AC08C0079D8DC /* RevenueCatUI */; };
+		9446DA892D3AABEC00FE47B7 /* StoreKitConfig.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 9446DA882D3AABEC00FE47B7 /* StoreKitConfig.storekit */; };
 		945B5D9D2D0E2D230023A3D9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 945B5D9C2D0E2D230023A3D9 /* SnapKit */; };
 		945B5DA02D0E2D360023A3D9 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 945B5D9F2D0E2D360023A3D9 /* Alamofire */; };
 		945EFC4A2D0F1ECB000819E6 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 945EFC492D0F1ECB000819E6 /* FirebaseAnalytics */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9446DA882D3AABEC00FE47B7 /* StoreKitConfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitConfig.storekit; sourceTree = "<group>"; };
 		94918F052D0DA32B00FDC538 /* AIEnglishSentences.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIEnglishSentences.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94918F1B2D0DA32D00FDC538 /* AIEnglishSentencesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIEnglishSentencesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94918F252D0DA32D00FDC538 /* AIEnglishSentencesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIEnglishSentencesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,6 +123,7 @@
 		94918EFC2D0DA32B00FDC538 = {
 			isa = PBXGroup;
 			children = (
+				9446DA882D3AABEC00FE47B7 /* StoreKitConfig.storekit */,
 				94DE1BA02D121EE700B860D6 /* Config */,
 				94918F072D0DA32B00FDC538 /* AIEnglishSentences */,
 				94918F1E2D0DA32D00FDC538 /* AIEnglishSentencesTests */,
@@ -290,6 +293,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9446DA892D3AABEC00FE47B7 /* StoreKitConfig.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -354,7 +358,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AIEnglishSentences/AIEnglishSentences.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = J584WC8XJ5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AIEnglishSentences/Info.plist;
@@ -362,12 +366,12 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mertalp.AIEnglishSentences;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -387,7 +391,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = AIEnglishSentences/AIEnglishSentences.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = J584WC8XJ5;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = AIEnglishSentences/Info.plist;
@@ -395,12 +399,12 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.mertalp.AIEnglishSentences;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

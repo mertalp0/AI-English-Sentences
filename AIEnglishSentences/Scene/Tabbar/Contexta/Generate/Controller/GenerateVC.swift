@@ -7,6 +7,8 @@
 
 import UIKit
 import BaseMVVMCKit
+import RevenueCat
+import RevenueCatUI
 
 final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewModel> {
     
@@ -176,27 +178,51 @@ extension GenerateVC {
         let tone = writingTone.selectedOption ?? "Default (Formal)"
         let style = writingStyle.selectedOption ?? "Formal"
         
-        viewModel.generateSentences(
-            inputWords: inputWords,
-            maxWords: maxWords ?? 10,
-            sentenceCount: sentenceCount ?? 1,
-            category: category ?? "Professional",
-            writingTone: tone,
-            writingStyle: style
-        ) { result in
-            switch result {
-            case .success(let sentences):
-                DispatchQueue.main.async {
-                    self.coordinator?.showResult(sentences: sentences)
+        
+        SubscriptionService.shared.checkPremiumStatus { isPremium in
+            if(isPremium){
+                
+                self.viewModel.generateSentences(
+                    inputWords: inputWords,
+                    maxWords: maxWords ?? 10,
+                    sentenceCount: sentenceCount ?? 1,
+                    category: category ?? "Professional",
+                    writingTone: tone,
+                    writingStyle: style
+                ) { result in
+                    switch result {
+                    case .success(let sentences):
+                        DispatchQueue.main.async {
+                            self.coordinator?.showResult(sentences: sentences)
+                        }
+                    case .failure(let error):
+                        print("generateSentences Error: \(error)")
+                    }
                 }
-            case .failure(let error):
-                print("generateSentences Error: \(error)")
+            }
+            else{
+                Purchases.shared.getOfferings { [weak self] (offerings, error) in
+                    guard let self = self else { return }
+
+                    if let error = error {
+                        print("Offerings error: \(error.localizedDescription)")
+                        return
+                    }
+
+                    guard let currentOffering = offerings?.current else {
+                        print("No current offering available.")
+                        return
+                    }
+
+                    let paywallVC = PaywallViewController(offering: currentOffering)
+                    self.present(paywallVC, animated: true, completion: nil)
+                }
             }
         }
     }
 }
 
-// MARK: - AppBarDelegate
+// MARK: - AppBarDelegateWWW
 extension GenerateVC: AppBarDelegate {
     func leftButtonTapped() {
         coordinator?.back()
