@@ -47,7 +47,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
         
         // Question Label
         questionLabel = UILabel()
-        questionLabel.text = "What will you generate today?"
+        questionLabel.text = .localized(for: .generateTitle)
         questionLabel.textColor = .main
         questionLabel.font = .dynamicFont(size: 20, weight: .light)
         view.addSubview(questionLabel)
@@ -68,13 +68,14 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
         }
         
         writingTone = DropdownMenuButton(
-            title: "Writing Tone",
+            title: .localized(for: .writingToneTitle),
             options: [
-                "Formal",
-                "Friendly",
-                "Casual",
-                "Inspirational",
-                "Humorous"
+                .localized(for: .toneFormal),
+                .localized(for: .toneFriendly),
+                .localized(for: .toneCasual),
+                .localized(for: .toneInspirational),
+                .localized(for: .toneHumorous)
+                
             ]
         )
         writingTone.onDropdownTapped = { [weak self] in
@@ -92,17 +93,17 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
         }
         
         writingStyle = DropdownMenuButton(
-            title: "Writing Style",
+            title: .localized(for: .writingStyleTitle),
             options: [
-                "Persuasive",
-                "Narrative",
-                "Descriptive",
-                "Explanatory",
-                "Creative"
+                .localized(for: .stylePersuasive),
+                .localized(for: .styleNarrative),
+                .localized(for: .styleDescriptive),
+                .localized(for: .styleExplanatory),
+                .localized(for: .styleCreative)
             ]
         )
         writingStyle.onDropdownTapped = { [weak self] in
-            self?.view.endEditing(true) 
+            self?.view.endEditing(true)
         }
         writingStyle.onOptionSelected = { selectedOption in
             print("Selected Writing Style: \(selectedOption)")
@@ -169,24 +170,23 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
 extension GenerateVC {
     @objc private func onTapGenerate() {
         guard let button = generateButton else { return }
-        print("Generate button tapped: \(button)")
         
         let inputWords = textField.text ?? ""
         let maxWords = wordSelector.selectedValue
         let sentenceCount = sentenceSelector.selectedValue
         let category = pageCellType?.title
-        let tone = writingTone.selectedOption ?? "Default (Formal)"
-        let style = writingStyle.selectedOption ?? "Formal"
+        let tone = writingTone.selectedOption ?? .localized(for: .toneFormal)
+        let style = writingStyle.selectedOption ?? .localized(for: .toneFormal)
         
         
         SubscriptionService.shared.checkPremiumStatus { isPremium in
-            if(isPremium){
+            if(true){
                 
                 self.viewModel.generateSentences(
                     inputWords: inputWords,
                     maxWords: maxWords ?? 10,
                     sentenceCount: sentenceCount ?? 1,
-                    category: category ?? "Professional",
+                    category: category ?? .localized(for: .categoryPersonalTitle),
                     writingTone: tone,
                     writingStyle: style
                 ) { result in
@@ -203,17 +203,15 @@ extension GenerateVC {
             else{
                 Purchases.shared.getOfferings { [weak self] (offerings, error) in
                     guard let self = self else { return }
-
+                    
                     if let error = error {
-                        print("Offerings error: \(error.localizedDescription)")
                         return
                     }
-
+                    
                     guard let currentOffering = offerings?.current else {
-                        print("No current offering available.")
                         return
                     }
-
+                    
                     let paywallVC = PaywallViewController(offering: currentOffering)
                     self.present(paywallVC, animated: true, completion: nil)
                 }
@@ -222,7 +220,7 @@ extension GenerateVC {
     }
 }
 
-// MARK: - AppBarDelegateWWW
+// MARK: - AppBarDelegate
 extension GenerateVC: AppBarDelegate {
     func leftButtonTapped() {
         coordinator?.back()

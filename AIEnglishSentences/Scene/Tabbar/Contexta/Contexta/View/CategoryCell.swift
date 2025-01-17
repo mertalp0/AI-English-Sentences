@@ -15,37 +15,37 @@ enum CellType {
     case educational
     
     var title: String {
-        switch self {
-        case .professional:
-            return "Professional"
-        case .personal:
-            return "Personal"
-        case .educational:
-            return "Educational"
-        }
-    }
-    
-    var image: UIImage? {
-        switch self {
-        case .professional:
-            return .appImage(.professional)
-        case .personal:
-            return  .appImage(.personal)
-        case .educational:
-            return  .appImage(.educational)
-        }
-    }
-    
-    var text: String {
-        switch self {
-        case .professional:
-            return "For polished emails, formal correspondence, or engaging ad scripts."
-        case .personal:
-            return "For messages to friends, congratulatory notes, or casual posts."
-        case .educational:
-            return "For simple or advanced sentence building with your chosen word."
-        }
-    }
+         switch self {
+         case .professional:
+             return .localized(for: .categoryProfessionalTitle)
+         case .personal:
+             return .localized(for: .categoryPersonalTitle)
+         case .educational:
+             return .localized(for: .categoryEducationalTitle)
+         }
+     }
+     
+     var image: UIImage? {
+         switch self {
+         case .professional:
+             return .appImage(.professional)
+         case .personal:
+             return  .appImage(.personal)
+         case .educational:
+             return  .appImage(.educational)
+         }
+     }
+     
+     var text: String {
+         switch self {
+         case .professional:
+             return .localized(for: .categoryProfessionalDescription)
+         case .personal:
+             return .localized(for: .categoryPersonalDescription)
+         case .educational:
+             return .localized(for: .categoryEducationalDescription)
+         }
+     }
     
     var backgroundColor: UIColor {
         switch self {

@@ -16,7 +16,7 @@ final class LanguageSelectionVC: BaseViewController<LanguageSelectionCoordinator
     private var tableView: UITableView!
     
     // Dil seçenekleri
-    private let languages: [String] = ["English", ]
+    private let languages: [String] = [.localized(for: .languageEnglish), ]
     private var selectedLanguageIndex: Int = 0
     
     // MARK: - Lifecycle

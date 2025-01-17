@@ -31,9 +31,8 @@ final class ProfileViewModel: BaseViewModel {
         }
     }
     
-    func updateUser(name: String, completion: @escaping (Bool) -> Void) {
+    func updateUser(name: String) {
         guard let userId = authService.getCurrentUserId() else {
-            completion(false)
             return
         }
         
@@ -41,10 +40,8 @@ final class ProfileViewModel: BaseViewModel {
             switch result {
             case .success:
                 self.user?.name = name
-                completion(true)
             case .failure(let error):
                 self.handleError(message: error.localizedDescription)
-                completion(false)
             }
         }
     }
@@ -73,17 +70,6 @@ final class ProfileViewModel: BaseViewModel {
                 switch result {
                 case .success(_):
                     completion(true)
-//                        self.userService.deleteUserData(by: userId) { userDataResult in
-//                            switch userDataResult {
-//                            case .success:
-//                                self.stopLoading()
-//                                completion(true)
-//                            case .failure(let error):
-//                                self.handleError(message: error.localizedDescription)
-//                                completion(false)
-//                            }
-//                        }
-                    
                 case .failure(let error):
                     self.handleError(message: error.localizedDescription)
                     completion(false)
@@ -99,7 +85,6 @@ final class ProfileViewModel: BaseViewModel {
         appLauncher.openApp(appURLScheme: appURLScheme, appStoreURL: appStoreURL, completion: completion)
     }
     
-    @available(iOS 14.0, *)
     func rateAppInAppStore() {
         if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             SKStoreReviewController.requestReview(in: scene)

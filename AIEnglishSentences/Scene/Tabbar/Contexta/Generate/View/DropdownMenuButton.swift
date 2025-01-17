@@ -57,7 +57,7 @@ final class DropdownMenuButton: UIView, UITableViewDelegate, UITableViewDataSour
         selectedOptionLabel.font = .dynamicFont(size: 16, weight: .semibold)
         selectedOptionLabel.textColor = .black
         
-        dropdownIcon.image = UIImage(systemName: "chevron.down")
+        dropdownIcon.image = .appIcon(.chevronDown)
         dropdownIcon.tintColor = .gray
         dropdownIcon.contentMode = .scaleAspectFit
         

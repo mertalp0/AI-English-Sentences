@@ -34,7 +34,7 @@ final class DashboardController: UITabBarController {
         
         let historyNavigationController = historyCoordinator.navigationController!
         historyNavigationController.tabBarItem = UITabBarItem(
-            title: "History",
+            title: .localized(for: .tabBarHistory),
             image: .appIcon(.clock),
             tag: 0
         )
@@ -44,7 +44,7 @@ final class DashboardController: UITabBarController {
 
         let generateSentenceNavigationController = generateSentenceCoordinator.navigationController!
         generateSentenceNavigationController.tabBarItem = UITabBarItem(
-            title: "Generate",
+            title: .localized(for: .tabBarGenerate),
             image: .appIcon(.textBadgePlus),
             tag: 1
         )
@@ -54,7 +54,7 @@ final class DashboardController: UITabBarController {
 
         let profileNavigationController = profileCoordinator.navigationController!
         profileNavigationController.tabBarItem = UITabBarItem(
-            title: "Profile",
+            title: .localized(for: .tabBarProfile),
             image: .appIcon(.personCropCircle),
             tag: 2
         )

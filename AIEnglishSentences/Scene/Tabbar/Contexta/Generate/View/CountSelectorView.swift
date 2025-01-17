@@ -15,9 +15,9 @@ enum CountSelectorViewType {
     var title: String {
         switch self {
         case .sentence:
-            return "Sentence Count"
+            return .localized(for: .sentenceCountTitle)
         case .word:
-            return "Maximum Word Count"
+            return .localized(for: .maxWordCountTitle)
         }
     }
     

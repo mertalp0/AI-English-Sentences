@@ -55,7 +55,7 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
         }
         
         // Custom Segmented Control
-        historySegmentedControl = HistorySegmentedControl(items: ["All", "Favourites"])
+        historySegmentedControl = HistorySegmentedControl(items: [    .localized(for: .historySegmentAll), .localized(for: .historySegmentFavourites)])
         historySegmentedControl.delegate = self
         view.addSubview(historySegmentedControl)
         historySegmentedControl.snp.makeConstraints { make in
@@ -122,14 +122,14 @@ final class HistoryVC: BaseViewController<HistoryCoordinator, HistoryViewModel> 
             if historySegmentedControl.selectedIndex == 0 {
                 emptyStateView.configure(
                     image: .appImage(.historyAllEmpty),
-                    title: "No History Found",
-                    description: "You haven't created any sentences yet. Start generating by selecting a category."
+                    title: .localized(for: .historyEmptyAllTitle),
+                    description: .localized(for: .historyEmptyAllDescription)
                 )
             } else {
                 emptyStateView.configure(
                     image: .appImage(.historyFavoritesEmpty),
-                    title: "No Favorites Yet!",
-                    description: "Looks like you haven't saved anything. Tap the heart icon to add favorites."
+                    title: .localized(for: .historyEmptyFavouritesTitle),
+                    description: .localized(for: .historyEmptyFavouritesDescription)
                 )
             }
         } else {
@@ -166,7 +166,7 @@ extension HistoryVC: UITableViewDataSource, UITableViewDelegate {
         
         let sentence = currentData[indexPath.row]
         
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] _, _, completionHandler in
+        let deleteAction = UIContextualAction(style: .destructive, title: .localized(for: .historyDeleteAlertConfirm)) { [weak self] _, _, completionHandler in
             guard let self = self else { return }
             self.didTapDelete(for: sentence, in: tableView.cellForRow(at: indexPath) as! SentenceCell)
             completionHandler(true)
@@ -194,7 +194,7 @@ extension HistoryVC: AppBarDelegate {
 extension HistoryVC: SentenceCellDelegate {
     func didTapCopyButton(for sentence: String, in cell: SentenceCell) {
         UIPasteboard.general.string = sentence
-        showToast(message: "Copied to clipboard!")
+        showToast(message: .localized(for: .historyCopiedToClipboard))
     }
     
     
@@ -211,12 +211,9 @@ extension HistoryVC: SentenceCellDelegate {
                     if isSuccess {
                         if !self.favouritesData.contains(where: { $0.id == updatedSentence.id }) {
                             self.favouritesData.append(updatedSentence)
-                            print("\(updatedSentence.sentence) favorilere eklendi.")
                         }
                         SentenceManager.shared.updateSentence(updatedSentence, at: indexInAllData)
                         self.updateUIForCurrentData()
-                    } else {
-                        print("Favori ekleme başarısız.")
                     }
                 }
             } else {
@@ -225,12 +222,9 @@ extension HistoryVC: SentenceCellDelegate {
                     if isSuccess {
                         if let indexInFavorites = self.favouritesData.firstIndex(where: { $0.id == updatedSentence.id }) {
                             self.favouritesData.remove(at: indexInFavorites)
-                            print("\(updatedSentence.sentence) favorilerden çıkarıldı.")
                         }
                         SentenceManager.shared.updateSentence(updatedSentence, at: indexInAllData)
                         self.updateUIForCurrentData()
-                    } else {
-                        print("Favorilerden çıkarma başarısız.")
                     }
                 }
             }
@@ -251,13 +245,20 @@ extension HistoryVC: SentenceCellDelegate {
     
     func didTapDelete(for sentence: Sentence, in cell: SentenceCell) {
         let alertController = UIAlertController(
-            title: "Delete Sentence",
-            message: "Are you sure you want to delete this sentence?",
+            title: .localized(for: .historyDeleteAlertTitle),
+            message: .localized(for: .historyDeleteAlertMessage),
             preferredStyle: .alert
         )
-        
-        alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
-        alertController.addAction(UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+
+        alertController.addAction(UIAlertAction(
+            title: .localized(for: .historyDeleteAlertCancel),
+            style: .cancel,
+            handler: nil
+        ))
+        alertController.addAction(UIAlertAction(
+            title: .localized(for: .historyDeleteAlertConfirm),
+            style: .destructive
+        ) { [weak self] _ in
             self?.deleteSentence(sentence: sentence)
         })
         
@@ -267,11 +268,8 @@ extension HistoryVC: SentenceCellDelegate {
     private func deleteSentence(sentence: Sentence) {
         viewModel.deleteSentence(sentence: sentence) { [weak self] isSuccess in
             if isSuccess {
-                print("\(sentence.sentence) başarıyla silindi.")
                 self?.loadInitialData()
                 self?.updateUIForCurrentData()
-            } else {
-                print("\(sentence.sentence) silinirken hata oluştu.")
             }
         }
     }

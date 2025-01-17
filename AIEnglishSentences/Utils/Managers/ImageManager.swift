@@ -35,7 +35,9 @@ final class ImageManager {
         case docOnDoc = "doc.on.doc"
         case chevronLeft = "chevron.left"
         case logout = "rectangle.portrait.and.arrow.right"
-        case trash = "trash"        
+        case trash = "trash"
+        case chevronDown = "chevron.down"
+        case chevronRight = "chevron.right"
     }
     
     func getIcon(named name: AppIcons) -> UIImage? {

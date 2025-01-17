@@ -14,7 +14,7 @@
 //    case DELETE
 //}
 //
-//struct EndPoint {TER
+//struct EndPoint {
 //    let path: String
 //    let method: HTTPMethd
 //    let headers: [String:String]

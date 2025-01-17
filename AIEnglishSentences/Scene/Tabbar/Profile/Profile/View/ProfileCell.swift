@@ -54,7 +54,7 @@ final class ProfileCell: UITableViewCell {
         
         // Arrow Image
         arrowImageView = UIImageView()
-        arrowImageView.image = UIImage(systemName: "chevron.right")
+        arrowImageView.image = .appIcon(.chevronRight)
         arrowImageView.tintColor = .lightGray
         contentView.addSubview(arrowImageView)
         

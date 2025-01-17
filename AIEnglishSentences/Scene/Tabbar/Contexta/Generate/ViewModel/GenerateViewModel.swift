@@ -18,7 +18,7 @@ final class GenerateViewModel: BaseViewModel {
     func generateSentences (inputWords: String, maxWords: Int, sentenceCount: Int, category: String, writingTone: String, writingStyle: String , completion: @escaping(Result<[Sentence],Error>)->Void){
         
         if inputWords.isEmpty {
-            handleError(message: "Please provide some input words to generate sentences.")
+            handleError(message: .localized(for: .generateInputError))
             return
         }
         startLoading()
