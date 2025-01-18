@@ -181,7 +181,8 @@ extension GenerateVC {
         
         SubscriptionService.shared.checkPremiumStatus { isPremium in
 #warning("Should be based on isPremium")
-            if(true){
+            
+            if(isPremium){
                 
                 self.viewModel.generateSentences(
                     inputWords: inputWords,
@@ -202,6 +203,7 @@ extension GenerateVC {
                 }
             }
             else{
+                
                 Purchases.shared.getOfferings { [weak self] (offerings, error) in
                     guard let self = self else { return }
                     
@@ -214,6 +216,8 @@ extension GenerateVC {
                     }
                     
                     let paywallVC = PaywallViewController(offering: currentOffering)
+#warning("Should be on Coordinator")
+                    
                     self.present(paywallVC, animated: true, completion: nil)
                 }
             }

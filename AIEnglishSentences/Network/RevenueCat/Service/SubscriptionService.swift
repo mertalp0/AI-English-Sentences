@@ -24,6 +24,7 @@ class SubscriptionService {
     func configure() {
         let userId = Auth.auth().currentUser?.uid
         Purchases.configure(withAPIKey: apiKey, appUserID: userId)
+        Purchases.logLevel = .debug
         print("RevenueCat configured with userId: \(userId ?? "Anonymous")")
     }
 
@@ -59,15 +60,20 @@ class SubscriptionService {
 
     // MARK: - Premium Status
     func checkPremiumStatus(completion: @escaping (Bool) -> Void) {
-        Purchases.shared.getCustomerInfo { customerInfo, error in
+        Purchases.shared.getCustomerInfo { (customerInfo, error) in
             if let error = error {
-                print("Error checking subscription status: \(error.localizedDescription)")
+                print("Error fetching customer info: \(error.localizedDescription)")
                 completion(false)
                 return
             }
-            let isPremium = customerInfo?.entitlements["premium"]?.isActive == true
-            print("Premium status: \(isPremium)")
-            completion(isPremium)
+            
+            if let entitlement = customerInfo?.entitlements["Premium Access"], entitlement.isActive {
+                print("User has Premium Access")
+                completion(true)
+            } else {
+                print("User does not have Premium Access")
+                completion(false)
+            }
         }
     }
 
