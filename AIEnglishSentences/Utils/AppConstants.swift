@@ -7,7 +7,6 @@
 
 import UIKit
 
-
 struct AppConstants {
     
     struct URLs {

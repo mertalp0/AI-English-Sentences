@@ -31,8 +31,8 @@ final class InfoCoordinator: BaseCoordinator {
         let registerCoordinator = RegisterCoordinator(navigationController: self.navigationController!, from: .info)
         registerCoordinator.start()
     }
-    
-    func showDashboard(){
+
+    func showDashboard() {
         let dashboardCoordinator = DashboardCoordinator(navigationController: self.navigationController!)
         dashboardCoordinator.start()
     }

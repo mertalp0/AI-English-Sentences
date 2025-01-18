@@ -11,7 +11,6 @@ import GoogleSignIn
 import FirebaseCore
 import AuthenticationServices
 
-
 final class AppleAuthorizationHandler: NSObject {
     static let shared = AppleAuthorizationHandler()
     

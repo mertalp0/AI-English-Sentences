@@ -58,10 +58,12 @@ final class FirebaseAuthRepositoryImpl: AuthRepository {
     
     // MARK: - Apple Authentication
     func signInWithApple(presentationAnchor: ASPresentationAnchor, completion: @escaping (Result<AuthDataResult, Error>) -> Void) {
+        
         AppleAuthorizationHandler.shared.signInWithApple(
             presentationAnchor: presentationAnchor,
             completion: completion )
     }
+    
     
     // MARK: - Logout
     func logout(completion: @escaping (Result<Void, Error>) -> Void) {

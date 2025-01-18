@@ -1,0 +1,56 @@
+
+# Devre dışı bırakılan kurallar
+disabled_rules:
+  - trailing_whitespace       # Satır sonlarındaki gereksiz boşluklar
+  - force_cast                # Zorunlu tür dönüşümleri (as!)
+  - force_unwrapping          # Zorunlu açmalar (force unwrap)
+  - line_length               # Satır uzunluğu sınırı
+  - function_body_length      # Fonksiyon gövdesi uzunluğu
+  - type_body_length          # Tip (sınıf/struct) gövdesi uzunluğu
+  - file_length               # Dosya uzunluğu
+  - identifier_name           # Değişken ve fonksiyon isimlendirme kuralları
+
+# Dahil edilen dizinler
+included:
+  - AIEnglishSentences
+
+# Hariç tutulan dizinler
+excluded:
+  - Pods
+  - Carthage
+  - AIEnglishSentencesTests
+  - AIEnglishSentencesUITests
+
+# Satır uzunluğu sınırı
+line_length:
+  warning: 120
+
+# Fonksiyon gövdesi uzunluğu sınırı
+function_body_length:
+  warning: 50
+
+# Tip (sınıf/struct) gövdesi uzunluğu sınırı
+type_body_length:
+  warning: 200
+
+# Dosya uzunluğu sınırı
+file_length:
+  warning: 400
+
+# İsimlendirme kuralları
+identifier_name:
+  min_length: 3
+  max_length: 40
+  excluded:
+    - id
+    - URL
+    - JSON
+
+# Özelleştirilmiş kurallar
+custom_rules:
+  no_print_statements:
+    included: ".*\\.swift"
+    name: "Print Statement Kullanımı"
+    regex: "print\\s*\\("
+    message: "print() fonksiyonu kullanımı yasaktır."
+    severity: warning
