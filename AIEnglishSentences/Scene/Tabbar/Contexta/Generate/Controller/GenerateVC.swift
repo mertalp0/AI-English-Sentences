@@ -180,6 +180,7 @@ extension GenerateVC {
         
         
         SubscriptionService.shared.checkPremiumStatus { isPremium in
+#warning("Should be based on isPremium")
             if(true){
                 
                 self.viewModel.generateSentences(
