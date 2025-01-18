@@ -31,7 +31,7 @@ final class ResultViewModel: BaseViewModel {
     
     private func handleSentenceeSaveSuccess(sentence: Sentence, completion: @escaping (Bool) -> Void) {
         guard let userId = authService.getCurrentUserId() else {
-            handleError(message: "An error occurred")
+            handleError(message: .localized(for: .sharedErrorMessage))
             completion(false)
             return
         }
@@ -57,9 +57,9 @@ final class ResultViewModel: BaseViewModel {
             case .success:
                 if let index = SentenceManager.shared.sentences.firstIndex(where: { $0.id == sentence.id }) {
                     
-                    print("\(sentence.sentence) başarıyla silindi.")
+                    print("\(sentence.sentence) successfully deleted.")
                     guard let userId = self?.authService.getCurrentUserId() else {
-                        print("Kullanıcı ID'si alınamadı.")
+                        print("Failed to retrieve user ID.")
                         completion(false)
                         return
                     }
@@ -68,21 +68,21 @@ final class ResultViewModel: BaseViewModel {
                         switch result {
                         case .success:
                             SentenceManager.shared.removeSentence(at: index)
-                            print("\(sentence.id) kullanıcıdan başarıyla kaldırıldı.")
+                            print("\(sentence.id) successfully removed from user.")
                             completion(true)
                         case .failure(let error):
                             self?.handleError(message: error.localizedDescription)
-                            print("Kullanıcıdan generateId kaldırma başarısız: \(error.localizedDescription)")
+                            print("Failed to remove generate ID from user: \(error.localizedDescription)")
                             completion(false)
                         }
                     }
                 } else {
-                    print("Cümle yerel listede bulunamadı.")
+                    print("Sentence not found in the local list.")
                     completion(false)
                 }
             case .failure(let error):
                 self?.handleError(message: error.localizedDescription)
-                print("Cümle silme başarısız: \(error.localizedDescription)")
+                print("Failed to delete sentence: \(error.localizedDescription)")
                 completion(false)
             }
             self?.stopLoading()

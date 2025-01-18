@@ -19,11 +19,5 @@ struct Sentence: Codable {
 }
 
 
-//struct GenerateModel: Codable {
-//    let id: String?
-//    let words: String
-//    let sentences: [String]
-//}
-
 
 

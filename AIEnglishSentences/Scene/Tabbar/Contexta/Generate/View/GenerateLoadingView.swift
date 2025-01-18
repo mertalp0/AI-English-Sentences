@@ -19,16 +19,16 @@ final class GenerateLoadingView: UIView {
     
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Generating Sentence..."
+        label.text = .localized(for: .generateLoadingTitle)
         label.font = .dynamicFont(size: 18, weight: .semibold)
         label.textColor = UIColor.black
         label.textAlignment = .center
         return label
     }()
-    
+
     private let descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "Please wait while your sentence is being processed.\nThis may take a few moments."
+        label.text = .localized(for: .generateLoadingDescription)
         label.font = .dynamicFont(size: 14, weight: .regular)
         label.textColor = UIColor.gray
         label.textAlignment = .center

@@ -1,4 +1,3 @@
-//
 //  ResultVC.swift
 //  AIEnglishSentences
 //
@@ -22,7 +21,6 @@ final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel> {
         view.backgroundColor = .white
         setupUI()
         configureTableView()
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -57,30 +55,10 @@ final class ResultVC: BaseViewController<ResultCoordinator, ResultViewModel> {
     }
 }
 
-// MARK: - Alert
-extension ResultVC {
-    
-    private func showSuccesAlert() {
-        let alert = UIAlertController(title: "Success", message: "Registration successful", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
-    }
-    
-    private func showAlert(title: String, message: String) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let okAction = UIAlertAction(title: "OK", style: .default)
-        alert.addAction(okAction)
-        present(alert, animated: true)
-    }
-
-}
-
-
 extension ResultVC: SentenceTableViewDelegate {
     func didTapCopyButton(for sentence: String, in cell: SentenceCell) {
         UIPasteboard.general.string = sentence
-        showToast(message: "Copied to clipboard!")
+        showToast(message: .localized(for: .resultCopyToClipboard))
     }
      
     func didTapSave(for sentence: Sentence, in cell: SentenceCell) {
@@ -90,9 +68,15 @@ extension ResultVC: SentenceTableViewDelegate {
                 guard let self = self else { return }
                 if isSuccess {
                     cell.updateSaveAndFavoriteButton(for: sentence)
-                    self.showAlert(title: "Success", message: "Sentence removed successfully.")
+                    self.showAlert(
+                        title: .localized(for: .resultSuccessTitle),
+                        message: .localized(for: .resultSentenceRemovedSuccess)
+                    )
                 } else {
-                    self.showAlert(title: "Error", message: "Failed to remove sentence.")
+                    self.showAlert(
+                        title: .localized(for: .resultSuccessTitle),
+                        message: .localized(for: .resultSentenceRemovedError)
+                    )
                 }
             }
         } else {
@@ -100,24 +84,27 @@ extension ResultVC: SentenceTableViewDelegate {
                 guard let self = self else { return }
                 if isSuccess {
                     cell.updateSaveAndFavoriteButton(for: sentence)
-                    self.showAlert(title: "Success", message: "Sentence saved successfully.")
+                    self.showAlert(
+                        title: .localized(for: .resultSuccessTitle),
+                        message: .localized(for: .resultSentenceSavedSuccess)
+                    )
                 } else {
-                    self.showAlert(title: "Error", message: "Failed to save sentence.")
+                    self.showAlert(
+                        title: .localized(for: .resultSuccessTitle),
+                        message: .localized(for: .resultSentenceSavedError)
+                    )
                 }
             }
         }
     }
-    
 }
- 
+
 extension ResultVC: AppBarDelegate {
     func leftButtonTapped() {
         coordinator?.showRoot()
-
     }
     
     func rightButtonTapped() {
-        
+        // Right button action
     }
-    
 }

@@ -86,7 +86,7 @@ final class ProfileHeaderView: UIView {
         
         // Name Label
         nameLabel = UILabel()
-        nameLabel.text = "Loading..."
+        nameLabel.text = LocalizationManager.shared.localized(for: .loading)
         nameLabel.textColor = .white
         nameLabel.font = .dynamicFont(size: 24, weight: .bold)
         nameLabel.isHidden = false
@@ -120,7 +120,7 @@ final class ProfileHeaderView: UIView {
         
         // Email Label
         emailLabel = UILabel()
-        emailLabel.text = "Loading..."
+        nameLabel.text = LocalizationManager.shared.localized(for: .loading)
         emailLabel.textColor = .white
         emailLabel.font = .dynamicFont(size: 16, weight: .medium)
         self.addSubview(emailLabel)

@@ -39,7 +39,7 @@ final class ContextaVC: BaseViewController<ContextaCoordinator, ContextaViewMode
         
         // SubTitle
         subTitle = UILabel()
-        subTitle.text = "Where ideas take shape"
+        subTitle.text = .localized(for: .contextaSubtitle)
         subTitle.textColor = .mainColor
         subTitle.font = .dynamicFont(size: 16, weight: .medium)
         subTitle.textAlignment = .center
@@ -51,7 +51,7 @@ final class ContextaVC: BaseViewController<ContextaCoordinator, ContextaViewMode
         
         // CategoriesTitle
         categoriesTitle = UILabel()
-        categoriesTitle.text = "Categories"
+        subTitle.text = .localized(for: .contextaCategoriesTitle)
         categoriesTitle.textColor = .black
         categoriesTitle.font = .dynamicFont(size: 24, weight: .medium)
         categoriesTitle.textAlignment = .center

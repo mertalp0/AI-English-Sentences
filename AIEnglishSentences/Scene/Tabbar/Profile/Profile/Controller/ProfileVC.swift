@@ -18,18 +18,16 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
     
     private let options: [(String, UIImage?)] = {
         var items: [(String, UIImage?)] = [
-            ("Language", .appIcon(.globe)),
-            ("Privacy Policy", .appIcon(.textMagnifyingGlass)),
-            ("Invite Friends", .appIcon(.envelope)),
-            ("Apps by Developer", .appIcon(.appBadge)),
-            ("Delete Account", .appIcon(.binCircle))
+            (.localized(for: .profileLanguage), .appIcon(.globe)),
+            (.localized(for: .profilePrivacyPolicy), .appIcon(.textMagnifyingGlass)),
+            (.localized(for: .profileInviteFriends), .appIcon(.envelope)),
+            (.localized(for: .profileAppsByDeveloper), .appIcon(.appBadge)),
+            (.localized(for: .profileDeleteAccount), .appIcon(.binCircle)),
+            (.localized(for: .profileRateApp), .appIcon(.star))
         ]
-
-        if #available(iOS 14.0, *) {
-            items.insert(("Rate App", .appIcon(.star)), at: 5)
-        }
         return items
     }()
+    
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -72,7 +70,7 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
         
         // Logout Button
         logoutButton = UIButton(type: .system)
-        logoutButton.setTitle("Log Out", for: .normal)
+        logoutButton.setTitle(.localized(for: .profileLogout), for: .normal)
         logoutButton.setTitleColor(.systemRed, for: .normal)
         logoutButton.layer.cornerRadius = 10
         logoutButton.layer.borderWidth = 1
@@ -106,13 +104,7 @@ final class ProfileVC: BaseViewController<ProfileCoordinator, ProfileViewModel> 
 // MARK: - ProfileHeaderViewDelegate
 extension ProfileVC: ProfileHeaderViewDelegate {
     func didUpdateName(_ newName: String) {
-        viewModel.updateUser(name: newName) { isSuccess in
-            if isSuccess {
-                print("Name updated successfully")
-            } else {
-                print("Failed to update name")
-            }
-        }
+        viewModel.updateUser(name: newName)
     }
 }
 
@@ -139,7 +131,6 @@ extension ProfileVC: UITableViewDelegate, UITableViewDataSource {
         
         switch indexPath.row {
         case 0:
-            print("Invite friends action triggered")
             changeLanguage()
         case 1:
             openPrivacyPolicy()
@@ -167,11 +158,7 @@ extension ProfileVC {
     }
     
     private func rateApp() {
-        if #available(iOS 14.0, *) {
-            viewModel.rateAppInAppStore()
-        } else {
-            
-        }
+        viewModel.rateAppInAppStore()
     }
     
     private func openPrivacyPolicy() {
@@ -183,7 +170,6 @@ extension ProfileVC {
     }
     
     private func inviteFriends() {
-        print("Invite friends action triggered")
         coordinator?.shareApp()
     }
     
@@ -191,8 +177,8 @@ extension ProfileVC {
         let deletePopup = PopupViewController(
             popupType: .delete,
             icon: .appIcon(.trash),
-            cancelText: "Cancel",
-            confirmText: "Delete"
+            cancelText: .localized(for: .profileDeleteCancel),
+            confirmText: .localized(for: .profileDeleteConfirm)
         )
         deletePopup.delegate = self
         deletePopup.modalPresentationStyle = .overFullScreen
@@ -201,11 +187,12 @@ extension ProfileVC {
     }
     
     @objc private func onLogoutButtonPressed() {
+        
         let logoutPopup = PopupViewController(
             popupType: .logout,
             icon: .appIcon(.logout),
-            cancelText: "Cancel",
-            confirmText: "Logout"
+            cancelText: .localized(for: .profileLogoutCancel),
+            confirmText: .localized(for: .profileLogoutConfirm)
         )
         logoutPopup.delegate = self
         logoutPopup.modalPresentationStyle = .overFullScreen
@@ -221,7 +208,6 @@ extension ProfileVC {
                 self.coordinator?.showInfo()
             } else {
                 self.tabBarController?.tabBar.isUserInteractionEnabled = true
-                print("Logout error occurred.")
             }
         }
     }
@@ -233,7 +219,6 @@ extension ProfileVC {
                 self.coordinator?.showInfo()
             } else {
                 self.tabBarController?.tabBar.isUserInteractionEnabled = true
-                print("Delete Account error.")
             }
         }
     }

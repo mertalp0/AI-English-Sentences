@@ -64,7 +64,7 @@ final class AppCell: UITableViewCell {
     
     private let openButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Open", for: .normal)
+        button.setTitle(.localized(for: .buttonOpenTitle), for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .mainColor
         button.titleLabel?.font = .dynamicFont(size: 12, weight: .medium)

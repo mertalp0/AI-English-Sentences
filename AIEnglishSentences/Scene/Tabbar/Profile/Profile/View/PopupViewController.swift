@@ -86,9 +86,15 @@ final class PopupViewController: UIViewController {
         // Title and Message Labels
         switch popupType {
         case .logout:
-            configureLabels(title: "Logout?", message: "Are you sure you want to log out?")
+            configureLabels(
+                title: .localized(for: .popupLogoutTitle),
+                message: .localized(for: .popupLogoutMessage)
+            )
         case .delete:
-            configureLabels(title: "Delete?", message: "Are you sure you want to delete this item?")
+            configureLabels(
+                title: .localized(for: .popupDeleteTitle),
+                message: .localized(for: .popupDeleteMessage)
+            )
         case .custom(let title, let message):
             configureLabels(title: title, message: message)
         }
@@ -96,7 +102,7 @@ final class PopupViewController: UIViewController {
         // Cancel Button
         cancelButton.setTitle(cancelButtonText, for: .normal)
         cancelButton.setTitleColor(.darkGray, for: .normal)
-        cancelButton.titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        cancelButton.titleLabel?.font = .dynamicFont(size: 16, weight: .medium)
         cancelButton.addTarget(self, action: #selector(onCancelTapped), for: .touchUpInside)
         containerView.addSubview(cancelButton)
 

@@ -28,7 +28,7 @@ final class GenerateButton: UIButton {
         self.layer.cornerRadius = 8
         self.clipsToBounds = true
         
-        self.setTitle("Generate Sentence", for: .normal)
+        self.setTitle(.localized(for: .generateButtonTitle), for: .normal)
         self.setTitleColor(.white, for: .normal)
         self.titleLabel?.font = .dynamicFont(size: 16, weight: .semibold)
         

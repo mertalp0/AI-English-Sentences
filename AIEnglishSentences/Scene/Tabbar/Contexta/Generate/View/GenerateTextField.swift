@@ -1,3 +1,10 @@
+//
+//  GenerateTextView.swift
+//  AIEnglishSentences
+//
+//  Created by mert alp on 17.12.2024.
+//
+
 import UIKit
 import SnapKit
 
@@ -8,11 +15,11 @@ final class GenerateTextView: UITextView {
         let label = UILabel()
         label.font = .dynamicFont(size: 14)
         label.textColor = .gray
-        label.text = "Write your sentence topic here...?"
+        label.text = .localized(for: .generateTextViewPlaceholder)
         return label
     }()
 
-    // MARK: - Maximum Satır Sayısı
+    // MARK: - Maximum Line Count
     private var maxNumberOfLines: Int = 5
 
     // MARK: - Initialization
@@ -46,17 +53,17 @@ final class GenerateTextView: UITextView {
         }
     }
 
-    // MARK: - Placeholder Görünüm Güncellemesi
+    // MARK: - Update Placeholder Visibility
     private func updatePlaceholderVisibility() {
         placeholderLabel.isHidden = !self.text.isEmpty
     }
 
-    // MARK: - Maksimum Satır Sayısını Ayarlama
+    // MARK: - Set Maximum Line Count
     func setMaxNumberOfLines(_ lines: Int) {
         self.maxNumberOfLines = lines
     }
 
-    // MARK: - Dinamik Yükseklik Hesaplama
+    // MARK: - Dynamic Height Calculation
     private func calculateHeight() -> CGFloat {
         guard let font = self.font else { return 0 }
         let lineHeight = font.lineHeight

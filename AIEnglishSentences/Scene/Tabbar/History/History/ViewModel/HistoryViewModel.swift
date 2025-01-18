@@ -10,14 +10,14 @@ import BaseMVVMCKit
 final class HistoryViewModel: BaseViewModel {
     
     private let userService = UserService.shared
-    private let authService : AuthService = AuthServiceImpl.shared
+    private let authService: AuthService = AuthServiceImpl.shared
     private let generateService = GenerateService.shared
     
-    func fetchSentences(completion: @escaping(Bool)-> Void) {
+    func fetchSentences(completion: @escaping (Bool) -> Void) {
         startLoading()
         
         guard let userId = authService.getCurrentUserId() else {
-            handleFetchError(message: "User not logged in")
+            handleFetchError(message: .localized(for: .historyFetchErrorUserNotLoggedIn))
             return
         }
         
@@ -32,7 +32,7 @@ final class HistoryViewModel: BaseViewModel {
         }
     }
     
-    private func fetchSentencesWithUser(for generateIds: [String] , completion: @escaping (Bool)-> Void) {
+    private func fetchSentencesWithUser(for generateIds: [String], completion: @escaping (Bool) -> Void) {
         generateService.getGenerates(for: generateIds) { [weak self] result in
             switch result {
             case .success(let sentences):
@@ -57,13 +57,16 @@ final class HistoryViewModel: BaseViewModel {
         generateService.addFavoriteSentence(sentence: sentence) { [weak self] result in
             switch result {
             case .success(let updatedSentence):
-                SentenceManager.shared.updateSentence(updatedSentence, at: SentenceManager.shared.sentences.firstIndex(where: { $0.id == updatedSentence.id })!)
+                SentenceManager.shared.updateSentence(
+                    updatedSentence,
+                    at: SentenceManager.shared.sentences.firstIndex(where: { $0.id == updatedSentence.id })!
+                )
                 completion(true)
-                print("\(updatedSentence.sentence) favorilere eklendi.")
+                print("\(updatedSentence.sentence) was added to favorites.")
             case .failure(let error):
                 self?.handleError(message: error.localizedDescription)
                 completion(false)
-                print("Favori ekleme başarısız: \(error.localizedDescription)")
+                print("Failed to add to favorites: \(error.localizedDescription)")
             }
             self?.stopLoading()
         }
@@ -75,13 +78,16 @@ final class HistoryViewModel: BaseViewModel {
         generateService.deleteFavoriteSentence(sentence: sentence) { [weak self] result in
             switch result {
             case .success(let updatedSentence):
-                SentenceManager.shared.updateSentence(updatedSentence, at: SentenceManager.shared.sentences.firstIndex(where: { $0.id == updatedSentence.id })!)
+                SentenceManager.shared.updateSentence(
+                    updatedSentence,
+                    at: SentenceManager.shared.sentences.firstIndex(where: { $0.id == updatedSentence.id })!
+                )
                 completion(true)
-                print("\(updatedSentence.sentence) favorilerden çıkarıldı.")
+                print("\(updatedSentence.sentence) was removed from favorites.")
             case .failure(let error):
                 self?.handleError(message: error.localizedDescription)
                 completion(false)
-                print("Favorilerden çıkarma başarısız: \(error.localizedDescription)")
+                print("Failed to remove from favorites: \(error.localizedDescription)")
             }
             self?.stopLoading()
         }
@@ -95,11 +101,10 @@ final class HistoryViewModel: BaseViewModel {
             case .success:
                 if let index = SentenceManager.shared.sentences.firstIndex(where: { $0.id == sentence.id }) {
                     SentenceManager.shared.removeSentence(at: index)
-                    print("\(sentence.sentence) başarıyla silindi.")
+                    print("\(sentence.sentence) was successfully deleted.")
                     
-                    // Kullanıcıdan ilgili generateId'yi kaldır
                     guard let userId = self?.authService.getCurrentUserId() else {
-                        print("Kullanıcı ID'si alınamadı.")
+                        print("Failed to get user ID.")
                         completion(false)
                         return
                     }
@@ -107,21 +112,21 @@ final class HistoryViewModel: BaseViewModel {
                     self?.userService.removeGenerateIdFromUser(userId: userId, generateId: sentence.id) { result in
                         switch result {
                         case .success:
-                            print("\(sentence.id) kullanıcıdan başarıyla kaldırıldı.")
+                            print("\(sentence.id) was successfully removed from the user.")
                             completion(true)
                         case .failure(let error):
                             self?.handleError(message: error.localizedDescription)
-                            print("Kullanıcıdan generateId kaldırma başarısız: \(error.localizedDescription)")
+                            print("Failed to remove generateId from user: \(error.localizedDescription)")
                             completion(false)
                         }
                     }
                 } else {
-                    print("Cümle yerel listede bulunamadı.")
+                    print("Sentence not found in the local list.")
                     completion(false)
                 }
             case .failure(let error):
                 self?.handleError(message: error.localizedDescription)
-                print("Cümle silme başarısız: \(error.localizedDescription)")
+                print("Failed to delete sentence: \(error.localizedDescription)")
                 completion(false)
             }
             self?.stopLoading()
