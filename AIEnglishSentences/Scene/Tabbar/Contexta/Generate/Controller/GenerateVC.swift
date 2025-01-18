@@ -169,7 +169,7 @@ final class GenerateVC: BaseViewController<GenerateCoordinator, GenerateViewMode
 // MARK: - Actions
 extension GenerateVC {
     @objc private func onTapGenerate() {
-        guard let button = generateButton else { return }
+        guard generateButton != nil else { return }
         
         let inputWords = textField.text ?? ""
         let maxWords = wordSelector.selectedValue
@@ -204,7 +204,7 @@ extension GenerateVC {
                 Purchases.shared.getOfferings { [weak self] (offerings, error) in
                     guard let self = self else { return }
                     
-                    if let error = error {
+                    if error != nil {
                         return
                     }
                     

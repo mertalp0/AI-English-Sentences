@@ -171,6 +171,12 @@ final class LocalizationManager {
     func localizedString(forKey key: String) -> String {
         return NSLocalizedString(key, comment: "")
     }
+    
+     func localized(for key: LocalizationKeys) -> String {
+        return localizedString(forKey: key.rawValue)
+    }
+
+    
 }
 
 extension String {
