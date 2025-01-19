@@ -5,23 +5,21 @@
 //  Created by mert alp on 3.01.2025.
 //
 
-//SocialButtonsCreate
-
 import Foundation
 
 final class SocialButtonsViewModel {
-    
+
     // MARK: - Properties
     var actionText: String
     var actionHighlightedText: String
     var googleButtonTitle: String
     var appleButtonTitle: String
-    
+
     // MARK: - Callbacks
     var onGoogleButtonTapped: (() -> Void)?
     var onAppleButtonTapped: (() -> Void)?
     var onActionLabelTapped: (() -> Void)?
-    
+
     // MARK: - Initialization
     init(
         actionText: String = "",
@@ -34,16 +32,16 @@ final class SocialButtonsViewModel {
         self.googleButtonTitle = googleButtonTitle
         self.appleButtonTitle = appleButtonTitle
     }
-    
+
     // MARK: - Actions
     func handleGoogleButtonTapped() {
         onGoogleButtonTapped?()
     }
-    
+
     func handleAppleButtonTapped() {
         onAppleButtonTapped?()
     }
-    
+
     func handleActionLabelTapped() {
         onActionLabelTapped?()
     }

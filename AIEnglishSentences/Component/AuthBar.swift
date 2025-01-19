@@ -5,7 +5,6 @@
 //  Created by mert alp on 4.01.2025.
 //
 
-
 import UIKit
 import SnapKit
 
@@ -18,7 +17,7 @@ final class AuthBar: UIView {
     // MARK: - UI Elements
     private let backButton: UIButton = {
         let button = UIButton(type: .system)
-        let backIcon = UIImage(systemName: "chevron.left")
+        let backIcon =  UIImage.appIcon(.chevronLeft)
         let resizedRightIcon = backIcon?.resizedIcon(dynamicSize: 22, weight: .bold)
         button.setImage(resizedRightIcon, for: .normal)
         button.tintColor = .mainColor
@@ -26,16 +25,15 @@ final class AuthBar: UIView {
         button.imageView?.contentMode = .scaleAspectFit
         return button
     }()
-    
+
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Title"
         label.font = .dynamicFont(size: 27, weight: .bold )
         label.textColor = .mainColor
         label.textAlignment = .center
         return label
     }()
-    
+
     // MARK: - Delegate
     weak var delegate: AuthBarDelegate?
 

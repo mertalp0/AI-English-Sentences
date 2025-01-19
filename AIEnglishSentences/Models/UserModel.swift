@@ -50,8 +50,7 @@ struct UserModel: Codable {
     }
 }
 
-
-enum Gender: String{
+enum Gender: String {
     case male = "Male"
     case female = "Female"
     case preferNotToSay = "PreferNottoSay"

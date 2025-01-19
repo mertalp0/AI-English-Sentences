@@ -10,7 +10,6 @@ import SnapKit
 
 final class GenerateTextView: UITextView {
 
-    // MARK: - Placeholder Label
     private let placeholderLabel: UILabel = {
         let label = UILabel()
         label.font = .dynamicFont(size: 14)
@@ -19,7 +18,6 @@ final class GenerateTextView: UITextView {
         return label
     }()
 
-    // MARK: - Maximum Line Count
     private var maxNumberOfLines: Int = 5
 
     // MARK: - Initialization
@@ -35,7 +33,6 @@ final class GenerateTextView: UITextView {
 
     // MARK: - Setup
     private func setupView() {
-
         self.backgroundColor = .backgroundColor
         self.layer.cornerRadius = 10
         self.layer.borderWidth = 1
@@ -53,17 +50,14 @@ final class GenerateTextView: UITextView {
         }
     }
 
-    // MARK: - Update Placeholder Visibility
     private func updatePlaceholderVisibility() {
         placeholderLabel.isHidden = !self.text.isEmpty
     }
 
-    // MARK: - Set Maximum Line Count
     func setMaxNumberOfLines(_ lines: Int) {
         self.maxNumberOfLines = lines
     }
 
-    // MARK: - Dynamic Height Calculation
     private func calculateHeight() -> CGFloat {
         guard let font = self.font else { return 0 }
         let lineHeight = font.lineHeight

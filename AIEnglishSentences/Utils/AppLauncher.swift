@@ -9,17 +9,17 @@ import Foundation
 import UIKit
 
 final class AppLauncher {
-    
+
     static let shared = AppLauncher()
-    
-    private init(){}
-    
+
+    private init() {}
+
     func openApp(appURLScheme: String, appStoreURL: String, completion: ((Bool) -> Void)? = nil) {
         guard let appURL = URL(string: appURLScheme) else {
             completion?(false)
             return
         }
-        
+
         if UIApplication.shared.canOpenURL(appURL) {
             UIApplication.shared.open(appURL, options: [:]) { success in
                 completion?(success)

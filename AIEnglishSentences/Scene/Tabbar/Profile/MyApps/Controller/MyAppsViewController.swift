@@ -9,10 +9,9 @@ import UIKit
 import SnapKit
 import BaseMVVMCKit
 
-
 final class MyAppsViewController: BaseViewController<MyAppsCoordinator, MyAppsViewModel> {
     // MARK: - Properties
-    private let apps: [AppModel] = AppConstants.myApps
+    let apps: [AppModel] = AppConstants.myApps
 
     // MARK: - UI Elements
     private var backgroundImageView: UIImageView!
@@ -27,28 +26,27 @@ final class MyAppsViewController: BaseViewController<MyAppsCoordinator, MyAppsVi
     }
 
     private func setupUI() {
-        // Background Image
+
         backgroundImageView = UIImageView()
         backgroundImageView.image =  .appImage(.backgroundImage)
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
         view.addSubview(backgroundImageView)
-        
-        // AppBar
+
         appBar = AppBar(type: .myApps)
         appBar.delegate = self
         view.addSubview(appBar)
-        
-        // TableView
+
         tableView = UITableView()
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.register(AppCell.self, forCellReuseIdentifier: "AppCell")
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
         tableView.contentInset = .zero
         view.addSubview(tableView)
     }
-    
+
     private func setupConstraints() {
 
         backgroundImageView.snp.makeConstraints { make in
@@ -65,30 +63,4 @@ final class MyAppsViewController: BaseViewController<MyAppsCoordinator, MyAppsVi
             make.leading.trailing.bottom.equalToSuperview()
         }
     }
-}
-
-// MARK: - UITableViewDelegate, UITableViewDataSource
-extension MyAppsViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return apps.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "AppCell", for: indexPath) as? AppCell else {
-            return UITableViewCell()
-        }
-        cell.configure(with: apps[indexPath.row])
-        cell.delegate = self
-        return cell
-    }
-}
-
-
-
-extension MyAppsViewController: AppBarDelegate {
-    func leftButtonTapped() {
-        coordinator?.back()
-    }
-
-    func rightButtonTapped() {}
 }

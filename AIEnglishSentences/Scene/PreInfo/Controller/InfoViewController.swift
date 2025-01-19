@@ -70,28 +70,25 @@ final class InfoViewController: BaseViewController<InfoCoordinator, InfoViewMode
         )
 
         socialButtonsViewModel.onGoogleButtonTapped = {
-
             self.viewModel.loginWithGoogle(from: self) { [weak self] result in
                 switch result {
                 case .success:
                     self?.coordinator?.showDashboard()
-                case .failure(let error):
+                case .failure:
                     break
                 }
             }
         }
 
         socialButtonsViewModel.onAppleButtonTapped = {
-
             guard let window = self.view.window else {
                 return
             }
-
             self.viewModel.loginWithApple(presentationAnchor: window) { [weak self] result in
                 switch result {
                 case .success:
                     self?.coordinator?.showDashboard()
-                case .failure(let error):
+                case .failure:
                     break
                 }
             }
@@ -136,4 +133,3 @@ final class InfoViewController: BaseViewController<InfoCoordinator, InfoViewMode
         }
     }
 }
-

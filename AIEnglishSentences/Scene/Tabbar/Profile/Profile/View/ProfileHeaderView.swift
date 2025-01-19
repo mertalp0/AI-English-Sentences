@@ -11,8 +11,9 @@ import SnapKit
 protocol ProfileHeaderViewDelegate: AnyObject {
     func didUpdateName(_ newName: String)
 }
+
 final class ProfileHeaderView: UIView {
-    
+
     // MARK: - UI Elements
     private var appBar: AppBar!
     private var avatarImageView: UIImageView!
@@ -20,29 +21,29 @@ final class ProfileHeaderView: UIView {
     private var nameTextField: UITextField!
     private var emailLabel: UILabel!
     private var editButton: UIButton!
-    
+
     weak var delegate: ProfileHeaderViewDelegate?
-    
+
     // MARK: - Properties
      var isEditingName = false {
         didSet {
             updateEditingState()
         }
     }
-    
+
     // MARK: - Initialization
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
-            
+
             let cornerRadii = CGSize(width: 16, height: 16)
             let path = UIBezierPath(
                 roundedRect: self.bounds,
@@ -53,23 +54,20 @@ final class ProfileHeaderView: UIView {
             maskLayer.path = path.cgPath
             self.layer.mask = maskLayer
     }
-    
+
     // MARK: - Setup UI
     private func setupUI() {
         self.backgroundColor = .mainColor
         self.clipsToBounds = true
-        
-        
-        // AppBar
+
         appBar = AppBar(type: .profile)
         self.addSubview(appBar)
-        
+
         appBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
         }
-        
-        // Avatar
+
         avatarImageView = UIImageView()
         avatarImageView.image = .appIcon(.personCircle)
         avatarImageView.tintColor = .white
@@ -77,28 +75,25 @@ final class ProfileHeaderView: UIView {
         avatarImageView.layer.cornerRadius = 40
         avatarImageView.clipsToBounds = true
         self.addSubview(avatarImageView)
-        
+
         avatarImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.top.equalTo(appBar.snp.bottom).offset(UIHelper.dynamicHeight(16))
             make.width.height.equalTo(UIHelper.dynamicHeight(80))
         }
-        
-        // Name Label
         nameLabel = UILabel()
         nameLabel.text = LocalizationManager.shared.localized(for: .loading)
         nameLabel.textColor = .white
         nameLabel.font = .dynamicFont(size: 24, weight: .bold)
         nameLabel.isHidden = false
         self.addSubview(nameLabel)
-        
+
         nameLabel.snp.makeConstraints { make in
             make.top.equalTo(avatarImageView.snp.top).offset(UIHelper.dynamicHeight(8))
             make.leading.equalTo(avatarImageView.snp.trailing).offset(16)
             make.trailing.equalToSuperview().offset(-60)
         }
-        
-        // Name TextField
+
         nameTextField = UITextField()
         nameTextField.textColor = .black
         nameTextField.font = .dynamicFont(size: 24, weight: .bold)
@@ -112,52 +107,50 @@ final class ProfileHeaderView: UIView {
         nameTextField.isHidden = true
         nameTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
         self.addSubview(nameTextField)
-        
+
         nameTextField.snp.makeConstraints { make in
             make.edges.equalTo(nameLabel)
             make.height.equalTo(UIHelper.dynamicHeight(40))
         }
-        
-        // Email Label
+
         emailLabel = UILabel()
         nameLabel.text = LocalizationManager.shared.localized(for: .loading)
         emailLabel.textColor = .white
         emailLabel.font = .dynamicFont(size: 16, weight: .medium)
         self.addSubview(emailLabel)
-        
+
         emailLabel.snp.makeConstraints { make in
             make.top.equalTo(nameLabel.snp.bottom).offset(UIHelper.dynamicHeight(4))
             make.leading.trailing.equalTo(nameLabel)
         }
-        
-        // Edit Button
+
         editButton = UIButton()
         editButton.setImage(.appIcon(.squareAndPencil), for: .normal)
         editButton.tintColor = .white
         editButton.addTarget(self, action: #selector(didTapEditButton), for: .touchUpInside)
         self.addSubview(editButton)
-        
+
         editButton.snp.makeConstraints { make in
             make.centerY.equalTo(nameLabel)
             make.trailing.equalToSuperview().offset(-16)
             make.width.height.equalTo(UIHelper.dynamicHeight(30))
         }
     }
-    
+
     // MARK: - Configure
     func configure(name: String, email: String) {
         nameLabel.text = name
         nameTextField.text = name
         emailLabel.text = email
     }
-    
+
      func updateEditingState() {
         nameLabel.isHidden = isEditingName
         nameTextField.isHidden = !isEditingName
-        
+
          let editIcon: UIImage = isEditingName ? .appIcon(.checkmarkCircle)! : .appIcon(.squareAndPencil)!
          editButton.setImage(editIcon, for: .normal)
-        
+
         if !isEditingName {
             if let newName = nameTextField.text, !newName.isEmpty {
                 nameLabel.text = newName
@@ -168,11 +161,11 @@ final class ProfileHeaderView: UIView {
             nameTextField.becomeFirstResponder()
         }
     }
-    
+
     @objc private func didTapEditButton() {
         isEditingName.toggle()
     }
-    
+
     @objc private func textFieldEditingChanged() {
         nameLabel.text = nameTextField.text
     }

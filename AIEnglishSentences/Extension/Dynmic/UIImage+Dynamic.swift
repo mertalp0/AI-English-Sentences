@@ -9,7 +9,7 @@ import UIKit
 
 extension UIImage {
     func resizedIcon(dynamicSize: CGFloat, weight: UIImage.SymbolWeight = .regular) -> UIImage? {
-        let configuration = UIHelper.resizedIcon(dynamicSize: dynamicSize , weight: weight)
+        let configuration = UIHelper.resizedIcon(dynamicSize: dynamicSize, weight: weight)
         return self.withConfiguration(configuration)
     }
 }

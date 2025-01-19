@@ -7,24 +7,21 @@
 
 import UIKit
 
-
 struct AppModel {
     let appIcon: UIImage
     let appName: String
     let appDescription: String
-
 }
 
 protocol AppCellDelegate: AnyObject {
   func didTapOpen(_ app: AppModel)
 }
 
-
 final class AppCell: UITableViewCell {
     // MARK: - Properties
     weak var delegate: AppCellDelegate?
     private var app: AppModel?
-    
+
     // MARK: - UI Elements
     private let containerView: UIView = {
         let view = UIView()
@@ -38,7 +35,7 @@ final class AppCell: UITableViewCell {
         view.layer.shadowRadius = 4
         return view
     }()
-    
+
     private let appIconImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.layer.cornerRadius = 8
@@ -46,14 +43,14 @@ final class AppCell: UITableViewCell {
         imageView.contentMode = .scaleAspectFill
         return imageView
     }()
-    
+
     private let appNameLabel: UILabel = {
         let label = UILabel()
         label.font = .dynamicFont(size: 16, weight: .semibold)
         label.textColor = .black
         return label
     }()
-    
+
     private let appDescriptionLabel: UILabel = {
         let label = UILabel()
         label.font = .dynamicFont(size: 14, weight: .regular)
@@ -61,7 +58,7 @@ final class AppCell: UITableViewCell {
         label.numberOfLines = 0
         return label
     }()
-    
+
     private let openButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle(.localized(for: .buttonOpenTitle), for: .normal)
@@ -71,7 +68,7 @@ final class AppCell: UITableViewCell {
         button.layer.cornerRadius = 8
         return button
     }()
-    
+
     // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -79,34 +76,34 @@ final class AppCell: UITableViewCell {
         selectionStyle = .none
         setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Setup UI
     private func setupUI() {
         contentView.addSubview(containerView)
-        
+
         containerView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(UIHelper.dynamicHeight(8))
             make.leading.trailing.equalToSuperview().inset(16)
         }
-        
+
         containerView.addSubview(appIconImageView)
         appIconImageView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(UIHelper.dynamicHeight(16))
             make.leading.equalToSuperview().inset(16)
             make.width.height.equalTo(UIHelper.dynamicHeight(60))
         }
-        
+
         containerView.addSubview(appNameLabel)
         appNameLabel.snp.makeConstraints { make in
             make.leading.equalTo(appIconImageView.snp.trailing).offset(16)
             make.trailing.equalToSuperview().inset(16)
             make.top.equalToSuperview().offset(UIHelper.dynamicHeight(16))
         }
-        
+
         containerView.addSubview(openButton)
         openButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
@@ -124,12 +121,12 @@ final class AppCell: UITableViewCell {
             make.bottom.equalToSuperview().inset(UIHelper.dynamicHeight(16))
         }
     }
-    
+
     @objc private func openButtonTapped() {
         guard let app = app else { return }
         delegate?.didTapOpen(app)
     }
-    
+
     // MARK: - Configure Cell
     func configure(with app: AppModel) {
         self.app = app
@@ -138,5 +135,3 @@ final class AppCell: UITableViewCell {
         appDescriptionLabel.text = app.appDescription
     }
 }
-
-

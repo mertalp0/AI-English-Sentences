@@ -20,12 +20,11 @@ extension BaseViewController {
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }
-    
+
      func showAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let okAction = UIAlertAction(title: .localized(for: .resultOkButton), style: .default)
         alert.addAction(okAction)
         present(alert, animated: true)
     }
-
 }

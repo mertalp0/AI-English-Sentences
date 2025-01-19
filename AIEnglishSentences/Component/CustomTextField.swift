@@ -8,18 +8,13 @@
 import UIKit
 import SnapKit
 
-enum CustomTextFieldType {
-    case normal
-    case password
-}
-
 final class CustomTextField: UIView {
-    
+
     // MARK: - Properties
     private var isPasswordVisible = false
     private var type: CustomTextFieldType = .normal
     private var validationLabel: UILabel!
-    
+
     // MARK: - Subviews
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -28,16 +23,16 @@ final class CustomTextField: UIView {
         label.textAlignment = .left
         return label
     }()
-    
+
     private let textField: UITextField = {
-            let tf = UITextField()
-            tf.borderStyle = .none
-            tf.textColor = .black
-            tf.backgroundColor = .clear
-            tf.font = .dynamicFont(size: 16)
-            return tf
-        }()
-    
+        let textField = UITextField()
+        textField.borderStyle = .none
+        textField.textColor = .black
+        textField.backgroundColor = .clear
+        textField.font = .dynamicFont(size: 16)
+        return textField
+    }()
+
     private let containerView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 8
@@ -46,7 +41,7 @@ final class CustomTextField: UIView {
         view.backgroundColor = .white
         return view
     }()
-    
+
     private let togglePasswordButton: UIButton = {
         let button = UIButton(type: .custom)
         let image = UIImage.appIcon(.eyeSlash)
@@ -54,7 +49,7 @@ final class CustomTextField: UIView {
         button.tintColor = .gray
         return button
     }()
-    
+
     private let shadowLayer: CALayer = {
         let layer = CALayer()
         layer.shadowColor = UIColor.black.cgColor
@@ -63,90 +58,90 @@ final class CustomTextField: UIView {
         layer.shadowRadius = 4
         return layer
     }()
-    
+
     var placeholder: String? {
         get { textField.placeholder }
         set { textField.placeholder = newValue }
     }
-    
+
     var text: String? {
         get { textField.text }
         set { textField.text = newValue }
     }
-    
+
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupUI()
     }
-    
+
     private func setupUI() {
         addSubview(titleLabel)
         addSubview(containerView)
         containerView.layer.addSublayer(shadowLayer)
         containerView.addSubview(textField)
-        
+
         validationLabel = UILabel()
         validationLabel.textColor = .red
         validationLabel.font = .dynamicFont(size: 10)
         validationLabel.numberOfLines = 0
         validationLabel.isHidden = true
         addSubview(validationLabel)
-        
+
         titleLabel.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
             make.height.equalTo(UIHelper.dynamicHeight(20))
         }
-        
+
         containerView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(4)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(UIHelper.dynamicHeight(40))
         }
-        
+
         textField.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(UIHelper.dynamicHeight(10))
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().inset(16)
         }
-        
+
         validationLabel.snp.makeConstraints { make in
             make.top.equalTo(containerView.snp.bottom)
             make.leading.trailing.equalToSuperview()
             make.bottom.lessThanOrEqualToSuperview()
         }
-        
+
         textField.delegate = self
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         shadowLayer.frame = containerView.bounds
     }
-    
+
     // MARK: - Public Configuration
-      func configure(placeholder: String, type: CustomTextFieldType, title: String?) {
-          self.type = type
-          titleLabel.text = title
-          textField.attributedPlaceholder = NSAttributedString(
-              string: placeholder,
-              attributes: [
-                  .foregroundColor: UIColor.lightGray,
-                  .font: UIFont.dynamicFont(size: 16)
-              ]
-          )
-          
-          if type == .password {
-              textField.isSecureTextEntry = true
-              addPasswordToggle()
-          }
-      }
-    
+    func configure(placeholder: String, type: CustomTextFieldType, title: String?) {
+        self.type = type
+        titleLabel.text = title
+        textField.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [
+                .foregroundColor: UIColor.lightGray,
+                .font: UIFont.dynamicFont(size: 16)
+            ]
+        )
+
+        if type == .password {
+            textField.isSecureTextEntry = true
+            addPasswordToggle()
+        }
+    }
+
     private func addPasswordToggle() {
         containerView.addSubview(togglePasswordButton)
         togglePasswordButton.snp.makeConstraints { make in
@@ -154,23 +149,23 @@ final class CustomTextField: UIView {
             make.trailing.equalToSuperview().inset(12)
             make.width.height.equalTo(24)
         }
-        
+
         textField.snp.remakeConstraints { make in
             make.top.bottom.equalToSuperview().inset(UIHelper.dynamicHeight(10))
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalTo(togglePasswordButton.snp.leading).offset(-8)
         }
-        
+
         togglePasswordButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
     }
-    
+
     @objc private func togglePasswordVisibility() {
         isPasswordVisible.toggle()
         textField.isSecureTextEntry = !isPasswordVisible
-        let image = isPasswordVisible ? UIImage(systemName: "eye") : UIImage(systemName: "eye.slash")
+        let image = isPasswordVisible ? UIImage.appIcon(.eye) : UIImage.appIcon(.eyeSlash)
         togglePasswordButton.setImage(image, for: .normal)
     }
-    
+
     // MARK: - Focus Animasyon
     private func updateFocusState(isFocused: Bool) {
         UIView.animate(withDuration: 0.3) {
@@ -186,12 +181,12 @@ final class CustomTextField: UIView {
             }
         }
     }
-    
+
     // MARK: - Validation
     func validate(with errorMessage: String? = nil) -> Bool {
         guard let text = textField.text, !text.isEmpty else {
             containerView.layer.borderColor = UIColor.red.cgColor
-            validationLabel.text = errorMessage ?? "This field is required."
+            validationLabel.text = errorMessage ?? .localized(for: .validationRequiredField)
             validationLabel.isHidden = false
             return false
         }
@@ -206,8 +201,13 @@ extension CustomTextField: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         updateFocusState(isFocused: true)
     }
-    
+
     func textFieldDidEndEditing(_ textField: UITextField) {
         updateFocusState(isFocused: false)
     }
+}
+
+enum CustomTextFieldType {
+    case normal
+    case password
 }

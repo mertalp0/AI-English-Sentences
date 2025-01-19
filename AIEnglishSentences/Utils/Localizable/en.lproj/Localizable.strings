@@ -159,3 +159,20 @@
 
 "language_english" = "English";
 "button_open_title" = "Open";
+
+"validation_required_field" = "This field is required.";
+"error_invalid_email" = "The email address is not valid.";
+"error_wrong_password" = "The password is incorrect.";
+"error_user_not_found" = "User not found. Please register first.";
+"error_user_already_exists" = "User already exists. Please try logging in.";
+"error_weak_password" = "The password is too weak. Please choose a stronger password.";
+"error_network" = "Network error occurred. Please check your internet connection.";
+"error_unknown" = "An unknown error occurred. Please try again.";
+"error_user_not_logged_in" = "User is not logged in.";
+"male" = "Male";
+"female" = "Female";
+"prefer_notto_say" = "PreferNottoSay";
+"error_missing_document" = "The requested document is missing.";
+"error_decoding_failed" = "Failed to decode the document.";
+"error_document_already_exists" = "The document already exists in the database.";
+"error_unknown" = "An unknown error occurred.";

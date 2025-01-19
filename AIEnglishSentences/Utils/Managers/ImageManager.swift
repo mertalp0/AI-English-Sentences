@@ -8,11 +8,11 @@
 import UIKit
 
 final class ImageManager {
-    
+
     static let shared = ImageManager()
-    
+
     private init() {}
-    
+
     enum AppIcons: String {
         case globe = "globe"
         case textMagnifyingGlass = "doc.text.magnifyingglass"
@@ -23,6 +23,7 @@ final class ImageManager {
         case squareAndPencil = "square.and.pencil"
         case checkmarkCircle = "checkmark.circle.fill"
         case eyeSlash = "eye.slash"
+        case eye = "eye"
         case clock = "clock"
         case textBadgePlus = "text.badge.plus"
         case personCropCircle = "person.crop.circle"
@@ -39,11 +40,11 @@ final class ImageManager {
         case chevronDown = "chevron.down"
         case chevronRight = "chevron.right"
     }
-    
+
     func getIcon(named name: AppIcons) -> UIImage? {
         return UIImage(systemName: name.rawValue)
     }
-    
+
     enum AppImages: String {
         case google = "google_icon"
         case apple = "apple_icon"
@@ -58,11 +59,9 @@ final class ImageManager {
         case loadingImage = "loading_image"
         case wandAndStars = "wand.and.stars"
         case appIcon = "app_icon_ailex"
-        
-    }
-    
+}
+
     func getImage(for image: AppImages) -> UIImage? {
         return UIImage(named: image.rawValue)
     }
 }
-

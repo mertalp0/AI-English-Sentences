@@ -11,23 +11,22 @@ import AuthenticationServices
 
 final class LoginViewController: BaseViewController<LoginCoordinator, LoginViewModel> {
 
-    //MARK: - UI Elements
-    private var backgroundImageView: UIImageView!
-    private var socialButtonsView: SocialButtonsView!
-    private var authBar: AuthBar!
-    private var subtitleLabel: UILabel!
-    private var emailTextField: CustomTextField!
-    private var passwordTextField: CustomTextField!
-    private var loginButton: AuthButton!
-    private var forgotPasswordLabel: UILabel!
+    // MARK: - UI Elements
+     var backgroundImageView: UIImageView!
+     var socialButtonsView: SocialButtonsView!
+     var authBar: AuthBar!
+     var subtitleLabel: UILabel!
+     var emailTextField: CustomTextField!
+     var passwordTextField: CustomTextField!
+     var loginButton: AuthButton!
+     var forgotPasswordLabel: UILabel!
 
-    //MARK: - LifeCycle
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupConstraints()
         setupKeyboardDismissRecognizer()
-    
     }
 
     private func setupUI() {
@@ -91,7 +90,7 @@ final class LoginViewController: BaseViewController<LoginCoordinator, LoginViewM
 
         let socialButtonsViewModel = SocialButtonsViewModel(
             actionText: .localized(for: .dontHaveAccount),
-            actionHighlightedText:  .localized(for: .signup),
+            actionHighlightedText: .localized(for: .signup),
             googleButtonTitle: .localized(for: .googleButtonTitle),
             appleButtonTitle: .localized(for: .appleButtonTitle)
         )
@@ -105,7 +104,7 @@ final class LoginViewController: BaseViewController<LoginCoordinator, LoginViewM
                 }
             }
         }
-        
+
         socialButtonsViewModel.onAppleButtonTapped = {
             guard let window = self.view.window else {
                 return
@@ -126,7 +125,7 @@ final class LoginViewController: BaseViewController<LoginCoordinator, LoginViewM
         view.addSubview(socialButtonsView)
     }
 
-    private func setupConstraints(){
+    private func setupConstraints() {
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -159,7 +158,7 @@ final class LoginViewController: BaseViewController<LoginCoordinator, LoginViewM
             make.leading.trailing.equalToSuperview().inset(32)
             make.height.equalTo(UIHelper.dynamicHeight(40))
         }
-        
+
         forgotPasswordLabel.snp.makeConstraints { make in
             make.top.equalTo(passwordTextField.snp.bottom).offset(UIHelper.dynamicHeight(5))
             make.trailing.equalTo(passwordTextField.snp.trailing)
@@ -168,32 +167,6 @@ final class LoginViewController: BaseViewController<LoginCoordinator, LoginViewM
         socialButtonsView.snp.makeConstraints { make in
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-UIHelper.dynamicHeight(10))
             make.leading.trailing.equalToSuperview()
-        }
-    }
-}
-
-extension LoginViewController: AuthBarDelegate {
-    func didTapBackButton() {
-        coordinator?.pop()
-    }
-}
-
-extension LoginViewController: AuthButtonDelegate {
-    func didTapButton(type: AuthButtonType) {
-        let isEmailValid = emailTextField.validate(with: .localized(for: .validationEmail))
-        let isPasswordValid = passwordTextField.validate(with: .localized(for: .validationPassword))
-        
-        guard isEmailValid, isPasswordValid else {
-            return
-        }
-
-        viewModel.loginWithEmail(email: emailTextField.text!, password: passwordTextField.text!) { result in
-            switch result {
-            case .success:
-                self.coordinator?.showDashboard()
-            case .failure:
-                break
-            }
         }
     }
 }

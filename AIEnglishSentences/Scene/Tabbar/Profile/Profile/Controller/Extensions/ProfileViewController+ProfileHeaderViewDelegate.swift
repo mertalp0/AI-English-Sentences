@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+// MARK: - ProfileHeaderViewDelegate
+extension ProfileViewController: ProfileHeaderViewDelegate {
+    func didUpdateName(_ newName: String) {
+        viewModel.updateUser(name: newName)
+    }
+}

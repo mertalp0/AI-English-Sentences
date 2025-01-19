@@ -19,27 +19,29 @@ class SubscriptionService {
         self.apiKey = key
     }
 
-
     // MARK: - RevenueCat Configuration
     func configure() {
         let userId = Auth.auth().currentUser?.uid
         Purchases.configure(withAPIKey: apiKey, appUserID: userId)
-        Purchases.logLevel = .debug
-        print("RevenueCat configured with userId: \(userId ?? "Anonymous")")
+        Purchases.logLevel = .error
+        Logger.log("RevenueCat configured with userId: \(userId ?? "Anonymous")", type: .info)
     }
 
     // MARK: - User Login
-    func login(userId: String, completion: @escaping (Bool) -> Void) {
-        Purchases.shared.logIn(userId) { customerInfo, created, error in
+    func login(
+        userId: String,
+        completion: @escaping (Bool) -> Void
+    ) {
+        Purchases.shared.logIn(userId) { _, created, error in
             if let error = error {
-                print("Error logging into RevenueCat: \(error.localizedDescription)")
+                Logger.log("Error logging into RevenueCat: \(error.localizedDescription)", type: .error)
                 completion(false)
                 return
             }
             if created {
-                print("New RevenueCat user created.")
+                Logger.log("New RevenueCat user created.", type: .info)
             } else {
-                print("RevenueCat user successfully linked.")
+                Logger.log("RevenueCat user successfully linked.", type: .info)
             }
             completion(true)
         }
@@ -47,13 +49,13 @@ class SubscriptionService {
 
     // MARK: - User Logout
     func logout(completion: @escaping (Bool) -> Void) {
-        Purchases.shared.logOut { customerInfo, error in
+        Purchases.shared.logOut { _, error in
             if let error = error {
-                print("Error logging out of RevenueCat: \(error.localizedDescription)")
+                Logger.log("Error logging out of RevenueCat: \(error.localizedDescription)", type: .error)
                 completion(false)
                 return
             }
-            print("Successfully logged out from RevenueCat.")
+            Logger.log("Successfully logged out from RevenueCat.", type: .info)
             completion(true)
         }
     }
@@ -62,16 +64,15 @@ class SubscriptionService {
     func checkPremiumStatus(completion: @escaping (Bool) -> Void) {
         Purchases.shared.getCustomerInfo { (customerInfo, error) in
             if let error = error {
-                print("Error fetching customer info: \(error.localizedDescription)")
+                Logger.log("Error fetching customer info: \(error.localizedDescription)", type: .error)
                 completion(false)
                 return
             }
-            
             if let entitlement = customerInfo?.entitlements["Premium Access"], entitlement.isActive {
-                print("User has Premium Access")
+                Logger.log("User has Premium Access", type: .info)
                 completion(true)
             } else {
-                print("User does not have Premium Access")
+                Logger.log("User does not have Premium Access", type: .info)
                 completion(false)
             }
         }
@@ -81,12 +82,11 @@ class SubscriptionService {
     func fetchPackages(completion: @escaping ([Package]?) -> Void) {
         Purchases.shared.getOfferings { offerings, error in
             if let error = error {
-                print("Error fetching packages: \(error.localizedDescription)")
+                Logger.log("Error fetching packages: \(error.localizedDescription)", type: .error)
                 completion(nil)
                 return
             }
-            let availablePackages = offerings?.current?.availablePackages
-            completion(availablePackages)
+            completion(offerings?.current?.availablePackages)
         }
     }
 
@@ -94,12 +94,12 @@ class SubscriptionService {
     func refreshCustomerInfo(completion: @escaping (Bool) -> Void) {
         Purchases.shared.syncPurchases { customerInfo, error in
             if let error = error {
-                print("Error refreshing customer info: \(error.localizedDescription)")
+                Logger.log("Error refreshing customer info: \(error.localizedDescription)", type: .error)
                 completion(false)
                 return
             }
             let isPremium = customerInfo?.entitlements["premium"]?.isActive == true
-            print("Customer info refreshed. Premium status: \(isPremium)")
+            Logger.log("Customer info refreshed. Premium status: \(isPremium)", type: .info)
             completion(isPremium)
         }
     }
@@ -107,35 +107,35 @@ class SubscriptionService {
     func getCustomerInfo(completion: @escaping (CustomerInfo?) -> Void) {
         Purchases.shared.getCustomerInfo { customerInfo, error in
             if let error = error {
-                print("Error fetching customer info: \(error.localizedDescription)")
+                Logger.log("Error fetching customer info: \(error.localizedDescription)", type: .error)
                 completion(nil)
                 return
             }
             let originalAppUserId = customerInfo?.originalAppUserId
-            print("Original App User ID: \(originalAppUserId ?? "Unknown")")
-
+            Logger.log("Original App User ID: \(originalAppUserId ?? "Unknown")", type: .info)
             let currentAppUserId = Purchases.shared.appUserID
-            print("Current App User ID: \(currentAppUserId)")
-            
+            Logger.log("Current App User ID: \(currentAppUserId)", type: .info)
             completion(customerInfo)
         }
     }
 
     // MARK: - Purchase Handling
-    func purchase(package: Package, completion: @escaping (Bool) -> Void) {
-        Purchases.shared.purchase(package: package) { transaction, customerInfo, error, userCancelled in
+    func purchase(package: Package,
+                  completion: @escaping (Bool) -> Void
+    ) {
+        Purchases.shared.purchase(package: package) { _, customerInfo, error, userCancelled in
             if let error = error {
-                print("Purchase failed: \(error.localizedDescription)")
+                Logger.log("Purchase failed: \(error.localizedDescription)", type: .error)
                 completion(false)
                 return
             }
             if userCancelled {
-                print("User cancelled purchase.")
+                Logger.log("User cancelled purchase.", type: .info)
                 completion(false)
                 return
             }
             let isPremium = customerInfo?.entitlements["premium"]?.isActive == true
-            print("Purchase successful. Premium status: \(isPremium)")
+            Logger.log("Purchase successful. Premium status: \(isPremium)", type: .info)
             completion(isPremium)
         }
     }

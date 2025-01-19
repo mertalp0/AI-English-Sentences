@@ -15,11 +15,10 @@ extension RegisterViewController: AuthButtonDelegate {
             return
         }
 
-        viewModel
-            .registerWithEmail(
+        viewModel.registerWithEmail(
                 email: emailTextField.text!,
                 password: passwordTextField.text!,
-                name: nameTextField.text! ,
+                name: nameTextField.text!,
                 gender: gender
             ) {  result in
             switch result {

@@ -7,7 +7,4 @@
 
 import BaseMVVMCKit
 
-final class LanguageSelectionViewModel: BaseViewModel {
-    
-
-}
+final class LanguageSelectionViewModel: BaseViewModel {}

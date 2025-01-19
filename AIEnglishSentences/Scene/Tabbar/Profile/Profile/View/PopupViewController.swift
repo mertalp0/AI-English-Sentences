@@ -42,7 +42,6 @@ final class PopupViewController: UIViewController {
         self.iconImage = icon
         self.cancelButtonText = cancelText
         self.confirmButtonText = confirmText
-        
     }
 
     required init?(coder: NSCoder) {
@@ -59,7 +58,6 @@ final class PopupViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = UIColor.black.withAlphaComponent(0.5)
 
-        // Container View
         containerView.backgroundColor = .white
         containerView.layer.cornerRadius = 16
         containerView.clipsToBounds = true
@@ -70,7 +68,6 @@ final class PopupViewController: UIViewController {
             make.width.equalToSuperview().multipliedBy(0.8)
         }
 
-        // Icon Image View
         if let iconImage = iconImage {
             iconImageView.image = iconImage
             iconImageView.tintColor = .mainColor
@@ -83,7 +80,6 @@ final class PopupViewController: UIViewController {
             }
         }
 
-        // Title and Message Labels
         switch popupType {
         case .logout:
             configureLabels(
@@ -99,7 +95,6 @@ final class PopupViewController: UIViewController {
             configureLabels(title: title, message: message)
         }
 
-        // Cancel Button
         cancelButton.setTitle(cancelButtonText, for: .normal)
         cancelButton.setTitleColor(.darkGray, for: .normal)
         cancelButton.titleLabel?.font = .dynamicFont(size: 16, weight: .medium)
@@ -113,7 +108,6 @@ final class PopupViewController: UIViewController {
             make.bottom.equalToSuperview().offset(-UIHelper.dynamicHeight(16))
         }
 
-        // Confirm Button
         confirmButton.setTitle(confirmButtonText, for: .normal)
         confirmButton.setTitleColor(.systemRed, for: .normal)
         confirmButton.titleLabel?.font = .dynamicFont(size: 16, weight: .medium)
@@ -130,7 +124,6 @@ final class PopupViewController: UIViewController {
     }
 
     private func configureLabels(title: String, message: String) {
-        // Title Label
         titleLabel.text = title
         titleLabel.font = .dynamicFont(size: 18, weight: .semibold)
         titleLabel.textColor = .mainColor
@@ -142,7 +135,6 @@ final class PopupViewController: UIViewController {
             make.leading.trailing.equalToSuperview().inset(16)
         }
 
-        // Message Label
         messageLabel.text = message
         messageLabel.font = .dynamicFont(size: 14, weight: .regular)
         messageLabel.textColor = .darkGray
@@ -165,6 +157,5 @@ final class PopupViewController: UIViewController {
         dismiss(animated: true) {
             self.delegate?.popupDidConfirm(popupType: self.popupType)
         }
-       
     }
 }

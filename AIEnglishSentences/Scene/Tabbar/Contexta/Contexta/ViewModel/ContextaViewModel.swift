@@ -7,6 +7,4 @@
 
 import BaseMVVMCKit
 
-final class ContextaViewModel: BaseViewModel{
-    
-}
+final class ContextaViewModel: BaseViewModel {}

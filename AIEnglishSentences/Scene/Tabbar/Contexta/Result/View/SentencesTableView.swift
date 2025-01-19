@@ -51,7 +51,6 @@ final class SentencesTableView: UIView {
     func configure(with sentences: [Sentence]) {
         self.sentences = sentences
     }
-    
 
     private func stopCurrentSpeaking() {
         currentlyPlayingCell?.updatePlayButton(isPlaying: false)
@@ -81,24 +80,25 @@ extension SentencesTableView: SentenceCellDelegate {
     func didTapCopyButton(for sentence: String, in cell: SentenceCell) {
         delegate?.didTapCopyButton(for: sentence, in: cell)
     }
-    
-    func didTapSaveAndFavorite(for sentence: Sentence, in cell: SentenceCell) {
+
+    func didTapSaveAndFavorite(
+        for sentence: Sentence,
+        in cell: SentenceCell
+    ) {
         delegate?.didTapSave(for: sentence, in: cell)
     }
-    
-    func didTapPlayButton(for sentence: String, in cell: SentenceCell) {
+
+    func didTapPlayButton(
+        for sentence: String,
+        in cell: SentenceCell
+    ) {
         if let currentlyPlayingCell = currentlyPlayingCell, currentlyPlayingCell == cell {
-            // Stop current speaking
             stopCurrentSpeaking()
         } else {
-            // Stop any ongoing speaking
             stopCurrentSpeaking()
-            
-            // Start new speaking
             textToSpeechManager.speak(text: sentence)
             cell.updatePlayButton(isPlaying: true)
             currentlyPlayingCell = cell
         }
     }
 }
-

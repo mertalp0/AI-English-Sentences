@@ -1,43 +1,41 @@
-
-# Devre dışı bırakılan kurallar
+# Disabled rules
 disabled_rules:
-  - trailing_whitespace       # Satır sonlarındaki gereksiz boşluklar
-  - force_cast                # Zorunlu tür dönüşümleri (as!)
-  - force_unwrapping          # Zorunlu açmalar (force unwrap)
-  - line_length               # Satır uzunluğu sınırı
-  - function_body_length      # Fonksiyon gövdesi uzunluğu
-  - type_body_length          # Tip (sınıf/struct) gövdesi uzunluğu
-  - file_length               # Dosya uzunluğu
-  - identifier_name           # Değişken ve fonksiyon isimlendirme kuralları
+  - force_cast                # Forced type casts (as!)
+  - force_unwrapping          # Forced unwrapping (force unwrap)
+  - line_length               # Line length limit
+  - type_body_length          # Type (class/struct) body length
+  - file_length               # File length
 
-# Dahil edilen dizinler
+# Included directories
 included:
   - AIEnglishSentences
 
-# Hariç tutulan dizinler
+# Excluded directories
 excluded:
   - Pods
   - Carthage
   - AIEnglishSentencesTests
   - AIEnglishSentencesUITests
 
-# Satır uzunluğu sınırı
-line_length:
-  warning: 120
 
-# Fonksiyon gövdesi uzunluğu sınırı
+# Function body length limit
 function_body_length:
   warning: 50
+  
+# Function parameter count limit
+function_parameter_count:
+  warning: 8
+  error: 9
 
-# Tip (sınıf/struct) gövdesi uzunluğu sınırı
-type_body_length:
+
+
+function_body_length:
   warning: 200
+  error: 300
 
-# Dosya uzunluğu sınırı
-file_length:
-  warning: 400
 
-# İsimlendirme kuralları
+
+# Naming conventions
 identifier_name:
   min_length: 3
   max_length: 40
@@ -46,11 +44,11 @@ identifier_name:
     - URL
     - JSON
 
-# Özelleştirilmiş kurallar
+# Custom rules
 custom_rules:
   no_print_statements:
     included: ".*\\.swift"
-    name: "Print Statement Kullanımı"
+    name: "Print Statement Usage"
     regex: "print\\s*\\("
-    message: "print() fonksiyonu kullanımı yasaktır."
+    message: "The use of print() function is prohibited."
     severity: warning

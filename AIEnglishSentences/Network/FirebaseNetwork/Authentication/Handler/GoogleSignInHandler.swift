@@ -11,10 +11,10 @@ import GoogleSignIn
 import UIKit
 
 final class GoogleSignInHandler {
-    
+
     static let shared = GoogleSignInHandler()
     private init() {}
-    
+
     func signInWithGoogle(
         from viewController: UIViewController,
         completion: @escaping (Result<User, Error>) -> Void
@@ -23,31 +23,30 @@ final class GoogleSignInHandler {
             completion(.failure(AuthError.custom(message: "Missing Firebase Client ID.")))
             return
         }
-        
+
         let config = GIDConfiguration(clientID: clientID)
         GIDSignIn.sharedInstance.configuration = config
-        
+
         GIDSignIn.sharedInstance.signIn(withPresenting: viewController) { signInResult, error in
             if let error = error {
                 completion(.failure(AuthError.map(from: error)))
                 return
             }
-            
+
             guard let result = signInResult else {
                 completion(.failure(AuthError.custom(message: "Sign-in result is nil.")))
                 return
             }
-            
             guard let idToken = result.user.idToken?.tokenString else {
                 completion(.failure(AuthError.custom(message: "Failed to fetch tokens.")))
                 return
             }
-            
+
             let credential = GoogleAuthProvider.credential(
                 withIDToken: idToken,
                 accessToken: result.user.accessToken.tokenString
             )
-            
+
             Auth.auth().signIn(with: credential) { authResult, error in
                 if let error = error {
                     completion(.failure(AuthError.map(from: error)))

@@ -6,3 +6,11 @@
 //
 
 import Foundation
+
+extension PrivacyPolicyViewController: AppBarDelegate {
+    func leftButtonTapped() {
+        coordinator?.back()
+    }
+
+    func rightButtonTapped() {}
+}

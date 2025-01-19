@@ -7,6 +7,4 @@
 
 import BaseMVVMCKit
 
-final class PrivacyPolicyViewModel: BaseViewModel {
-    
-}
+final class PrivacyPolicyViewModel: BaseViewModel {}

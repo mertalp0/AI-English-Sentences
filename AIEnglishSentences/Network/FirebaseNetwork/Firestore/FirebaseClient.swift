@@ -5,35 +5,32 @@
 //  Created by mert alp on 19.12.2024.
 //
 
-
 import FirebaseFirestore
 
 final class FirebaseClient {
     static let shared = FirebaseClient()
-    private let db = Firestore.firestore()
+    private let dataBase = Firestore.firestore()
+
     private init() {}
 
-    // MARK: - Veri Ekleme
+    // MARK: - Create Data
     func create(request: FirebaseRequest, completion: @escaping (Result<String, Error>) -> Void) {
         guard let data = request.data, let documentID = request.documentID else {
             completion(.failure(FirebaseError.unknown))
             return
         }
 
-        let documentRef = db.collection(request.collection).document(documentID)
-        
-        // Check if the document already exists
+        let documentRef = dataBase.collection(request.collection).document(documentID)
+
         documentRef.getDocument { (documentSnapshot, error) in
             if let error = error {
                 completion(.failure(error))
                 return
             }
-            
+
             if let documentSnapshot = documentSnapshot, documentSnapshot.exists {
-                // Document already exists, return an error
                 completion(.failure(FirebaseError.documentAlreadyExists))
             } else {
-                // Document does not exist, proceed to create it
                 documentRef.setData(data) { error in
                     if let error = error {
                         completion(.failure(error))
@@ -45,14 +42,14 @@ final class FirebaseClient {
         }
     }
 
-    // MARK: - Veri Okuma
+    // MARK: - Read Data
     func read<T: Decodable>(request: FirebaseRequest, completion: @escaping (Result<T, Error>) -> Void) {
         guard let documentID = request.documentID else {
             completion(.failure(FirebaseError.missingDocument))
             return
         }
 
-        let document = db.collection(request.collection).document(documentID)
+        let document = dataBase.collection(request.collection).document(documentID)
         document.getDocument { snapshot, error in
             if let error = error {
                 completion(.failure(error))
@@ -73,14 +70,14 @@ final class FirebaseClient {
         }
     }
 
-    // MARK: - Veri Güncelleme
+    // MARK: - Update Data
     func update(request: FirebaseRequest, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let documentID = request.documentID, let data = request.data else {
             completion(.failure(FirebaseError.unknown))
             return
         }
 
-        let document = db.collection(request.collection).document(documentID)
+        let document = dataBase.collection(request.collection).document(documentID)
         document.updateData(data) { error in
             if let error = error {
                 completion(.failure(error))
@@ -90,14 +87,14 @@ final class FirebaseClient {
         }
     }
 
-    // MARK: - Veri Silme
+    // MARK: - Delete Data
     func delete(request: FirebaseRequest, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let documentID = request.documentID else {
             completion(.failure(FirebaseError.missingDocument))
             return
         }
 
-        let document = db.collection(request.collection).document(documentID)
+        let document = dataBase.collection(request.collection).document(documentID)
         document.delete { error in
             if let error = error {
                 completion(.failure(error))

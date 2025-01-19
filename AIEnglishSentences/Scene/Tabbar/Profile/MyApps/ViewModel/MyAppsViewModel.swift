@@ -7,6 +7,4 @@
 
 import BaseMVVMCKit
 
-final class MyAppsViewModel: BaseViewModel {
-    
-}
+final class MyAppsViewModel: BaseViewModel {}

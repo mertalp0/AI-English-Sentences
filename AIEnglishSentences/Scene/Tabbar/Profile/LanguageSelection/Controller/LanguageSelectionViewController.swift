@@ -14,8 +14,8 @@ final class LanguageSelectionViewController: BaseViewController<LanguageSelectio
     private var backgroundImageView: UIImageView!
     private var appBar: AppBar!
     private var tableView: UITableView!
-    private let languages: [String] = [.localized(for: .languageEnglish), ]
-    private var selectedLanguageIndex: Int = 0
+    let languages: [String] = [.localized(for: .languageEnglish)]
+    var selectedLanguageIndex: Int = 0
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -23,7 +23,7 @@ final class LanguageSelectionViewController: BaseViewController<LanguageSelectio
         setupUI()
         setupConstraints()
     }
-    
+
     // MARK: - Setup UI
     private func setupUI() {
         backgroundImageView = UIImageView()
@@ -44,7 +44,7 @@ final class LanguageSelectionViewController: BaseViewController<LanguageSelectio
         tableView.separatorStyle = .none
         view.addSubview(tableView)
     }
-    
+
     // MARK: - Setup Constraints
     private func setupConstraints() {
         backgroundImageView.snp.makeConstraints { make in

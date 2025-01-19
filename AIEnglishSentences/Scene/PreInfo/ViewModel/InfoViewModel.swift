@@ -7,7 +7,6 @@
 
 import BaseMVVMCKit
 import Foundation
-import UIKit
 import AuthenticationServices
 
 final class InfoViewModel: BaseViewModel {
@@ -22,7 +21,7 @@ final class InfoViewModel: BaseViewModel {
             case .success(let userModel):
                 completion(.success(userModel))
             case .failure(let error):
-                self?.handleError(message: error.errorDescription ?? "An error occurred")
+                self?.handleError(message: error.errorDescription ?? .localized(for: .sharedErrorMessage))
                 completion(.failure(error))
             }
         }
@@ -37,7 +36,7 @@ final class InfoViewModel: BaseViewModel {
             case .success(let userModel):
                 completion(.success(userModel))
             case .failure(let error):
-                self?.handleError(message: error.errorDescription ?? "An error occurred")
+                self?.handleError(message: error.errorDescription ?? .localized(for: .sharedErrorMessage))
                 completion(.failure(error))
             }
         }

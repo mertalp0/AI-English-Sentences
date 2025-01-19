@@ -9,30 +9,29 @@ import UIKit
 import BaseMVVMCKit
 import SnapKit
 
-final class RegisterViewController: BaseViewController<RegisterCoordinator, RegisterViewModel>{
-    
-    private var gender : Gender = .preferNotToSay
-    
-    //MARK: - UI Elements
-    private var backgroundImageView: UIImageView!
-    private var socialButtonsView: SocialButtonsView!
-    private var authBar: AuthBar!
-    private var subtitleLabel: UILabel!
-    private var emailTextField: CustomTextField!
-    private var passwordTextField: CustomTextField!
-    private var nameTextField: CustomTextField!
-    private var loginButton: AuthButton!
-    private var forgotPasswordLabel: UILabel!
-    
-    
-    //MARK: - LifeCycle
+final class RegisterViewController: BaseViewController<RegisterCoordinator, RegisterViewModel> {
+
+     var gender: Gender = .preferNotToSay
+
+    // MARK: - UI Elements
+     var backgroundImageView: UIImageView!
+     var socialButtonsView: SocialButtonsView!
+     var authBar: AuthBar!
+     var subtitleLabel: UILabel!
+     var emailTextField: CustomTextField!
+     var passwordTextField: CustomTextField!
+     var nameTextField: CustomTextField!
+     var loginButton: AuthButton!
+     var forgotPasswordLabel: UILabel!
+
+    // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupConstraints()
         setupKeyboardDismissRecognizer()
     }
-    
+
     private func setupUI() {
         backgroundImageView = UIImageView()
         backgroundImageView.image = .appImage(.backgroundImage)
@@ -132,7 +131,7 @@ final class RegisterViewController: BaseViewController<RegisterCoordinator, Regi
         view.addSubview(socialButtonsView)
     }
 
-    private func setupConstraints(){
+    private func setupConstraints() {
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

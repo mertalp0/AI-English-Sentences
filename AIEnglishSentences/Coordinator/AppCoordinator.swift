@@ -7,21 +7,19 @@
 
 import BaseMVVMCKit
 
-final class AppCoordinator: BaseCoordinator{
-    
-    private let authService : AuthService = AuthServiceImpl.shared
+final class AppCoordinator: BaseCoordinator {
+
+    private let authService: AuthService = AuthServiceImpl.shared
 
     override func start() {
         navigationController?.navigationBar.isHidden = true
-        
+
         if authService.isUserLoggedIn() {
             let dashboardCoordinator = DashboardCoordinator(navigationController: self.navigationController!)
             dashboardCoordinator.start()
-            
-        }else {
+        } else {
             let infoCoordinator = InfoCoordinator(navigationController: self.navigationController!)
             infoCoordinator.start()
         }
     }
-    
 }

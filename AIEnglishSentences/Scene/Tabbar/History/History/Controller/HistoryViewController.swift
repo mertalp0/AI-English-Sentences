@@ -12,16 +12,16 @@ final class HistoryViewController: BaseViewController<HistoryCoordinator, Histor
 
     // MARK: - UI Elements
     private var appBar: AppBar!
-    private var historySegmentedControl: HistorySegmentedControl!
+    var historySegmentedControl: HistorySegmentedControl!
     private var tableView: UITableView!
     private var emptyStateView: EmptyStateView!
-    private var currentlyPlayingCell: SentenceCell?
+    var currentlyPlayingCell: SentenceCell?
 
     // MARK: - Properties
-    private let textToSpeechManager =  TextToSpeechManager.shared
+    let textToSpeechManager =  TextToSpeechManager.shared
     private var allData: [Sentence] = []
-    private var favouritesData: [Sentence] = []
-    private var currentData: [Sentence] {
+    var favouritesData: [Sentence] = []
+    var currentData: [Sentence] {
         return historySegmentedControl.selectedIndex == 0 ? allData : favouritesData
     }
 
@@ -53,7 +53,7 @@ final class HistoryViewController: BaseViewController<HistoryCoordinator, Histor
             make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
         }
 
-        historySegmentedControl = HistorySegmentedControl(items: [    .localized(for: .historySegmentAll), .localized(for: .historySegmentFavourites)])
+        historySegmentedControl = HistorySegmentedControl(items: [.localized(for: .historySegmentAll), .localized(for: .historySegmentFavourites)])
         historySegmentedControl.delegate = self
         view.addSubview(historySegmentedControl)
         historySegmentedControl.snp.makeConstraints { make in
@@ -91,12 +91,12 @@ final class HistoryViewController: BaseViewController<HistoryCoordinator, Histor
     }
 
     private func fetchSentences() {
-        viewModel.fetchSentences { isSucces in
+        viewModel.fetchSentences { _ in
             self.loadInitialData()
             self.updateUIForCurrentData()
         }}
 
-    private func loadInitialData() {
+     func loadInitialData() {
         allData = SentenceManager.shared.sentences
         favouritesData = allData.filter {$0.favorite}
         tableView.reloadData()
@@ -107,7 +107,7 @@ final class HistoryViewController: BaseViewController<HistoryCoordinator, Histor
         tableView.reloadData()
     }
 
-    private func updateUIForCurrentData() {
+    func updateUIForCurrentData() {
         stopCurrentSpeaking()
 
         let isDataEmpty = currentData.isEmpty
@@ -133,11 +133,9 @@ final class HistoryViewController: BaseViewController<HistoryCoordinator, Histor
         }
     }
 
-    private func stopCurrentSpeaking() {
+     func stopCurrentSpeaking() {
         currentlyPlayingCell?.updatePlayButton(isPlaying: false)
         textToSpeechManager.stopSpeaking()
         currentlyPlayingCell = nil
     }
 }
-
-

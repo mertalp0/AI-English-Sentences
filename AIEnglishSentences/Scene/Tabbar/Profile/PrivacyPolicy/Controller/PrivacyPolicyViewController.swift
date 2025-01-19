@@ -10,7 +10,7 @@ import BaseMVVMCKit
 
 final class PrivacyPolicyViewController: BaseViewController<PrivacyPolicyCoordinator, PrivacyPolicyViewModel> {
 
-    //MARK: - UI Elements
+    // MARK: - UI Elements
     private var backgroundImageView: UIImageView!
     private var appBar: AppBar!
     private var contentTextView: UITextView!
@@ -59,12 +59,4 @@ final class PrivacyPolicyViewController: BaseViewController<PrivacyPolicyCoordin
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-UIHelper.dynamicHeight(16))
         }
     }
-}
-
-extension PrivacyPolicyViewController: AppBarDelegate {
-    func leftButtonTapped() {
-        coordinator?.back()
-    }
-
-    func rightButtonTapped() {}
 }

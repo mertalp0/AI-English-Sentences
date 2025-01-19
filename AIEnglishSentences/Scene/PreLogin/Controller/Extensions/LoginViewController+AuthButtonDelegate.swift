@@ -9,12 +9,16 @@ extension LoginViewController: AuthButtonDelegate {
     func didTapButton(type: AuthButtonType) {
         let isEmailValid = emailTextField.validate(with: .localized(for: .validationEmail))
         let isPasswordValid = passwordTextField.validate(with: .localized(for: .validationPassword))
-        
+
         guard isEmailValid, isPasswordValid else {
             return
         }
 
-        viewModel.loginWithEmail(email: emailTextField.text!, password: passwordTextField.text!) { result in
+        guard let email = emailTextField.text, let password = passwordTextField.text else {
+            return
+        }
+
+        viewModel.loginWithEmail(email: email, password: password) { result in
             switch result {
             case .success:
                 self.coordinator?.showDashboard()

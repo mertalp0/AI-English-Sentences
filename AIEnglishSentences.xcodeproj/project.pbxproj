@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		941688272D0F8E2A0082A73F /* BaseMVVMCKit in Frameworks */ = {isa = PBXBuildFile; productRef = 941688262D0F8E2A0082A73F /* BaseMVVMCKit */; };
+		9421A05E2D3C516500CA5326 /* AILex.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 9421A05D2D3C516500CA5326 /* AILex.storekit */; };
 		942A53642D19A19800BC0697 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 942A53632D19A19800BC0697 /* FirebaseAuthCombine-Community */; };
 		942A53672D19A20200BC0697 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 942A53662D19A20200BC0697 /* GoogleSignIn */; };
 		942A53692D19A20200BC0697 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 942A53682D19A20200BC0697 /* GoogleSignInSwift */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9421A05D2D3C516500CA5326 /* AILex.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = AILex.storekit; sourceTree = "<group>"; };
 		94918F052D0DA32B00FDC538 /* AIEnglishSentences.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIEnglishSentences.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94918F1B2D0DA32D00FDC538 /* AIEnglishSentencesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIEnglishSentencesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94918F252D0DA32D00FDC538 /* AIEnglishSentencesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIEnglishSentencesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -121,6 +123,7 @@
 		94918EFC2D0DA32B00FDC538 = {
 			isa = PBXGroup;
 			children = (
+				9421A05D2D3C516500CA5326 /* AILex.storekit */,
 				94DE1BA02D121EE700B860D6 /* Config */,
 				94918F072D0DA32B00FDC538 /* AIEnglishSentences */,
 				94918F1E2D0DA32D00FDC538 /* AIEnglishSentencesTests */,
@@ -291,6 +294,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9421A05E2D3C516500CA5326 /* AILex.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -327,7 +331,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]\nthen\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif command -v swiftlint >/dev/null 2>&1\nthen\n    swiftlint\nelse\n    echo \"warning: `swiftlint` command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n";
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]\nthen\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif command -v swiftlint >/dev/null 2>&1\nthen\n    swiftlint\nelse\n    echo \"warning: ⁠ swiftlint ⁠ command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

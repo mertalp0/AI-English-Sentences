@@ -13,7 +13,7 @@ extension UIView {
             self.backgroundColor = color
         })
     }
-    
+
     func animateScaleDown(duration: TimeInterval = 0.1, scale: CGFloat = 0.95) {
         UIView.animate(withDuration: duration, animations: {
             self.transform = CGAffineTransform(scaleX: scale, y: scale)
