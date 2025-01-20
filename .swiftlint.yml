@@ -27,13 +27,9 @@ function_parameter_count:
   warning: 8
   error: 9
 
-
-
 function_body_length:
   warning: 200
   error: 300
-
-
 
 # Naming conventions
 identifier_name:
@@ -43,12 +39,3 @@ identifier_name:
     - id
     - URL
     - JSON
-
-# Custom rules
-custom_rules:
-  no_print_statements:
-    included: ".*\\.swift"
-    name: "Print Statement Usage"
-    regex: "print\\s*\\("
-    message: "The use of print() function is prohibited."
-    severity: warning

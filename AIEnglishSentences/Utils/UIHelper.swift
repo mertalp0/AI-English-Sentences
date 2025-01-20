@@ -8,7 +8,6 @@
 import UIKit
 
 struct UIHelper {
-
     // MARK: - Status Bar
     static var statusBarHeight: CGFloat {
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,

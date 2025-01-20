@@ -13,7 +13,6 @@ protocol AuthButtonDelegate: AnyObject {
 }
 
 final class AuthButton: UIButton {
-
     private let authButtonType: AuthButtonType
     weak var delegate: AuthButtonDelegate?
 
@@ -49,7 +48,6 @@ final class AuthButton: UIButton {
                 self.semanticContentAttribute = .forceLeftToRight
             }
         }
-
         self.addTarget(self, action: #selector(animateDown), for: .touchDown)
         self.addTarget(self, action: #selector(buttonTapped), for: [.touchUpInside, .touchCancel, .touchDragExit])
     }

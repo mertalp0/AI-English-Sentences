@@ -43,7 +43,6 @@ final class PrivacyPolicyViewController: BaseViewController<PrivacyPolicyCoordin
     }
 
     private func setupConstraints() {
-
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

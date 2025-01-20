@@ -8,7 +8,16 @@
 import UIKit
 import SnapKit
 
+protocol SocialButtonsViewDelegate: AnyObject {
+    func didTapGoogleButton()
+    func didTapAppleButton()
+    func didTapActionLabel()
+}
+
 final class SocialButtonsView: UIView {
+
+    // MARK: - Delegate
+    weak var delegate: SocialButtonsViewDelegate?
 
     // MARK: - UI Elements
     private var googleButton: AuthButton!
@@ -16,14 +25,20 @@ final class SocialButtonsView: UIView {
     private var orLabel: UILabel!
     private var actionLabel: UILabel!
 
-    // MARK: - ViewModel
-    private var viewModel: SocialButtonsViewModel
-
     // MARK: - Initialization
-    init(viewModel: SocialButtonsViewModel) {
-        self.viewModel = viewModel
+    init(
+        googleButtonTitle: String,
+        appleButtonTitle: String,
+        actionText: String,
+        actionHighlightedText: String
+    ) {
         super.init(frame: .zero)
-        setupUI()
+        setupUI(
+            googleButtonTitle: googleButtonTitle,
+            appleButtonTitle: appleButtonTitle,
+            actionText: actionText,
+            actionHighlightedText: actionHighlightedText
+        )
         setupConstraints()
     }
 
@@ -32,8 +47,12 @@ final class SocialButtonsView: UIView {
     }
 
     // MARK: - Setup UI
-    private func setupUI() {
-
+    private func setupUI(
+        googleButtonTitle: String,
+        appleButtonTitle: String,
+        actionText: String,
+        actionHighlightedText: String
+    ) {
         orLabel = UILabel()
         orLabel.text = .localized(for: .orText)
         orLabel.font = .dynamicFont(size: 14, weight: .regular)
@@ -42,12 +61,12 @@ final class SocialButtonsView: UIView {
         addSubview(orLabel)
 
         googleButton = AuthButton(type: .google)
-        googleButton.setTitle(viewModel.googleButtonTitle, for: .normal)
+        googleButton.setTitle(googleButtonTitle, for: .normal)
         googleButton.addTarget(self, action: #selector(didTapGoogleButton), for: .touchUpInside)
         addSubview(googleButton)
 
         appleButton = AuthButton(type: .apple)
-        appleButton.setTitle(viewModel.appleButtonTitle, for: .normal)
+        appleButton.setTitle(appleButtonTitle, for: .normal)
         appleButton.backgroundColor = .black
         appleButton.setTitleColor(.white, for: .normal)
         appleButton.addTarget(self, action: #selector(didTapAppleButton), for: .touchUpInside)
@@ -55,11 +74,11 @@ final class SocialButtonsView: UIView {
 
         actionLabel = UILabel()
         let attributedString = NSMutableAttributedString(
-            string: viewModel.actionText + " ",
+            string: actionText + " ",
             attributes: [.foregroundColor: UIColor.darkGray]
         )
         attributedString.append(NSAttributedString(
-            string: viewModel.actionHighlightedText,
+            string: actionHighlightedText,
             attributes: [
                 .foregroundColor: UIColor.mainColor ?? .white,
                 .underlineStyle: NSUnderlineStyle.single.rawValue
@@ -102,14 +121,14 @@ final class SocialButtonsView: UIView {
 
     // MARK: - Actions
     @objc private func didTapGoogleButton() {
-        viewModel.handleGoogleButtonTapped()
+        delegate?.didTapGoogleButton()
     }
 
     @objc private func didTapAppleButton() {
-        viewModel.handleAppleButtonTapped()
+        delegate?.didTapAppleButton()
     }
 
     @objc private func didTapActionLabel() {
-        viewModel.handleActionLabelTapped()
+        delegate?.didTapActionLabel()
     }
 }

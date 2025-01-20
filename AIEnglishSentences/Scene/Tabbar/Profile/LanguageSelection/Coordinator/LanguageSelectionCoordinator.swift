@@ -18,7 +18,8 @@ final class LanguageSelectionCoordinator: BaseCoordinator {
 
     func back() {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in ResultCoordinator")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
 
         if let tabBarController = navigationController.tabBarController {

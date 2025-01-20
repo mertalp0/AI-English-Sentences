@@ -39,12 +39,23 @@ final class AppleAuthorizationHandler: NSObject {
 
 // MARK: - ASAuthorizationControllerDelegate
 extension AppleAuthorizationHandler: ASAuthorizationControllerDelegate {
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+    func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithAuthorization authorization: ASAuthorization
+    ) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             guard let identityToken = appleIDCredential.identityToken,
                   let idTokenString = String(data: identityToken, encoding: .utf8) else {
                 Logger.log("Failed to retrieve identity token.", type: .error)
-                self.completionHandler?(.failure(NSError(domain: "AppleAuthorizationHandler", code: -1, userInfo: [NSLocalizedDescriptionKey: "Invalid identity token"])))
+                self.completionHandler?(
+                    .failure(
+                        NSError(
+                            domain: "AppleAuthorizationHandler",
+                            code: -1,
+                            userInfo: [NSLocalizedDescriptionKey: "Invalid identity token"]
+                        )
+                    )
+                )
                 return
             }
 
@@ -67,7 +78,10 @@ extension AppleAuthorizationHandler: ASAuthorizationControllerDelegate {
         }
     }
 
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+    func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithError error: Error
+    ) {
         Logger.log("Apple Sign-In Failed: \(error.localizedDescription)", type: .error)
         self.completionHandler?(.failure(error))
     }

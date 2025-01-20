@@ -14,7 +14,10 @@ final class FirebaseClient {
     private init() {}
 
     // MARK: - Create Data
-    func create(request: FirebaseRequest, completion: @escaping (Result<String, Error>) -> Void) {
+    func create(
+        request: FirebaseRequest,
+        completion: @escaping (Result<String, Error>) -> Void
+    ) {
         guard let data = request.data, let documentID = request.documentID else {
             completion(.failure(FirebaseError.unknown))
             return
@@ -43,7 +46,10 @@ final class FirebaseClient {
     }
 
     // MARK: - Read Data
-    func read<T: Decodable>(request: FirebaseRequest, completion: @escaping (Result<T, Error>) -> Void) {
+    func read<T: Decodable>(
+        request: FirebaseRequest,
+        completion: @escaping (Result<T, Error>) -> Void
+    ) {
         guard let documentID = request.documentID else {
             completion(.failure(FirebaseError.missingDocument))
             return
@@ -71,7 +77,10 @@ final class FirebaseClient {
     }
 
     // MARK: - Update Data
-    func update(request: FirebaseRequest, completion: @escaping (Result<Void, Error>) -> Void) {
+    func update(
+        request: FirebaseRequest,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
         guard let documentID = request.documentID, let data = request.data else {
             completion(.failure(FirebaseError.unknown))
             return
@@ -88,7 +97,10 @@ final class FirebaseClient {
     }
 
     // MARK: - Delete Data
-    func delete(request: FirebaseRequest, completion: @escaping (Result<Void, Error>) -> Void) {
+    func delete(
+        request: FirebaseRequest,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
         guard let documentID = request.documentID else {
             completion(.failure(FirebaseError.missingDocument))
             return

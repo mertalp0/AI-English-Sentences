@@ -9,6 +9,4 @@ extension MyAppsViewController: AppBarDelegate {
     func leftButtonTapped() {
         coordinator?.back()
     }
-
-    func rightButtonTapped() {}
 }

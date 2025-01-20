@@ -9,6 +9,4 @@ extension ResultViewController: AppBarDelegate {
     func leftButtonTapped() {
         coordinator?.showRoot()
     }
-
-    func rightButtonTapped() {}
 }

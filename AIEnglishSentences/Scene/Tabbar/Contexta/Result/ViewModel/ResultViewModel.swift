@@ -59,7 +59,6 @@ final class ResultViewModel: BaseViewModel {
         completion: @escaping (Bool) -> Void
     ) {
         startLoading()
-
         generateService.deleteSentence(sentence: sentence) { [weak self] result in
             switch result {
             case .success:

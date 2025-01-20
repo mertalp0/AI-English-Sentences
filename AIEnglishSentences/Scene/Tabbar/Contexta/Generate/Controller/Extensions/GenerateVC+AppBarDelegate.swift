@@ -10,6 +10,4 @@ extension GenerateViewController: AppBarDelegate {
     func leftButtonTapped() {
         coordinator?.back()
     }
-
-    func rightButtonTapped() {}
 }

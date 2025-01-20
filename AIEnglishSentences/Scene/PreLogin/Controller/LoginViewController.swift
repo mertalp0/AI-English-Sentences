@@ -88,40 +88,13 @@ final class LoginViewController: BaseViewController<LoginCoordinator, LoginViewM
         forgotPasswordLabel.textColor = .mainColor
         view.addSubview(forgotPasswordLabel)
 
-        let socialButtonsViewModel = SocialButtonsViewModel(
-            actionText: .localized(for: .dontHaveAccount),
-            actionHighlightedText: .localized(for: .signup),
+        socialButtonsView = SocialButtonsView(
             googleButtonTitle: .localized(for: .googleButtonTitle),
-            appleButtonTitle: .localized(for: .appleButtonTitle)
+            appleButtonTitle: .localized(for: .appleButtonTitle),
+            actionText: .localized(for: .dontHaveAccount),
+            actionHighlightedText: .localized(for: .signup)
         )
-        socialButtonsViewModel.onGoogleButtonTapped = {
-            self.viewModel.loginWithGoogle(from: self) { [weak self] result in
-                switch result {
-                case .success:
-                    self?.coordinator?.showDashboard()
-                case .failure:
-                    break
-                }
-            }
-        }
-
-        socialButtonsViewModel.onAppleButtonTapped = {
-            guard let window = self.view.window else {
-                return
-            }
-            self.viewModel.loginWithApple(presentationAnchor: window) { [weak self] result in
-                switch result {
-                case .success:
-                    self?.coordinator?.showDashboard()
-                case .failure:
-                    break
-                }
-            }
-        }
-        socialButtonsViewModel.onActionLabelTapped = {
-            self.coordinator?.showRegister()
-        }
-        socialButtonsView = SocialButtonsView(viewModel: socialButtonsViewModel)
+        socialButtonsView.delegate = self
         view.addSubview(socialButtonsView)
     }
 

@@ -25,7 +25,8 @@ final class GenerateCoordinator: BaseCoordinator {
 
     func showResult(sentences: [Sentence]) {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in showResult")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
         let resultCoordinator = ResultCoordinator(navigationController: navigationController)
         resultCoordinator.sentences = sentences
@@ -34,7 +35,8 @@ final class GenerateCoordinator: BaseCoordinator {
 
     func presentPaywall(with offering: Offering) {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in showResult")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
         let paywallVC = PaywallViewController(offering: offering)
         navigationController.present(paywallVC, animated: true)
@@ -42,7 +44,8 @@ final class GenerateCoordinator: BaseCoordinator {
 
     func back() {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in ResultCoordinator")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
 
         if let tabBarController = navigationController.tabBarController {

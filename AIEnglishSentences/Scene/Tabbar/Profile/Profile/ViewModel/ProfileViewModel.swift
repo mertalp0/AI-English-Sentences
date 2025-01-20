@@ -21,7 +21,6 @@ final class ProfileViewModel: BaseViewModel {
     }
 
     func getUser(completion: @escaping (UserModel) -> Void) {
-
         guard let userId = authService.getCurrentUserId() else {
             return
         }

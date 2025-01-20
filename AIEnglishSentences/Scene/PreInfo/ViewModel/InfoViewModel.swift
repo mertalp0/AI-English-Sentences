@@ -13,7 +13,10 @@ final class InfoViewModel: BaseViewModel {
     private let authService: AuthService = AuthServiceImpl.shared
 
     // MARK: - Login with Google
-    func loginWithGoogle(from viewController: UIViewController, completion: @escaping (Result<UserModel, AuthError>) -> Void) {
+    func loginWithGoogle(
+        from viewController: UIViewController,
+        completion: @escaping (Result<UserModel, AuthError>) -> Void
+    ) {
         startLoading()
         authService.googleSignIn(from: viewController) { [weak self] result in
             self?.stopLoading()
@@ -28,7 +31,10 @@ final class InfoViewModel: BaseViewModel {
     }
 
     // MARK: - Login with Apple
-    func loginWithApple(presentationAnchor: ASPresentationAnchor, completion: @escaping (Result<UserModel, AuthError>) -> Void) {
+    func loginWithApple(
+        presentationAnchor: ASPresentationAnchor,
+        completion: @escaping (Result<UserModel, AuthError>) -> Void
+    ) {
         startLoading()
         authService.appleSignIn(presentationAnchor: presentationAnchor) { [weak self] result in
             self?.stopLoading()

@@ -13,6 +13,10 @@ protocol AppBarDelegate: AnyObject {
     func rightButtonTapped()
 }
 
+extension AppBarDelegate {
+    func rightButtonTapped() {}
+}
+
 final class AppBar: UIView {
     // MARK: - Properties
     weak var delegate: AppBarDelegate?
@@ -132,19 +136,19 @@ enum AppBarType {
         case .generate(let pageCellType):
             return pageCellType.title
         case .history:
-            return "History"
+            return LocalizationManager.shared.localized(for: .appBarHistory)
         case .profile:
-            return "My Profile"
+            return LocalizationManager.shared.localized(for: .appBarProfile)
         case .contexta:
-            return "Contexta"
+            return LocalizationManager.shared.localized(for: .appBarContexta)
         case .result:
-            return "Sentences"
+            return LocalizationManager.shared.localized(for: .appBarResult)
         case .privacyPolicy:
-            return "Privacy Policy"
+            return LocalizationManager.shared.localized(for: .appBarPrivacyPolicy)
         case .myApps:
-            return "My Apps"
+            return LocalizationManager.shared.localized(for: .appBarMyApps)
         case .languages:
-            return "Languages"
+            return LocalizationManager.shared.localized(for: .appBarLanguages)
         }
     }
 
@@ -171,7 +175,6 @@ enum AppBarType {
         case .languages:
             return .appIcon(.chevronLeft)
         }
-
     }
 
     var titleColor: UIColor {

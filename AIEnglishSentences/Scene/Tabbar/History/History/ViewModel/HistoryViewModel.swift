@@ -15,7 +15,6 @@ final class HistoryViewModel: BaseViewModel {
 
     func fetchSentences(completion: @escaping (Bool) -> Void) {
         startLoading()
-
         guard let userId = authService.getCurrentUserId() else {
             handleFetchError(message: .localized(for: .historyFetchErrorUserNotLoggedIn))
             return
@@ -59,7 +58,6 @@ final class HistoryViewModel: BaseViewModel {
         completion: @escaping (Bool) -> Void
     ) {
         startLoading()
-
         generateService.addFavoriteSentence(sentence: sentence) { [weak self] result in
             switch result {
             case .success(let updatedSentence):
@@ -83,7 +81,6 @@ final class HistoryViewModel: BaseViewModel {
         completion: @escaping (Bool) -> Void
     ) {
         startLoading()
-
         generateService.deleteFavoriteSentence(sentence: sentence) { [weak self] result in
             switch result {
             case .success(let updatedSentence):
@@ -107,7 +104,6 @@ final class HistoryViewModel: BaseViewModel {
         completion: @escaping (Bool) -> Void
     ) {
         startLoading()
-
         generateService.deleteSentence(sentence: sentence) { [weak self] result in
             switch result {
             case .success:

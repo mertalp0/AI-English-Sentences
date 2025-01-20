@@ -16,7 +16,10 @@ final class GenerateService {
 
     private init() {}
 
-    func saveSentence(sentence: Sentence, completion: @escaping (Result<String, Error>) -> Void) {
+    func saveSentence(
+        sentence: Sentence,
+        completion: @escaping (Result<String, Error>) -> Void
+    ) {
         let request = FirebaseRequest(
             collection: "sentences",
             documentID: sentence.id,
@@ -26,7 +29,10 @@ final class GenerateService {
         client.create(request: request, completion: completion)
     }
 
-    func getGenerates(for generateIds: [String], completion: @escaping (Result<[Sentence], Error>) -> Void) {
+    func getGenerates(
+        for generateIds: [String],
+        completion: @escaping (Result<[Sentence], Error>) -> Void
+    ) {
         let requests = generateIds.map { id in
             FirebaseRequest(collection: "sentences", documentID: id, data: nil)
         }
@@ -57,7 +63,10 @@ final class GenerateService {
         }
     }
 
-    func addFavoriteSentence(sentence: Sentence, completion: @escaping (Result<Sentence, Error>) -> Void) {
+    func addFavoriteSentence(
+        sentence: Sentence,
+        completion: @escaping (Result<Sentence, Error>) -> Void
+    ) {
         var updatedSentence = sentence
         updatedSentence.favorite = true
 
@@ -77,7 +86,10 @@ final class GenerateService {
         }
     }
 
-    func deleteFavoriteSentence(sentence: Sentence, completion: @escaping (Result<Sentence, Error>) -> Void) {
+    func deleteFavoriteSentence(
+        sentence: Sentence,
+        completion: @escaping (Result<Sentence, Error>) -> Void
+    ) {
         var updatedSentence = sentence
         updatedSentence.favorite = false
 
@@ -97,20 +109,22 @@ final class GenerateService {
         }
     }
 
-    func deleteSentence(sentence: Sentence, completion: @escaping (Result<Void, Error>) -> Void) {
-            let request = FirebaseRequest(
-                collection: "sentences",
-                documentID: sentence.id,
-                data: nil
-            )
-
-            client.delete(request: request) { result in
-                switch result {
-                case .success:
+    func deleteSentence(
+        sentence: Sentence,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
+        let request = FirebaseRequest(
+            collection: "sentences",
+            documentID: sentence.id,
+            data: nil
+        )
+        client.delete(request: request) { result in
+            switch result {
+            case .success:
                     completion(.success(()))
-                case .failure(let error):
+            case .failure(let error):
                     completion(.failure(error))
-                }
             }
         }
+    }
 }

@@ -58,7 +58,10 @@ final class UserService {
         }
     }
 
-    func getUser(by userId: String, completion: @escaping (Result<UserModel, Error>) -> Void) {
+    func getUser(
+        by userId: String,
+        completion: @escaping (Result<UserModel, Error>) -> Void
+    ) {
         let request = FirebaseRequest(
             collection: "users",
             documentID: userId,
@@ -76,7 +79,11 @@ final class UserService {
         }
     }
 
-    func addGenerateIdToUser(userId: String, generateId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func addGenerateIdToUser(
+        userId: String,
+        generateId: String,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
         let userRef = Firestore.firestore().collection("users").document(userId)
 
         userRef.updateData([
@@ -90,7 +97,11 @@ final class UserService {
         }
     }
 
-    func removeGenerateIdFromUser(userId: String, generateId: String, completion: @escaping (Result<Void, Error>) -> Void) {
+    func removeGenerateIdFromUser(
+        userId: String,
+        generateId: String,
+        completion: @escaping (Result<Void, Error>) -> Void
+    ) {
         let userRef = Firestore.firestore().collection("users").document(userId)
 
         userRef.updateData([

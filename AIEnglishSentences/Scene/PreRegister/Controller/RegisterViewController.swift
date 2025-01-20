@@ -91,43 +91,13 @@ final class RegisterViewController: BaseViewController<RegisterCoordinator, Regi
         loginButton.delegate = self
         view.addSubview(loginButton)
 
-        let socialButtonsViewModel = SocialButtonsViewModel(
-            actionText: .localized(for: .alreadyHaveAccount),
-            actionHighlightedText: .localized(for: .login),
+        socialButtonsView = SocialButtonsView(
             googleButtonTitle: .localized(for: .googleButtonTitle),
-            appleButtonTitle: .localized(for: .appleButtonTitle)
+            appleButtonTitle: .localized(for: .appleButtonTitle),
+            actionText: .localized(for: .alreadyHaveAccount),
+            actionHighlightedText: .localized(for: .login)
         )
-
-        socialButtonsViewModel.onGoogleButtonTapped = {
-            self.viewModel.googleSignIn(from: self) { [weak self] result in
-                switch result {
-                case .success:
-                    self?.coordinator?.showDashboard()
-                case .failure:
-                    break
-                }
-            }
-        }
-
-        socialButtonsViewModel.onAppleButtonTapped = {
-            guard let window = self.view.window else {
-                return
-            }
-
-            self.viewModel.appleSignIn(presentationAnchor: window) { [weak self] result in
-                switch result {
-                case .success:
-                    self?.coordinator?.showDashboard()
-                case .failure:
-                    break
-                }
-            }
-        }
-
-        socialButtonsViewModel.onActionLabelTapped = {
-            self.coordinator?.showLogin()
-        }
-        socialButtonsView = SocialButtonsView(viewModel: socialButtonsViewModel)
+        socialButtonsView.delegate = self
         view.addSubview(socialButtonsView)
     }
 

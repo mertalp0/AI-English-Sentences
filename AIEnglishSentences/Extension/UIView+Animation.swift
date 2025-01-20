@@ -8,19 +8,31 @@
 import UIKit
 
 extension UIView {
-    func animateBackgroundColor(to color: UIColor, duration: TimeInterval = 0.3) {
-        UIView.animate(withDuration: duration, delay: 0, options: .curveEaseInOut, animations: {
+    func animateBackgroundColor(
+        to color: UIColor,
+        duration: TimeInterval = 0.3
+    ) {
+        UIView.animate(
+                withDuration: duration,
+                delay: 0,
+                options: .curveEaseInOut,
+                animations: {
             self.backgroundColor = color
         })
     }
 
-    func animateScaleDown(duration: TimeInterval = 0.1, scale: CGFloat = 0.95) {
+    func animateScaleDown(
+        duration: TimeInterval = 0.1,
+        scale: CGFloat = 0.95
+    ) {
         UIView.animate(withDuration: duration, animations: {
             self.transform = CGAffineTransform(scaleX: scale, y: scale)
         })
     }
 
-    func animateScaleUp(duration: TimeInterval = 0.1) {
+    func animateScaleUp(
+        duration: TimeInterval = 0.1
+    ) {
         UIView.animate(withDuration: duration, animations: {
             self.transform = .identity
         })

@@ -10,6 +10,7 @@ import BaseMVVMCKit
 import SnapKit
 
 final class InfoViewController: BaseViewController<InfoCoordinator, InfoViewModel> {
+
     // MARK: - UI Elements
     private var backgroundImageView: UIImageView!
     private var logoImageView: UIImageView!
@@ -20,6 +21,10 @@ final class InfoViewController: BaseViewController<InfoCoordinator, InfoViewMode
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupAll()
+    }
+
+    private func setupAll() {
         setupUI()
         setupConstraints()
     }
@@ -62,49 +67,18 @@ final class InfoViewController: BaseViewController<InfoCoordinator, InfoViewMode
         loginButton.delegate = self
         view.addSubview(loginButton)
 
-        let socialButtonsViewModel = SocialButtonsViewModel(
-            actionText: .localized(for: .dontHaveAccount),
-            actionHighlightedText: .localized(for: .signup),
-            googleButtonTitle: .localized(for: .googleButtonTitle),
-            appleButtonTitle: .localized(for: .appleButtonTitle)
+        socialButtonsView = SocialButtonsView(
+                googleButtonTitle: .localized(for: .googleButtonTitle),
+                appleButtonTitle: .localized(for: .appleButtonTitle),
+                actionText: .localized(for: .dontHaveAccount),
+                actionHighlightedText: .localized(for: .signup)
         )
-
-        socialButtonsViewModel.onGoogleButtonTapped = {
-            self.viewModel.loginWithGoogle(from: self) { [weak self] result in
-                switch result {
-                case .success:
-                    self?.coordinator?.showDashboard()
-                case .failure:
-                    break
-                }
-            }
-        }
-
-        socialButtonsViewModel.onAppleButtonTapped = {
-            guard let window = self.view.window else {
-                return
-            }
-            self.viewModel.loginWithApple(presentationAnchor: window) { [weak self] result in
-                switch result {
-                case .success:
-                    self?.coordinator?.showDashboard()
-                case .failure:
-                    break
-                }
-            }
-        }
-
-        socialButtonsViewModel.onActionLabelTapped = {
-            self.coordinator?.showRegister()
-        }
-
-        socialButtonsView = SocialButtonsView(viewModel: socialButtonsViewModel)
+        socialButtonsView.delegate = self
         view.addSubview(socialButtonsView)
     }
 
     // MARK: - Setup Constraints
     private func setupConstraints() {
-
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

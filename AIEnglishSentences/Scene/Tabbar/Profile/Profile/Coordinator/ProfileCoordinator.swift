@@ -33,7 +33,8 @@ final class ProfileCoordinator: BaseCoordinator {
 
     func showApps() {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in showResult")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
 
         let myAppsCoordinator = MyAppsCoordinator(navigationController: navigationController)
@@ -46,7 +47,8 @@ final class ProfileCoordinator: BaseCoordinator {
 
     func showLanguagePage() {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in showResult")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
 
         let coordinator = LanguageSelectionCoordinator(navigationController: navigationController)
@@ -59,7 +61,8 @@ final class ProfileCoordinator: BaseCoordinator {
 
     func showPrivacyPolicy() {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in showResult")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
 
         let coordinator = PrivacyPolicyCoordinator(navigationController: navigationController)

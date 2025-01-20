@@ -13,7 +13,6 @@ protocol AuthBarDelegate: AnyObject {
 }
 
 final class AuthBar: UIView {
-
     // MARK: - UI Elements
     private let backButton: UIButton = {
         let button = UIButton(type: .system)

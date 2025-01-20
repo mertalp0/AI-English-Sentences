@@ -27,13 +27,17 @@ final class OpenAIService {
         writingStyle: String,
         completion: @escaping (Result<[Sentence], Error>) -> Void
     ) {
-        let endpoint = OpenAIEndpoint.generateSentences(
+        let parameters = GenerateSentencesParameters(
             inputWords: inputWords,
             maxWords: maxWords,
             sentenceCount: sentenceCount,
             category: category,
             writingTone: writingTone,
-            writingStyle: writingStyle,
+            writingStyle: writingStyle
+        )
+
+        let endpoint = OpenAIEndpoint.generateSentences(
+            parameters: parameters,
             apiKey: apiKey
         )
         provider.request(endpoint, responseType: OpenAIResponse.self) { result in

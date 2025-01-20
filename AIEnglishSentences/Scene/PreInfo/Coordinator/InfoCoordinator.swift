@@ -17,17 +17,29 @@ final class InfoCoordinator: BaseCoordinator {
     }
 
     func showLogin() {
-        let loginCoordinator = LoginCoordinator(navigationController: self.navigationController!, from: .info)
+        guard let navigationController = self.navigationController else {
+            Logger.log("NavigationController is nil.", type: .error)
+            return
+        }
+        let loginCoordinator = LoginCoordinator(navigationController: navigationController, from: .info)
         loginCoordinator.start()
     }
 
     func showRegister() {
-        let registerCoordinator = RegisterCoordinator(navigationController: self.navigationController!, from: .info)
+        guard let navigationController = self.navigationController else {
+            Logger.log("NavigationController is nil.", type: .error)
+            return
+        }
+        let registerCoordinator = RegisterCoordinator(navigationController: navigationController, from: .info)
         registerCoordinator.start()
     }
 
     func showDashboard() {
-        let dashboardCoordinator = DashboardCoordinator(navigationController: self.navigationController!)
+        guard let navigationController = self.navigationController else {
+            Logger.log("NavigationController is nil.", type: .error)
+            return
+        }
+        let dashboardCoordinator = DashboardCoordinator(navigationController: navigationController)
         dashboardCoordinator.start()
     }
 }

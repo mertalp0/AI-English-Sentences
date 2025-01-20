@@ -94,7 +94,8 @@ final class HistoryViewController: BaseViewController<HistoryCoordinator, Histor
         viewModel.fetchSentences { _ in
             self.loadInitialData()
             self.updateUIForCurrentData()
-        }}
+        }
+    }
 
      func loadInitialData() {
         allData = SentenceManager.shared.sentences
