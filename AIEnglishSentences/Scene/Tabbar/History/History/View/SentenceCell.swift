@@ -44,7 +44,6 @@ final class SentenceCell: UITableViewCell {
         label.font = .dynamicFont(size: 16, weight: .regular)
         label.textColor = .black
         label.numberOfLines = 0
-        label.lineBreakMode = .byWordWrapping
         return label
     }()
 
@@ -127,8 +126,6 @@ final class SentenceCell: UITableViewCell {
     // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        selectionStyle = .none
-        backgroundColor = .clear
         setupUI()
     }
 
@@ -136,8 +133,83 @@ final class SentenceCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Setup UI
+    // MARK: - Configure Cell
+    func configure(with sentence: Sentence, type: SentenceCellType) {
+        self.currentSentence = sentence
+        self.type = type
+        sentenceLabel.text = sentence.sentence
+        writingToneLabel.text = sentence.writingTone
+        writingStyleLabel.text = sentence.writingStyle
+        createdAtLabel.text = DateFormatter.localizedString(
+                from: sentence.createdAt,
+                dateStyle: .medium,
+                timeStyle: .none
+            )
+        updateSaveAndFavoriteButton()
+    }
+
+    func updateSaveAndFavoriteButton() {
+        guard let sentence = currentSentence else { return }
+        let icon: UIImage?
+        switch type {
+        case .historyCell:
+            icon = sentence.favorite ? .appIcon(.starFill) : .appIcon(.star)
+        case .resultCell:
+            if SentenceManager.shared.sentences.contains(where: { $0.id == sentence.id }) {
+                icon = .appIcon(.bookmarkFill)
+            } else {
+                icon = .appIcon(.bookmark)
+            }
+        case .none:
+            return
+        }
+        saveAndFavoriteButton.setImage(icon, for: .normal)
+    }
+
+    func updatePlayButton(isPlaying: Bool) {
+        let icon: UIImage? = isPlaying ? .appIcon(.stopCircle) : .appIcon(.playCircle)
+        playButton.setImage(icon, for: .normal)
+    }
+
+    // MARK: - Actions
+    @objc private func onTapPlay() {
+        guard let sentence = currentSentence else { return }
+        delegate?.didTapPlayButton(for: sentence.sentence, in: self)
+    }
+
+    @objc private func onTapSaveAndFavorite() {
+        guard let sentence = currentSentence else { return }
+        delegate?.didTapSaveAndFavorite(for: sentence, in: self)
+    }
+
+    func updateSaveAndFavoriteButton(for sentence: Sentence) {
+        let icon: UIImage?
+        if SentenceManager.shared.sentences.contains(where: { $0.id == sentence.id }) {
+            icon = .appIcon(.bookmarkFill)
+        } else {
+            icon = .appIcon(.bookmark)
+        }
+        UIView.transition(
+                with: saveAndFavoriteButton,
+                duration: 0.3,
+                options: .transitionCrossDissolve,
+                animations: {
+            self.saveAndFavoriteButton.setImage(icon, for: .normal)
+        })
+    }
+
+    @objc private func onTapCopy() {
+          guard let sentence = currentSentence else { return }
+          delegate?.didTapCopyButton(for: sentence.sentence, in: self)
+      }
+}
+
+// MARK: - Setup UI
+extension SentenceCell {
     private func setupUI() {
+        selectionStyle = .none
+        backgroundColor = .clear
+
         contentView.addSubview(containerView)
         containerView.snp.makeConstraints { make in
             make.edges.equalToSuperview().inset(8)
@@ -202,66 +274,4 @@ final class SentenceCell: UITableViewCell {
         saveAndFavoriteButton.addTarget(self, action: #selector(onTapSaveAndFavorite), for: .touchUpInside)
         copyButton.addTarget(self, action: #selector(onTapCopy), for: .touchUpInside)
     }
-
-    // MARK: - Configure Cell
-    func configure(with sentence: Sentence, type: SentenceCellType) {
-        self.currentSentence = sentence
-        self.type = type
-        sentenceLabel.text = sentence.sentence
-        writingToneLabel.text = sentence.writingTone
-        writingStyleLabel.text = sentence.writingStyle
-        createdAtLabel.text = DateFormatter.localizedString(from: sentence.createdAt, dateStyle: .medium, timeStyle: .none)
-        updateSaveAndFavoriteButton()
-    }
-
-    func updateSaveAndFavoriteButton() {
-        guard let sentence = currentSentence else { return }
-        let icon: UIImage?
-        switch type {
-        case .historyCell:
-            icon = sentence.favorite ? .appIcon(.starFill) : .appIcon(.star)
-        case .resultCell:
-            if SentenceManager.shared.sentences.contains(where: { $0.id == sentence.id }) {
-                icon = .appIcon(.bookmarkFill)
-            } else {
-                icon = .appIcon(.bookmark)
-            }
-        case .none:
-            return
-        }
-        saveAndFavoriteButton.setImage(icon, for: .normal)
-    }
-
-    func updatePlayButton(isPlaying: Bool) {
-        let icon: UIImage? = isPlaying ? .appIcon(.stopCircle) : .appIcon(.playCircle)
-        playButton.setImage(icon, for: .normal)
-    }
-
-    // MARK: - Actions
-    @objc private func onTapPlay() {
-        guard let sentence = currentSentence else { return }
-        delegate?.didTapPlayButton(for: sentence.sentence, in: self)
-    }
-
-    @objc private func onTapSaveAndFavorite() {
-        guard let sentence = currentSentence else { return }
-        delegate?.didTapSaveAndFavorite(for: sentence, in: self)
-    }
-
-    func updateSaveAndFavoriteButton(for sentence: Sentence) {
-        let icon: UIImage?
-        if SentenceManager.shared.sentences.contains(where: { $0.id == sentence.id }) {
-            icon = .appIcon(.bookmarkFill)
-        } else {
-            icon = .appIcon(.bookmark)
-        }
-        UIView.transition(with: saveAndFavoriteButton, duration: 0.3, options: .transitionCrossDissolve, animations: {
-            self.saveAndFavoriteButton.setImage(icon, for: .normal)
-        })
-    }
-
-    @objc private func onTapCopy() {
-          guard let sentence = currentSentence else { return }
-          delegate?.didTapCopyButton(for: sentence.sentence, in: self)
-      }
 }

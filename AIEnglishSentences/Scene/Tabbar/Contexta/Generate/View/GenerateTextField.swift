@@ -10,29 +10,29 @@ import SnapKit
 
 final class GenerateTextView: UITextView {
 
-    private let placeholderLabel: UILabel = {
-        let label = UILabel()
-        label.font = .dynamicFont(size: 14)
-        label.textColor = .gray
-        label.text = .localized(for: .generateTextViewPlaceholder)
-        return label
-    }()
-
+    private var placeholderLabel: UILabel!
     private var maxNumberOfLines: Int = 5
 
     // MARK: - Initialization
     override init(frame: CGRect, textContainer: NSTextContainer?) {
         super.init(frame: frame, textContainer: textContainer)
-        setupView()
+        setupUI()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupView()
+        setupUI()
+    }
+}
+
+// MARK: - Setup UI
+private extension GenerateTextView {
+    private func setupUI() {
+        setupTextView()
+        setupPlaceholderLabel()
     }
 
-    // MARK: - Setup
-    private func setupView() {
+    private func setupTextView() {
         self.backgroundColor = .backgroundColor
         self.layer.cornerRadius = 10
         self.layer.borderWidth = 1
@@ -42,23 +42,36 @@ final class GenerateTextView: UITextView {
         self.isScrollEnabled = false
         self.textContainerInset = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
         self.delegate = self
+    }
 
+    private func setupPlaceholderLabel() {
+        placeholderLabel = UILabel()
+        placeholderLabel.font = .dynamicFont(size: 14)
+        placeholderLabel.textColor = .gray
+        placeholderLabel.text = .localized(for: .generateTextViewPlaceholder)
         addSubview(placeholderLabel)
+
         placeholderLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.top.equalToSuperview().offset(UIHelper.dynamicHeight(8))
         }
     }
+}
 
-    private func updatePlaceholderVisibility() {
+// MARK: - Placeholder Handling
+private extension GenerateTextView {
+    func updatePlaceholderVisibility() {
         placeholderLabel.isHidden = !self.text.isEmpty
     }
+}
 
+// MARK: - Public Methods
+extension GenerateTextView {
     func setMaxNumberOfLines(_ lines: Int) {
         self.maxNumberOfLines = lines
     }
 
-    private func calculateHeight() -> CGFloat {
+    func calculateHeight() -> CGFloat {
         guard let font = self.font else { return 0 }
         let lineHeight = font.lineHeight
         return lineHeight * CGFloat(maxNumberOfLines)

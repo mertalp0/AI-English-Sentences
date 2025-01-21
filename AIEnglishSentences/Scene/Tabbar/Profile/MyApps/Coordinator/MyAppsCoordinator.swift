@@ -10,8 +10,8 @@ import BaseMVVMCKit
 final class MyAppsCoordinator: BaseCoordinator {
 
     override func start() {
-        let myAppsViewModel = MyAppsViewModel()
-        let myAppsVC = MyAppsViewController(viewModel: myAppsViewModel)
+        let baseViewModel = BaseViewModel()
+        let myAppsVC = MyAppsViewController(viewModel: baseViewModel)
         myAppsVC.coordinator = self
         push(myAppsVC)
     }

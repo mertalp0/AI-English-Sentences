@@ -8,7 +8,7 @@
 import UIKit
 import BaseMVVMCKit
 
-final class ContextaViewController: BaseViewController<ContextaCoordinator, ContextaViewModel> {
+final class ContextaViewController: BaseViewController<ContextaCoordinator, BaseViewModel> {
 
     // MARK: - Properties
     let categoryCell: [CellType] = [.professional, .personal, .educational]

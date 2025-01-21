@@ -10,8 +10,8 @@ import BaseMVVMCKit
 final class LanguageSelectionCoordinator: BaseCoordinator {
 
     override func start() {
-        let languageSelectionViewModel = LanguageSelectionViewModel()
-        let languageSelectionVC = LanguageSelectionViewController(viewModel: languageSelectionViewModel)
+        let baseViewModel = BaseViewModel()
+        let languageSelectionVC = LanguageSelectionViewController(viewModel: baseViewModel)
         languageSelectionVC.coordinator = self
         push(languageSelectionVC)
     }

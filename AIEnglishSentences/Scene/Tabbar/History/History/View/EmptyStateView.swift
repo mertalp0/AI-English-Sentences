@@ -11,9 +11,9 @@ import SnapKit
 final class EmptyStateView: UIView {
 
     // MARK: - UI Elements
-    private let imageView = UIImageView()
-    private let titleLabel = UILabel()
-    private let descriptionLabel = UILabel()
+    private var imageView: UIImageView!
+    private var titleLabel: UILabel!
+    private var descriptionLabel: UILabel!
 
     // MARK: - Initialization
     init() {
@@ -25,43 +25,58 @@ final class EmptyStateView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Setup UI
+    // MARK: - Configuration
+    func configure(image: UIImage?, title: String, description: String) {
+        imageView.image = image
+        titleLabel.text = title
+        descriptionLabel.text = description
+    }
+}
+
+// MARK: - Setup UI
+private extension EmptyStateView {
     private func setupUI() {
+        setupImageView()
+        setupTitleLabel()
+        setupDescriptionLabel()
+    }
+
+    private func setupImageView() {
+        imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         addSubview(imageView)
-
-        titleLabel.textAlignment = .center
-        titleLabel.font = .dynamicFont(size: 18, weight: .bold)
-        titleLabel.textColor = .darkGray
-        addSubview(titleLabel)
-
-        descriptionLabel.textAlignment = .center
-        descriptionLabel.font = .dynamicFont(size: 14, weight: .regular)
-        descriptionLabel.textColor = .gray
-        descriptionLabel.numberOfLines = 0
-        addSubview(descriptionLabel)
 
         imageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.centerX.equalToSuperview()
             make.width.height.equalTo(UIHelper.dynamicHeight(250))
         }
+    }
+
+    private func setupTitleLabel() {
+        titleLabel = UILabel()
+        titleLabel.textAlignment = .center
+        titleLabel.font = .dynamicFont(size: 18, weight: .bold)
+        titleLabel.textColor = .darkGray
+        addSubview(titleLabel)
 
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(imageView.snp.bottom).offset(UIHelper.dynamicHeight(16))
             make.leading.trailing.equalToSuperview()
         }
+    }
+
+    private func setupDescriptionLabel() {
+        descriptionLabel = UILabel()
+        descriptionLabel.textAlignment = .center
+        descriptionLabel.font = .dynamicFont(size: 14, weight: .regular)
+        descriptionLabel.textColor = .gray
+        descriptionLabel.numberOfLines = 0
+        addSubview(descriptionLabel)
 
         descriptionLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(UIHelper.dynamicHeight(8))
             make.leading.trailing.equalToSuperview().inset(16)
         }
-    }
-
-    // MARK: - Configuration
-    func configure(image: UIImage?, title: String, description: String) {
-        imageView.image = image
-        titleLabel.text = title
-        descriptionLabel.text = description
     }
 }

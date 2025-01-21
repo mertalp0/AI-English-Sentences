@@ -13,7 +13,7 @@ final class GenerateButton: UIButton {
     // MARK: - Initialization
     init() {
         super.init(frame: .zero)
-        setupButton()
+        setupUI()
         setupActions()
     }
 
@@ -21,7 +21,26 @@ final class GenerateButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Setup
+    private func setupActions() {
+        addTarget(self, action: #selector(animateDown), for: .touchDown)
+        addTarget(self, action: #selector(animateUp), for: [.touchUpInside, .touchCancel, .touchDragExit])
+    }
+
+    @objc private func animateDown() {
+        self.animateScaleDown()
+    }
+
+    @objc private func animateUp() {
+        self.animateScaleUp()
+    }
+}
+
+// MARK: - Setup
+extension GenerateButton {
+    private func  setupUI() {
+        setupButton()
+    }
+
     private func setupButton() {
         self.backgroundColor = .mainColor
         self.layer.cornerRadius = 8
@@ -41,16 +60,4 @@ final class GenerateButton: UIButton {
         }
     }
 
-    private func setupActions() {
-        addTarget(self, action: #selector(animateDown), for: .touchDown)
-        addTarget(self, action: #selector(animateUp), for: [.touchUpInside, .touchCancel, .touchDragExit])
-    }
-
-    @objc private func animateDown() {
-        self.animateScaleDown()
-    }
-
-    @objc private func animateUp() {
-        self.animateScaleUp()
-    }
 }

@@ -28,9 +28,7 @@ final class GenerateViewModel: BaseViewModel {
             return
         }
         startLoading()
-
-        openAIService
-            .generateSentences(
+        openAIService.generateSentences(
                 inputWords: inputWords,
                 maxWords: maxWords,
                 sentenceCount: sentenceCount,
