@@ -13,7 +13,7 @@ final class DropdownMenuButton: UIView {
     // MARK: - Properties
     private let title: String
     private let options: [String]
-     var selectedOption: String? {
+    var selectedOption: String? {
         didSet {
             selectedOptionLabel.text = selectedOption
         }
@@ -34,7 +34,7 @@ final class DropdownMenuButton: UIView {
         self.title = title
         self.options = options
         super.init(frame: .zero)
-        setupViews()
+        setupUI()
         selectedOption = options.first
     }
 
@@ -45,73 +45,6 @@ final class DropdownMenuButton: UIView {
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
         setupTableView()
-    }
-
-    // MARK: - Setup Views
-    private func setupViews() {
-        titleLabel.text = title
-        titleLabel.font = .dynamicFont(size: 14, weight: .medium)
-        titleLabel.textColor = .darkGray
-
-        selectedOptionLabel.text = options.first
-        selectedOptionLabel.font = .dynamicFont(size: 16, weight: .semibold)
-        selectedOptionLabel.textColor = .black
-
-        dropdownIcon.image = .appIcon(.chevronDown)
-        dropdownIcon.tintColor = .gray
-        dropdownIcon.contentMode = .scaleAspectFit
-
-        addSubview(titleLabel)
-        addSubview(selectedOptionLabel)
-        addSubview(dropdownIcon)
-
-        self.backgroundColor = .white
-        self.layer.cornerRadius = 8
-        self.layer.borderWidth = 1
-        self.layer.borderColor = UIColor.systemGray4.cgColor
-
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(8))
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-        }
-
-        selectedOptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(UIHelper.dynamicHeight(4))
-            make.leading.equalToSuperview().offset(16)
-        }
-
-        dropdownIcon.snp.makeConstraints { make in
-            make.centerY.equalTo(selectedOptionLabel)
-            make.trailing.equalToSuperview().offset(-16)
-            make.width.height.equalTo(UIHelper.dynamicHeight(20))
-        }
-
-        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toggleDropdown)))
-    }
-
-    private func setupTableView() {
-        guard let superview = self.superview else { return }
-
-        tableView = UITableView()
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.layer.cornerRadius = 8
-        tableView.layer.borderWidth = 1
-        tableView.layer.borderColor = UIColor.systemGray4.cgColor
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
-        tableView.isHidden = true
-
-        superview.addSubview(tableView)
-
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: self.bottomAnchor, constant: UIHelper.dynamicHeight(8)),
-            tableView.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -16)
-        ])
-        tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
-        tableViewHeightConstraint.isActive = true
     }
 
     // MARK: - Toggle Dropdown
@@ -144,6 +77,91 @@ final class DropdownMenuButton: UIView {
                 }
             }
         )
+    }
+}
+
+// MARK: - Setup UI
+private extension DropdownMenuButton {
+    private func setupUI() {
+        configureLabels()
+        configureDropdownIcon()
+        configureViewLayout()
+        setupTapGesture()
+    }
+
+    private func configureLabels() {
+        titleLabel.text = title
+        titleLabel.font = .dynamicFont(size: 14, weight: .medium)
+        titleLabel.textColor = .darkGray
+
+        selectedOptionLabel.text = options.first
+        selectedOptionLabel.font = .dynamicFont(size: 16, weight: .semibold)
+        selectedOptionLabel.textColor = .black
+    }
+
+    private func configureDropdownIcon() {
+        dropdownIcon.image = .appIcon(.chevronDown)
+        dropdownIcon.tintColor = .gray
+        dropdownIcon.contentMode = .scaleAspectFit
+    }
+
+    private func configureViewLayout() {
+        addSubview(titleLabel)
+        addSubview(selectedOptionLabel)
+        addSubview(dropdownIcon)
+
+        self.backgroundColor = .white
+        self.layer.cornerRadius = 8
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor.systemGray4.cgColor
+
+        setupConstraints()
+    }
+
+    private func setupConstraints() {
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(8))
+            make.leading.trailing.equalToSuperview().inset(16)
+        }
+
+        selectedOptionLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(UIHelper.dynamicHeight(4))
+            make.leading.equalToSuperview().offset(16)
+        }
+
+        dropdownIcon.snp.makeConstraints { make in
+            make.centerY.equalTo(selectedOptionLabel)
+            make.trailing.equalToSuperview().offset(-16)
+            make.width.height.equalTo(UIHelper.dynamicHeight(20))
+        }
+    }
+
+    private func setupTapGesture() {
+        self.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(toggleDropdown)))
+    }
+
+    private func setupTableView() {
+        guard let superview = self.superview else { return }
+
+        tableView = UITableView()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.layer.cornerRadius = 8
+        tableView.layer.borderWidth = 1
+        tableView.layer.borderColor = UIColor.systemGray4.cgColor
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
+        tableView.isHidden = true
+
+        superview.addSubview(tableView)
+
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: self.bottomAnchor, constant: UIHelper.dynamicHeight(8)),
+            tableView.leadingAnchor.constraint(equalTo: superview.leadingAnchor, constant: 16),
+            tableView.trailingAnchor.constraint(equalTo: superview.trailingAnchor, constant: -16)
+        ])
+        tableViewHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 0)
+        tableViewHeightConstraint.isActive = true
     }
 }
 

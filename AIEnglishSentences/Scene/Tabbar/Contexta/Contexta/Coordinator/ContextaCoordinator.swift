@@ -12,8 +12,8 @@ final class ContextaCoordinator: BaseCoordinator {
 
     override func start() {
 
-        let contextaViewModel = ContextaViewModel()
-        let gcontextaVC = ContextaViewController(viewModel: contextaViewModel)
+        let baseViewModel = BaseViewModel()
+        let gcontextaVC = ContextaViewController(viewModel: baseViewModel)
         gcontextaVC.coordinator = self
         push(gcontextaVC)
     }

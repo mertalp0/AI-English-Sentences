@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import BaseMVVMCKit
 
-final class MyAppsViewController: BaseViewController<MyAppsCoordinator, MyAppsViewModel> {
+final class MyAppsViewController: BaseViewController<MyAppsCoordinator, BaseViewModel> {
     // MARK: - Properties
     let apps: [AppModel] = AppConstants.myApps
 

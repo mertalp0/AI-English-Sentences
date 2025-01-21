@@ -15,8 +15,8 @@ final class HistorySegmentedControl: UIView {
 
     // MARK: - Properties
     private var buttons: [UIButton] = []
-    private let stackView = UIStackView()
-    private let selectionIndicator = UIView()
+    private var stackView: UIStackView!
+    private var selectionIndicator: UIView!
     private var selectedIndexInternal: Int = 0
 
     weak var delegate: HistorySegmentedControlDelegate?
@@ -34,9 +34,17 @@ final class HistorySegmentedControl: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    // MARK: - Setup
-    private func setupUI(items: [String]) {
+// MARK: - Setup UI
+private extension HistorySegmentedControl {
+    func setupUI(items: [String]) {
+        setupButtons(items: items)
+        setupStackView()
+        setupSelectionIndicator(itemCount: items.count)
+    }
+
+    func setupButtons(items: [String]) {
         buttons = items.enumerated().map { index, title in
             let button = UIButton(type: .system)
             button.setTitle(title, for: .normal)
@@ -45,28 +53,37 @@ final class HistorySegmentedControl: UIView {
             button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
             return button
         }
+    }
 
+    func setupStackView() {
+        stackView = UIStackView(arrangedSubviews: buttons)
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
-        buttons.forEach { stackView.addArrangedSubview($0) }
         addSubview(stackView)
+
         stackView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+    }
 
+    func setupSelectionIndicator(itemCount: Int) {
+        selectionIndicator = UIView()
         selectionIndicator.backgroundColor = .mainColor
         addSubview(selectionIndicator)
+
         selectionIndicator.snp.makeConstraints { make in
             make.height.equalTo(UIHelper.dynamicHeight(2))
             make.leading.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.width.equalToSuperview().dividedBy(items.count)
+            make.width.equalToSuperview().dividedBy(itemCount)
         }
     }
+}
 
-    // MARK: - Actions
-    @objc private func buttonTapped(_ sender: UIButton) {
+// MARK: - Actions
+private extension HistorySegmentedControl {
+    @objc func buttonTapped(_ sender: UIButton) {
         buttons.forEach { $0.setTitleColor(.gray, for: .normal) }
         sender.setTitleColor(.mainColor, for: .normal)
 

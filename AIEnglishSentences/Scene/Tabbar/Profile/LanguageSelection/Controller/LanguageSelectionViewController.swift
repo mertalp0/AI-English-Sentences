@@ -8,7 +8,7 @@
 import UIKit
 import BaseMVVMCKit
 
-final class LanguageSelectionViewController: BaseViewController<LanguageSelectionCoordinator, LanguageSelectionViewModel> {
+final class LanguageSelectionViewController: BaseViewController<LanguageSelectionCoordinator, BaseViewModel> {
 
     // MARK: - UI Elements
     private var backgroundImageView: UIImageView!
@@ -26,7 +26,6 @@ final class LanguageSelectionViewController: BaseViewController<LanguageSelectio
 
 // MARK: - UI Setup
 private extension LanguageSelectionViewController {
-
     func setupUI() {
         setupBackgroundImageView()
         setupAppBar()
