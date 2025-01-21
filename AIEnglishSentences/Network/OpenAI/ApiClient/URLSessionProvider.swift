@@ -10,7 +10,7 @@ import Foundation
 class URLSessionProvider {
     static let shared = URLSessionProvider()
     private init() {}
-    
+
     func request<T: Decodable>(_ endpoint: RequestProtocol,
                                responseType: T.Type,
                                completion: @escaping (Result<T, APIError>) -> Void) {

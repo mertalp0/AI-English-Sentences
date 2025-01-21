@@ -8,23 +8,23 @@
 import BaseMVVMCKit
 
 final class LanguageSelectionCoordinator: BaseCoordinator {
-    
+
     override func start() {
         let languageSelectionViewModel = LanguageSelectionViewModel()
-        let LanguageSelectionVC = LanguageSelectionVC(viewModel: languageSelectionViewModel)
-        LanguageSelectionVC.coordinator = self
-        push(LanguageSelectionVC)
+        let languageSelectionVC = LanguageSelectionViewController(viewModel: languageSelectionViewModel)
+        languageSelectionVC.coordinator = self
+        push(languageSelectionVC)
     }
-    
+
     func back() {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in ResultCoordinator")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
 
         if let tabBarController = navigationController.tabBarController {
             tabBarController.setTabBar(hidden: false, animated: true)
         }
-
         pop()
     }
 }

@@ -5,7 +5,6 @@
 //  Created by mert alp on 4.01.2025.
 //
 
-
 import UIKit
 import SnapKit
 
@@ -15,71 +14,66 @@ protocol AuthBarDelegate: AnyObject {
 
 final class AuthBar: UIView {
 
-    // MARK: - UI Elements
-    private let backButton: UIButton = {
-        let button = UIButton(type: .system)
-        let backIcon = UIImage(systemName: "chevron.left")
-        let resizedRightIcon = backIcon?.resizedIcon(dynamicSize: 22, weight: .bold)
-        button.setImage(resizedRightIcon, for: .normal)
-        button.tintColor = .mainColor
-        button.contentHorizontalAlignment = .leading
-        button.imageView?.contentMode = .scaleAspectFit
-        return button
-    }()
-    
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Title"
-        label.font = .dynamicFont(size: 27, weight: .bold )
-        label.textColor = .mainColor
-        label.textAlignment = .center
-        return label
-    }()
-    
     // MARK: - Delegate
     weak var delegate: AuthBarDelegate?
+
+    // MARK: - UI Elements
+    private var backButton: UIButton!
+    private var titleLabel: UILabel!
 
     // MARK: - Initialization
     init(title: String) {
         super.init(frame: .zero)
-        titleLabel.text = title
-        setupUI()
-        setupConstraints()
-        setupActions()
+        setupUI(with: title)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Setup UI
-    private func setupUI() {
-        addSubview(backButton)
-        addSubview(titleLabel)
+    // MARK: - Actions
+    @objc private func didTapBackButton() {
+        delegate?.didTapBackButton()
+    }
+}
+
+// MARK: - UI Setup
+private extension AuthBar {
+
+    private func setupUI(with title: String) {
+        setupBackButton()
+        setupTitleLabel(with: title)
     }
 
-    // MARK: - Setup Constraints
-    private func setupConstraints() {
+    private func setupBackButton() {
+        backButton = UIButton(type: .system)
+        let backIcon = UIImage.appIcon(.chevronLeft)?.resizedIcon(dynamicSize: 22, weight: .bold)
+        backButton.setImage(backIcon, for: .normal)
+        backButton.tintColor = .mainColor
+        backButton.contentHorizontalAlignment = .leading
+        backButton.imageView?.contentMode = .scaleAspectFit
+        backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
+        addSubview(backButton)
+
         backButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
             make.width.height.equalTo(UIHelper.dynamicHeight(24))
         }
+    }
+
+    private func setupTitleLabel(with title: String) {
+        titleLabel = UILabel()
+        titleLabel.text = title
+        titleLabel.font = .dynamicFont(size: 27, weight: .bold)
+        titleLabel.textColor = .mainColor
+        titleLabel.textAlignment = .center
+        addSubview(titleLabel)
 
         titleLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
             make.leading.greaterThanOrEqualTo(backButton.snp.trailing).offset(8)
             make.trailing.equalToSuperview().offset(-16)
         }
-    }
-
-    // MARK: - Setup Actions
-    private func setupActions() {
-        backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
-    }
-
-    // MARK: - Actions
-    @objc private func didTapBackButton() {
-        delegate?.didTapBackButton()
     }
 }

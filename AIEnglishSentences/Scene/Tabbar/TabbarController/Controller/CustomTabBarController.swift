@@ -31,7 +31,6 @@ final class DashboardController: UITabBarController {
         self.tabBar.backgroundColor = .mainBlur
         self.tabBar.tintColor = .mainColor
         self.tabBar.unselectedItemTintColor = UIColor.lightGray
-        
         let historyNavigationController = historyCoordinator.navigationController!
         historyNavigationController.tabBarItem = UITabBarItem(
             title: .localized(for: .tabBarHistory),
@@ -67,24 +66,5 @@ final class DashboardController: UITabBarController {
             generateSentenceNavigationController,
             profileNavigationController
         ]
-    }
-}
-
-extension DashboardController: UITabBarControllerDelegate {
-    // MARK: - UITabBarControllerDelegate
-    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
-        guard let currentVC = selectedViewController else { return true }
-
-        if let fromView = currentVC.view, let toView = viewController.view, fromView != toView {
-            UIView.transition(
-                from: fromView,
-                to: toView,
-                duration: 0.3,
-                options: [.transitionCrossDissolve],
-                completion: nil
-            )
-        }
-
-        return true
     }
 }

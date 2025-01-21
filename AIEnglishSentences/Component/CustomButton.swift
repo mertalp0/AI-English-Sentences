@@ -9,37 +9,46 @@ import UIKit
 import SnapKit
 
 final class CustomButton: UIButton {
-    
-    //MARK: - Initializers
+
+    // MARK: - Initializers
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupStyle()
-        setupActions()
+        setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    private func setupStyle(){
+
+    // MARK: - Setup UI
+    private func setupUI() {
+        setupStyle()
+        setupActions()
+    }
+
+    private func setupStyle() {
         backgroundColor = .mainColor
         setTitleColor(.white, for: .normal)
-        titleLabel?.font = UIFont.systemFont(ofSize: 16, weight: .semibold)
+        titleLabel?.font = .dynamicFont(size: 16, weight: .semibold)
         layer.cornerRadius = 8
         layer.masksToBounds = true
-        
-        self.snp.makeConstraints { make in
+
+        snp.makeConstraints { make in
             make.width.equalTo(200)
         }
     }
-    
+
     private func setupActions() {
         addTarget(self, action: #selector(animateDown), for: .touchDown)
         addTarget(self, action: #selector(animateUp), for: [.touchUpInside, .touchCancel, .touchDragExit])
     }
-    
-    // MARK: - Customization Method
-    func configure(title: String, backgroundColor: UIColor? = nil, textColor: UIColor? = nil) {
+
+    // MARK: - Configuration
+    func configure(
+        title: String,
+        backgroundColor: UIColor? = nil,
+        textColor: UIColor? = nil
+    ) {
         setTitle(title, for: .normal)
         if let bgColor = backgroundColor {
             self.backgroundColor = bgColor
@@ -48,8 +57,8 @@ final class CustomButton: UIButton {
             setTitleColor(txtColor, for: .normal)
         }
     }
-    
-    // MARK: - Animation Methods
+
+    // MARK: - Animations
     @objc private func animateDown() {
         self.animateScaleDown()
     }

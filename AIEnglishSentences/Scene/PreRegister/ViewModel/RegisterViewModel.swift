@@ -5,17 +5,14 @@
 //  Created by mert alp on 15.12.2024.
 //
 
-import UIKit
 import BaseMVVMCKit
 import FirebaseAuth
 import AuthenticationServices
 import GoogleSignIn
 
-
 final class RegisterViewModel: BaseViewModel {
     private let authService: AuthService
 
-    // ViewModel Initialization
     init(authService: AuthService = AuthServiceImpl.shared) {
         self.authService = authService
     }
@@ -29,13 +26,18 @@ final class RegisterViewModel: BaseViewModel {
         completion: @escaping (Result<UserModel, AuthError>) -> Void
     ) {
         startLoading()
-        authService.registerWithEmail(email: email, password: password, name: name, gender: gender) { [weak self] result in
+        authService.registerWithEmail(
+                email: email,
+                password: password,
+                name: name,
+                gender: gender
+            ) { [weak self] result in
             self?.stopLoading()
             switch result {
             case .success(let userModel):
                 completion(.success(userModel))
             case .failure(let error):
-                self?.handleError(message: error.errorDescription ?? "An error occurred during registration.")
+                self?.handleError(message: error.errorDescription ?? .localized(for: .sharedErrorMessage))
                 completion(.failure(error))
             }
         }
@@ -53,7 +55,7 @@ final class RegisterViewModel: BaseViewModel {
             case .success(let userModel):
                 completion(.success(userModel))
             case .failure(let error):
-                self?.handleError(message: error.errorDescription ?? "An error occurred during Google Sign-In.")
+                self?.handleError(message: error.errorDescription ?? .localized(for: .sharedErrorMessage))
                 completion(.failure(error))
             }
         }
@@ -71,7 +73,7 @@ final class RegisterViewModel: BaseViewModel {
             case .success(let userModel):
                 completion(.success(userModel))
             case .failure(let error):
-                self?.handleError(message: error.errorDescription ?? "An error occurred during Apple Sign-In.")
+                self?.handleError(message: error.errorDescription ?? .localized(for: .sharedErrorMessage))
                 completion(.failure(error))
             }
         }

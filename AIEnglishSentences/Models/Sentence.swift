@@ -17,7 +17,3 @@ struct Sentence: Codable {
     let writingStyle: String
     let createdAt: Date
 }
-
-
-
-

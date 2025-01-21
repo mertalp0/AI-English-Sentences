@@ -11,7 +11,7 @@ final class SentenceManager {
     static let shared = SentenceManager()
 
     static let sentencesUpdatedNotification = Notification.Name("SentenceManager.sentencesUpdated")
-    
+
     private(set) var sentences: [Sentence] = []
 
     private init() {}
@@ -33,20 +33,20 @@ final class SentenceManager {
             notifySentencesUpdated()
         }
     }
-    
+
     func removeSentence(at index: Int) {
         guard index >= 0 && index < sentences.count else { return }
         sentences.remove(at: index)
         notifySentencesUpdated()
     }
-    
+
     func removeSentence(by id: String) {
         if let index = sentences.firstIndex(where: { $0.id == id }) {
             sentences.remove(at: index)
             notifySentencesUpdated()
         }
     }
-    
+
     private func notifySentencesUpdated() {
         NotificationCenter.default.post(name: SentenceManager.sentencesUpdatedNotification, object: nil)
     }

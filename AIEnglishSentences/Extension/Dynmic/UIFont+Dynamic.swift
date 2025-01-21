@@ -8,7 +8,10 @@
 import UIKit
 
 extension UIFont {
-    static func dynamicFont(size: CGFloat, weight: UIFont.Weight = .regular) -> UIFont {
+    static func dynamicFont(
+        size: CGFloat,
+        weight: UIFont.Weight = .regular
+    ) -> UIFont {
         return UIHelper.dynamicFont(size: size, weight: weight)
     }
 }

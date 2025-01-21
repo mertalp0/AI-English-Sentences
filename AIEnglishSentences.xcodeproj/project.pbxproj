@@ -8,12 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		941688272D0F8E2A0082A73F /* BaseMVVMCKit in Frameworks */ = {isa = PBXBuildFile; productRef = 941688262D0F8E2A0082A73F /* BaseMVVMCKit */; };
+		9421A05E2D3C516500CA5326 /* AILex.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 9421A05D2D3C516500CA5326 /* AILex.storekit */; };
 		942A53642D19A19800BC0697 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 942A53632D19A19800BC0697 /* FirebaseAuthCombine-Community */; };
 		942A53672D19A20200BC0697 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 942A53662D19A20200BC0697 /* GoogleSignIn */; };
 		942A53692D19A20200BC0697 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 942A53682D19A20200BC0697 /* GoogleSignInSwift */; };
 		94302F742D2AC08C0079D8DC /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = 94302F732D2AC08C0079D8DC /* RevenueCat */; };
 		94302F762D2AC08C0079D8DC /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = 94302F752D2AC08C0079D8DC /* RevenueCatUI */; };
-		9446DA892D3AABEC00FE47B7 /* StoreKitConfig.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 9446DA882D3AABEC00FE47B7 /* StoreKitConfig.storekit */; };
 		945B5D9D2D0E2D230023A3D9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 945B5D9C2D0E2D230023A3D9 /* SnapKit */; };
 		945B5DA02D0E2D360023A3D9 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 945B5D9F2D0E2D360023A3D9 /* Alamofire */; };
 		945EFC4A2D0F1ECB000819E6 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 945EFC492D0F1ECB000819E6 /* FirebaseAnalytics */; };
@@ -42,7 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		9446DA882D3AABEC00FE47B7 /* StoreKitConfig.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKitConfig.storekit; sourceTree = "<group>"; };
+		9421A05D2D3C516500CA5326 /* AILex.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = AILex.storekit; sourceTree = "<group>"; };
 		94918F052D0DA32B00FDC538 /* AIEnglishSentences.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AIEnglishSentences.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94918F1B2D0DA32D00FDC538 /* AIEnglishSentencesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIEnglishSentencesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94918F252D0DA32D00FDC538 /* AIEnglishSentencesUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AIEnglishSentencesUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -123,7 +123,7 @@
 		94918EFC2D0DA32B00FDC538 = {
 			isa = PBXGroup;
 			children = (
-				9446DA882D3AABEC00FE47B7 /* StoreKitConfig.storekit */,
+				9421A05D2D3C516500CA5326 /* AILex.storekit */,
 				94DE1BA02D121EE700B860D6 /* Config */,
 				94918F072D0DA32B00FDC538 /* AIEnglishSentences */,
 				94918F1E2D0DA32D00FDC538 /* AIEnglishSentencesTests */,
@@ -159,6 +159,7 @@
 			buildConfigurationList = 94918F2E2D0DA32D00FDC538 /* Build configuration list for PBXNativeTarget "AIEnglishSentences" */;
 			buildPhases = (
 				94918F012D0DA32B00FDC538 /* Sources */,
+				9420EEB02D3C3EC900810B53 /* SwiftLint */,
 				94918F022D0DA32B00FDC538 /* Frameworks */,
 				94918F032D0DA32B00FDC538 /* Resources */,
 			);
@@ -293,7 +294,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9446DA892D3AABEC00FE47B7 /* StoreKitConfig.storekit in Resources */,
+				9421A05E2D3C516500CA5326 /* AILex.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -312,6 +313,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		9420EEB02D3C3EC900810B53 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ \"$(uname -m)\" == arm64 ]]\nthen\n    export PATH=\"/opt/homebrew/bin:$PATH\"\nfi\n\nif command -v swiftlint >/dev/null 2>&1\nthen\n    swiftlint\nelse\n    echo \"warning: ⁠ swiftlint ⁠ command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		94918F012D0DA32B00FDC538 /* Sources */ = {
@@ -456,7 +478,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -521,7 +543,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;

@@ -8,7 +8,7 @@
 import UIKit
 
 extension UITableViewCell {
-    
+
     func enablePressAnimation() {
         let touchDownGesture = UILongPressGestureRecognizer(target: self, action: #selector(handlePress(_:)))
         touchDownGesture.minimumPressDuration = 0
@@ -27,9 +27,15 @@ extension UITableViewCell {
             break
         }
     }
-    
+
     private func animateScale(to scale: CGFloat) {
-        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.7, options: [.allowUserInteraction]) {
+        UIView.animate(
+                withDuration: 0.2,
+                delay: 0,
+                usingSpringWithDamping: 0.8,
+                initialSpringVelocity: 0.7,
+                options: [.allowUserInteraction]
+            ) {
             self.transform = CGAffineTransform(scaleX: scale, y: scale)
         }
     }

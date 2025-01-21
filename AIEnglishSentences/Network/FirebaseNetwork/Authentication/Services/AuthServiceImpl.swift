@@ -9,22 +9,21 @@ import Foundation
 import UIKit
 import AuthenticationServices
 
-
 final class AuthServiceImpl: AuthService {
     static let shared = AuthServiceImpl()
-    
-    private init(){}
-    
+
+    private init() {}
+
     private let authRepository: AuthRepository = FirebaseAuthRepositoryImpl()
-    
+
     func isUserLoggedIn() -> Bool {
         return authRepository.isUserLoggedIn()
     }
-    
+
     func getCurrentUserId() -> String? {
         return authRepository.getCurrentUserId()
     }
-    
+
     func registerWithEmail(
         email: String,
         password: String,
@@ -50,16 +49,14 @@ final class AuthServiceImpl: AuthService {
                             createdAt: Date(),
                             generate: []
                         )
-                        
+
                         self.loginSubscribe(userId: user.uid) { isSucces in
-                            if(isSucces){
+                            if isSucces {
                                 completion(.success(userModel))
-                                
-                            }else{
-                                completion(.failure(.unknownError))
+                            } else {
+                                completion(.failure(AuthError.unknownError))
                             }
                         }
-                        
                     } else {
                         completion(.failure(AuthError.unknownError))
                     }
@@ -69,7 +66,7 @@ final class AuthServiceImpl: AuthService {
             }
         }
     }
-    
+
     func loginWithEmail(
         email: String,
         password: String,
@@ -86,22 +83,20 @@ final class AuthServiceImpl: AuthService {
                     createdAt: Date(),
                     generate: []
                 )
-                
+
                 self.loginSubscribe(userId: user.uid) { isSucces in
-                    if(isSucces){
+                    if isSucces {
                         completion(.success(userModel))
-                        
-                    }else{
-                        completion(.failure(.unknownError))
+                    } else {
+                        completion(.failure(AuthError.unknownError))
                     }
                 }
-                
             case .failure(let error):
                 completion(.failure(AuthError.map(from: error)))
             }
         }
     }
-    
+
     func googleSignIn(
         from viewController: UIViewController,
         completion: @escaping (Result<UserModel, AuthError>) -> Void
@@ -124,16 +119,14 @@ final class AuthServiceImpl: AuthService {
                             createdAt: Date(),
                             generate: []
                         )
-                        
+
                         self.loginSubscribe(userId: user.uid) { isSucces in
-                            if(isSucces){
+                            if isSucces {
                                 completion(.success(userModel))
-                                
-                            }else{
+                            } else {
                                 completion(.failure(.unknownError))
                             }
                         }
-                        
                     } else {
                         completion(.failure(AuthError.unknownError))
                     }
@@ -143,7 +136,7 @@ final class AuthServiceImpl: AuthService {
             }
         }
     }
-    
+
     func appleSignIn(
         presentationAnchor: ASPresentationAnchor,
         completion: @escaping (Result<UserModel, AuthError>) -> Void
@@ -166,17 +159,14 @@ final class AuthServiceImpl: AuthService {
                             createdAt: Date(),
                             generate: []
                         )
-                        
+
                         self.loginSubscribe(userId: credentials.user.uid) { isSucces in
-                            if(isSucces){
+                            if isSucces {
                                 completion(.success(userModel))
-                                
-                            }else{
+                            } else {
                                 completion(.failure(.unknownError))
                             }
                         }
-                        
-                        
                     } else {
                         completion(.failure(AuthError.unknownError))
                     }
@@ -186,36 +176,32 @@ final class AuthServiceImpl: AuthService {
             }
         }
     }
-    
+
     func logout(completion: @escaping (Result<Void, AuthError>) -> Void) {
         authRepository.logout { result in
             switch result {
             case .success:
-                
                 self.logoutSubscribe { isSuccess in
-                    if(isSuccess){
+                    if isSuccess {
                         completion(.success(()))
-                    }
-                    else{
+                    } else {
                         completion(.failure(.unknownError))
                     }
                 }
-                
             case .failure(let error):
                 completion(.failure(AuthError.map(from: error)))
             }
         }
     }
-    
+
     func deleteAccount(completion: @escaping (Result<Void, AuthError>) -> Void) {
         authRepository.deleteAccount { result in
             switch result {
             case .success:
                 self.logoutSubscribe { isSuccess in
-                    if(isSuccess){
+                    if isSuccess {
                         completion(.success(()))
-                    }
-                    else{
+                    } else {
                         completion(.failure(.unknownError))
                     }
                 }
@@ -228,12 +214,11 @@ final class AuthServiceImpl: AuthService {
 
 // MARK: - Helper func saveUserToFirestore
 extension AuthServiceImpl {
-    
     enum AuthType {
         case social
         case email
     }
-    
+
     private func saveUserToFirestoreForSocial(
         userId: String,
         name: String,
@@ -250,28 +235,29 @@ extension AuthServiceImpl {
             createdAt: Date(),
             generate: []
         )
-        
+
         UserService.shared.saveUser(user: userModel) { result in
-            switch result {
-            case .success:
-                completion(true)
-            case .failure(let error):
-                if error.localizedDescription == "The document already exists in the database." || type == .social {
-                    completion(true)
-                } else {
-                    print("Firestore save error: \(error.localizedDescription)")
-                    completion(false)
-                }
-            }
-        }
+             switch result {
+             case .success:
+                 completion(true)
+             case .failure(let error):
+                 if let firebaseError = error as? FirebaseError, firebaseError == .documentAlreadyExists || type == .social {
+                     completion(true)
+                 } else {
+                     completion(false)
+                 }
+             }
+         }
     }
 }
 
-
-//MARK: -  Helper SubscriptionService
+// MARK: - Helper SubscriptionService
 extension AuthServiceImpl {
-    
-    private func loginSubscribe(userId: String, completion: @escaping (Bool) -> Void) {
+
+    private func loginSubscribe(
+        userId: String,
+        completion: @escaping (Bool) -> Void
+    ) {
         SubscriptionService.shared.login(userId: userId) { isSuccess in
             if isSuccess {
                 completion(true)
@@ -280,13 +266,12 @@ extension AuthServiceImpl {
             }
         }
     }
-    
+
     private func logoutSubscribe(completion: @escaping (Bool) -> Void) {
         SubscriptionService.shared.logout { isSuccess in
-            if(isSuccess){
+            if isSuccess {
                 completion(true)
-            }
-            else {
+            } else {
                 completion(false)
             }
         }

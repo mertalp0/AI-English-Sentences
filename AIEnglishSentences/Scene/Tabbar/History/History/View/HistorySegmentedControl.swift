@@ -22,7 +22,7 @@ final class HistorySegmentedControl: UIView {
     weak var delegate: HistorySegmentedControlDelegate?
 
     var selectedIndex: Int {
-        get { selectedIndexInternal }
+        selectedIndexInternal
     }
 
     // MARK: - Initializer
@@ -37,7 +37,6 @@ final class HistorySegmentedControl: UIView {
 
     // MARK: - Setup
     private func setupUI(items: [String]) {
-        // Buttons
         buttons = items.enumerated().map { index, title in
             let button = UIButton(type: .system)
             button.setTitle(title, for: .normal)
@@ -47,7 +46,6 @@ final class HistorySegmentedControl: UIView {
             return button
         }
 
-        // StackView
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
@@ -57,7 +55,6 @@ final class HistorySegmentedControl: UIView {
             make.edges.equalToSuperview()
         }
 
-        // Selection Indicator
         selectionIndicator.backgroundColor = .mainColor
         addSubview(selectionIndicator)
         selectionIndicator.snp.makeConstraints { make in
@@ -87,5 +84,3 @@ final class HistorySegmentedControl: UIView {
         }
     }
 }
-
-

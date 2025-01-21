@@ -7,9 +7,8 @@
 
 import Foundation
 
-// MARK: - OpenAI Response Model
 struct OpenAIResponse: Codable {
-    
+
     struct Choice: Codable {
         let message: OpenAIMessage
     }

@@ -5,7 +5,6 @@
 //  Created by mert alp on 19.12.2024.
 //
 
-
 import Foundation
 
 enum FirebaseError: LocalizedError {
@@ -17,13 +16,13 @@ enum FirebaseError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .missingDocument:
-            return "The requested document is missing."
+            return LocalizationManager.shared.localized(for: .errorMissingDocument)
         case .decodingFailed:
-            return "Failed to decode the document."
+            return LocalizationManager.shared.localized(for: .errorDecodingFailed)
         case .documentAlreadyExists:
-            return "The document already exists in the database."
+            return LocalizationManager.shared.localized(for: .errorDocumentAlreadyExists)
         case .unknown:
-            return "An unknown error occurred."
+            return LocalizationManager.shared.localized(for: .errorUnknown)
         }
     }
 }

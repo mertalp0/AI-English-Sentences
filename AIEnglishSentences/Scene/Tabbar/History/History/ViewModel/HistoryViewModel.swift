@@ -8,19 +8,19 @@
 import BaseMVVMCKit
 
 final class HistoryViewModel: BaseViewModel {
-    
+
     private let userService = UserService.shared
     private let authService: AuthService = AuthServiceImpl.shared
     private let generateService = GenerateService.shared
-    
+
+    // MARK: - Fetch Sentences
     func fetchSentences(completion: @escaping (Bool) -> Void) {
         startLoading()
-        
         guard let userId = authService.getCurrentUserId() else {
             handleFetchError(message: .localized(for: .historyFetchErrorUserNotLoggedIn))
             return
         }
-        
+
         userService.getUser(by: userId) { [weak self] result in
             switch result {
             case .success(let user):
@@ -31,8 +31,49 @@ final class HistoryViewModel: BaseViewModel {
             }
         }
     }
-    
-    private func fetchSentencesWithUser(for generateIds: [String], completion: @escaping (Bool) -> Void) {
+
+    // MARK: - Add Favorite Sentence
+    func addFavoriteSentence(
+        sentence: Sentence,
+        completion: @escaping (Bool) -> Void
+    ) {
+        startLoading()
+        generateService.addFavoriteSentence(sentence: sentence) { [weak self] result in
+            self?.handleAddFavoriteResult(result: result, sentence: sentence, completion: completion)
+        }
+    }
+
+    // MARK: - Delete Favorite Sentence
+    func deleteFavoriteSentence(
+        sentence: Sentence,
+        completion: @escaping (Bool) -> Void
+    ) {
+        startLoading()
+        generateService.deleteFavoriteSentence(sentence: sentence) { [weak self] result in
+            self?.handleDeleteFavoriteResult(result: result, sentence: sentence, completion: completion)
+        }
+    }
+
+    // MARK: - Delete Sentence
+    func deleteSentence(
+        sentence: Sentence,
+        completion: @escaping (Bool) -> Void
+    ) {
+        startLoading()
+        generateService.deleteSentence(sentence: sentence) { [weak self] result in
+            self?.handleDeleteResult(result: result, sentence: sentence, completion: completion)
+        }
+    }
+}
+
+// MARK: - Private Methods
+extension HistoryViewModel {
+
+    // MARK: - Fetch Sentences Helpers
+    private func fetchSentencesWithUser(
+        for generateIds: [String],
+        completion: @escaping (Bool) -> Void
+    ) {
         generateService.getGenerates(for: generateIds) { [weak self] result in
             switch result {
             case .success(let sentences):
@@ -45,91 +86,101 @@ final class HistoryViewModel: BaseViewModel {
             }
         }
     }
-    
+
     private func handleFetchError(message: String) {
         stopLoading()
         handleError(message: message)
     }
-    
-    func addFavoriteSentence(sentence: Sentence, completion: @escaping (Bool) -> Void) {
-        startLoading()
-        
-        generateService.addFavoriteSentence(sentence: sentence) { [weak self] result in
-            switch result {
-            case .success(let updatedSentence):
-                SentenceManager.shared.updateSentence(
-                    updatedSentence,
-                    at: SentenceManager.shared.sentences.firstIndex(where: { $0.id == updatedSentence.id })!
-                )
-                completion(true)
-                print("\(updatedSentence.sentence) was added to favorites.")
-            case .failure(let error):
-                self?.handleError(message: error.localizedDescription)
-                completion(false)
-                print("Failed to add to favorites: \(error.localizedDescription)")
-            }
-            self?.stopLoading()
+
+    // MARK: - Favorite Sentence Helpers
+    private func handleAddFavoriteResult(
+        result: Result<Sentence, Error>,
+        sentence: Sentence,
+        completion: @escaping (Bool) -> Void
+    ) {
+        switch result {
+        case .success(let updatedSentence):
+            SentenceManager.shared.updateSentence(
+                updatedSentence,
+                at: SentenceManager.shared.sentences.firstIndex(where: { $0.id == updatedSentence.id })!
+            )
+            completion(true)
+            Logger.log("\(updatedSentence.sentence) was added to favorites.", type: .info)
+        case .failure(let error):
+            handleError(message: error.localizedDescription)
+            completion(false)
+            Logger.log("Failed to add to favorites: \(error.localizedDescription)", type: .error)
         }
+        stopLoading()
     }
-    
-    func deleteFavoriteSentence(sentence: Sentence, completion: @escaping (Bool) -> Void) {
-        startLoading()
-        
-        generateService.deleteFavoriteSentence(sentence: sentence) { [weak self] result in
-            switch result {
-            case .success(let updatedSentence):
-                SentenceManager.shared.updateSentence(
-                    updatedSentence,
-                    at: SentenceManager.shared.sentences.firstIndex(where: { $0.id == updatedSentence.id })!
-                )
-                completion(true)
-                print("\(updatedSentence.sentence) was removed from favorites.")
-            case .failure(let error):
-                self?.handleError(message: error.localizedDescription)
-                completion(false)
-                print("Failed to remove from favorites: \(error.localizedDescription)")
-            }
-            self?.stopLoading()
+
+    private func handleDeleteFavoriteResult(
+        result: Result<Sentence, Error>,
+        sentence: Sentence,
+        completion: @escaping (Bool) -> Void
+    ) {
+        switch result {
+        case .success(let updatedSentence):
+            SentenceManager.shared.updateSentence(
+                updatedSentence,
+                at: SentenceManager.shared.sentences.firstIndex(where: { $0.id == updatedSentence.id })!
+            )
+            completion(true)
+            Logger.log("\(updatedSentence.sentence) was removed from favorites.", type: .info)
+        case .failure(let error):
+            handleError(message: error.localizedDescription)
+            completion(false)
+            Logger.log("Failed to remove from favorites: \(error.localizedDescription)", type: .error)
         }
+        stopLoading()
     }
-    
-    func deleteSentence(sentence: Sentence, completion: @escaping (Bool) -> Void) {
-        startLoading()
-        
-        generateService.deleteSentence(sentence: sentence) { [weak self] result in
+
+    // MARK: - Delete Sentence Helpers
+    private func handleDeleteResult(
+        result: Result<Void, Error>,
+        sentence: Sentence,
+        completion: @escaping (Bool) -> Void
+    ) {
+        switch result {
+        case .success:
+            handleLocalSentenceDeletion(sentence: sentence, completion: completion)
+        case .failure(let error):
+            handleError(message: error.localizedDescription)
+            Logger.log("Failed to delete sentence: \(error.localizedDescription)", type: .error)
+            completion(false)
+        }
+        stopLoading()
+    }
+
+    private func handleLocalSentenceDeletion(
+        sentence: Sentence,
+        completion: @escaping (Bool) -> Void
+    ) {
+        guard let index = SentenceManager.shared.sentences.firstIndex(where: { $0.id == sentence.id }) else {
+            Logger.log("Sentence not found in the local list.", type: .warning)
+            completion(false)
+            return
+        }
+
+        SentenceManager.shared.removeSentence(at: index)
+        Logger.log("\(sentence.sentence) was successfully deleted.", type: .info)
+
+        guard let userId = authService.getCurrentUserId() else {
+            Logger.log("Failed to get user ID.", type: .error)
+            completion(false)
+            return
+        }
+
+        userService.removeGenerateIdFromUser(userId: userId, generateId: sentence.id) { [weak self] result in
             switch result {
             case .success:
-                if let index = SentenceManager.shared.sentences.firstIndex(where: { $0.id == sentence.id }) {
-                    SentenceManager.shared.removeSentence(at: index)
-                    print("\(sentence.sentence) was successfully deleted.")
-                    
-                    guard let userId = self?.authService.getCurrentUserId() else {
-                        print("Failed to get user ID.")
-                        completion(false)
-                        return
-                    }
-                    
-                    self?.userService.removeGenerateIdFromUser(userId: userId, generateId: sentence.id) { result in
-                        switch result {
-                        case .success:
-                            print("\(sentence.id) was successfully removed from the user.")
-                            completion(true)
-                        case .failure(let error):
-                            self?.handleError(message: error.localizedDescription)
-                            print("Failed to remove generateId from user: \(error.localizedDescription)")
-                            completion(false)
-                        }
-                    }
-                } else {
-                    print("Sentence not found in the local list.")
-                    completion(false)
-                }
+                Logger.log("\(sentence.id) was successfully removed from the user.", type: .info)
+                completion(true)
             case .failure(let error):
                 self?.handleError(message: error.localizedDescription)
-                print("Failed to delete sentence: \(error.localizedDescription)")
+                Logger.log("Failed to remove generateId from user: \(error.localizedDescription)", type: .error)
                 completion(false)
             }
-            self?.stopLoading()
         }
     }
 }

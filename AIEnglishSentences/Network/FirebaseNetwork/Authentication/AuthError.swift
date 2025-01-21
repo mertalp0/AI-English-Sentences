@@ -22,21 +22,21 @@ enum AuthError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidEmail:
-            return "The email address is not valid."
+            return .localized(for: .errorInvalidEmail)
         case .wrongPassword:
-            return "The password is incorrect."
+            return .localized(for: .errorWrongPassword)
         case .userNotFound:
-            return "User not found. Please register first."
+            return .localized(for: .errorUserNotFound)
         case .userAlreadyExists:
-            return "User already exists. Please try logging in."
+            return .localized(for: .errorUserAlreadyExists)
         case .weakPassword:
-            return "The password is too weak. Please choose a stronger password."
+            return .localized(for: .errorWeakPassword)
         case .networkError:
-            return "Network error occurred. Please check your internet connection."
+            return .localized(for: .errorNetwork)
         case .unknownError:
-            return "An unknown error occurred. Please try again."
+            return .localized(for: .errorUnknown)
         case .userNotLoggedIn:
-            return "User is not logged in."
+            return .localized(for: .errorUserNotFound)
         case .custom(let message):
             return message
         }

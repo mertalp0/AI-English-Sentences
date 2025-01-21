@@ -1,0 +1,173 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "5BAF171B",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6740177658",
+    "_developerTeamID" : "J584WC8XJ5",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 758927721.88132405,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21622699",
+      "localizations" : [
+
+      ],
+      "name" : "aiLexPremium",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6740701493",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Monthly Plan",
+              "displayName" : "1 Month Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.ailex.monthly",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "1 Month Premium",
+          "subscriptionGroupID" : "21622699",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "12.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6740701384",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Enjoy 3 months of premium features.",
+              "displayName" : "3 Month Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.ailex.quarterly",
+          "recurringSubscriptionPeriod" : "P3M",
+          "referenceName" : "3 Month Premium",
+          "subscriptionGroupID" : "21622699",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "24.99",
+          "familyShareable" : false,
+          "groupNumber" : 3,
+          "internalID" : "6740701523",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Enjoy premium for 6 months",
+              "displayName" : "6 Months Premium",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.ailex.halfyearly",
+          "recurringSubscriptionPeriod" : "P6M",
+          "referenceName" : "6 Month Premium",
+          "subscriptionGroupID" : "21622699",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

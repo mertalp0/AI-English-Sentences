@@ -9,38 +9,39 @@ import BaseMVVMCKit
 import UIKit
 
 final class LoginCoordinator: BaseCoordinator {
-    
+
     private let source: NavigationSource
-    
+
     init(navigationController: UINavigationController, from source: NavigationSource) {
         self.source = source
         super.init(navigationController: navigationController)
     }
-    
+
     override func start() {
-        
         let loginViewModel = LoginViewModel()
-        let loginVC = LoginVC(viewModel: loginViewModel)
+        let loginVC = LoginViewController(viewModel: loginViewModel)
         loginVC.coordinator = self
         push(loginVC)
-        
     }
-    
-    func showRegister(){
-        switch source{
+
+    func showRegister() {
+        switch source {
         case .info:
             let registerCoordinator = RegisterCoordinator(navigationController: self.navigationController!, from: .login)
             registerCoordinator.start()
         case.register:
             pop()
         default:
-            print("error")
+           break
         }
     }
-    
-    func showDashboard(){
-        let dashboardCoordinator = DashboardCoordinator(navigationController: self.navigationController!)
+
+    func showDashboard() {
+        guard let navigationController = self.navigationController else {
+            Logger.log("NavigationController is nil. Unable to show dashboard.", type: .error)
+            return
+        }
+        let dashboardCoordinator = DashboardCoordinator(navigationController: navigationController)
         dashboardCoordinator.start()
     }
 }
-

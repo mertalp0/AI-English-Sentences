@@ -8,11 +8,11 @@
 import UIKit
 
 extension UIImage {
-    static func appIcon(_ icon: ImageManager.AppIcons) -> UIImage? {
+    static func appIcon(_ icon: AppIcons) -> UIImage? {
         return ImageManager.shared.getIcon(named: icon)
     }
-    
-    static func appImage(_ image: ImageManager.AppImages) -> UIImage? {
+
+    static func appImage(_ image: AppImages) -> UIImage? {
         return ImageManager.shared.getImage(for: image)
     }
 }

@@ -19,4 +19,3 @@ extension Color {
     static let backgroundColor = Color("Background")
     static let mainBlur = Color("BlurMain")
 }
-

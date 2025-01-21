@@ -8,14 +8,14 @@
 import BaseMVVMCKit
 
 final class MyAppsCoordinator: BaseCoordinator {
-    
+
     override func start() {
         let myAppsViewModel = MyAppsViewModel()
-        let myAppsVC = MyAppsVC(viewModel: myAppsViewModel)
+        let myAppsVC = MyAppsViewController(viewModel: myAppsViewModel)
         myAppsVC.coordinator = self
         push(myAppsVC)
     }
-    
+
     func back() {
         guard let navigationController = navigationController else {
             fatalError("Navigation controller is nil in ResultCoordinator")
@@ -24,7 +24,6 @@ final class MyAppsCoordinator: BaseCoordinator {
         if let tabBarController = navigationController.tabBarController {
             tabBarController.setTabBar(hidden: false, animated: true)
         }
-
         pop()
     }
 }

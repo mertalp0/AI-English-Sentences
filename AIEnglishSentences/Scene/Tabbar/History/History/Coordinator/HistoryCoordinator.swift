@@ -9,14 +9,11 @@ import BaseMVVMCKit
 import UIKit
 
 final class HistoryCoordinator: BaseCoordinator {
-    
+
     override func start() {
-        
         let historyViewModel = HistoryViewModel()
-        let historyVC = HistoryVC(viewModel: historyViewModel)
+        let historyVC = HistoryViewController(viewModel: historyViewModel)
         historyVC.coordinator = self
         push(historyVC)
-        
-    }    
+    }
 }
-

@@ -5,7 +5,6 @@
 //  Created by mert alp on 18.12.2024.
 //
 
-
 import Foundation
 
 final class OpenAIService {
@@ -19,14 +18,32 @@ final class OpenAIService {
         self.apiKey = key
     }
 
-    func generateSentences(inputWords: String, maxWords: Int, sentenceCount: Int, category: String, writingTone: String, writingStyle: String , completion: @escaping (Result<[Sentence], Error>) -> Void) {
-        let endpoint = OpenAIEndpoint.generateSentences(inputWords: inputWords, maxWords: maxWords, sentenceCount: sentenceCount, category: category, writingTone: writingTone, writingStyle: writingStyle,  apiKey: apiKey)
-        
+    func generateSentences(
+        inputWords: String,
+        maxWords: Int,
+        sentenceCount: Int,
+        category: String,
+        writingTone: String,
+        writingStyle: String,
+        completion: @escaping (Result<[Sentence], Error>) -> Void
+    ) {
+        let parameters = GenerateSentencesParameters(
+            inputWords: inputWords,
+            maxWords: maxWords,
+            sentenceCount: sentenceCount,
+            category: category,
+            writingTone: writingTone,
+            writingStyle: writingStyle
+        )
+
+        let endpoint = OpenAIEndpoint.generateSentences(
+            parameters: parameters,
+            apiKey: apiKey
+        )
         provider.request(endpoint, responseType: OpenAIResponse.self) { result in
             switch result {
             case .success(let response):
-    
-                let sentences: [Sentence] = response.choices.enumerated().map { (index, choice) in
+                let sentences: [Sentence] = response.choices.enumerated().map { (_, choice) in
                     Sentence(
                         id: UUID().uuidString,
                         sentence: choice.message.content.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -38,7 +55,6 @@ final class OpenAIService {
                         createdAt: Date()
                     )
                 }
-                
                 completion(.success(sentences))
             case .failure(let error):
                 completion(.failure(error))

@@ -75,7 +75,7 @@
          </BuildableReference>
       </BuildableProductRunnable>
       <StoreKitConfigurationFileReference
-         identifier = "../../StoreKitConfig.storekit">
+         identifier = "../../AILex.storekit">
       </StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction

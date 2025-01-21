@@ -11,7 +11,7 @@ extension CGFloat {
     static func dynamicHeight(_ value: CGFloat) -> CGFloat {
         return UIHelper.dynamicHeight(value)
     }
-    
+
     static func dynamicWidth(_ value: CGFloat) -> CGFloat {
         return UIHelper.dynamicWidth(value)
     }

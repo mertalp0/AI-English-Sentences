@@ -1,0 +1,41 @@
+# Disabled rules
+disabled_rules:
+  - force_cast                # Forced type casts (as!)
+  - force_unwrapping          # Forced unwrapping (force unwrap)
+  - line_length               # Line length limit
+  - type_body_length          # Type (class/struct) body length
+  - file_length               # File length
+
+# Included directories
+included:
+  - AIEnglishSentences
+
+# Excluded directories
+excluded:
+  - Pods
+  - Carthage
+  - AIEnglishSentencesTests
+  - AIEnglishSentencesUITests
+
+
+# Function body length limit
+function_body_length:
+  warning: 50
+  
+# Function parameter count limit
+function_parameter_count:
+  warning: 8
+  error: 9
+
+function_body_length:
+  warning: 200
+  error: 300
+
+# Naming conventions
+identifier_name:
+  min_length: 3
+  max_length: 40
+  excluded:
+    - id
+    - URL
+    - JSON

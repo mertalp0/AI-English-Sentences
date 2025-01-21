@@ -7,49 +7,50 @@
 
 import BaseMVVMCKit
 import UIKit
+import RevenueCat
+import RevenueCatUI
 
 final class GenerateCoordinator: BaseCoordinator {
-    
+
     var pageCellType: CellType?
 
     override func start() {
-        
+
         let generateViewModel = GenerateViewModel()
-        let generateVC = GenerateVC(viewModel: generateViewModel)
+        let generateVC = GenerateViewController(viewModel: generateViewModel)
         generateVC.pageCellType = pageCellType
         generateVC.coordinator = self
         push(generateVC)
-        
     }
-    
+
     func showResult(sentences: [Sentence]) {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in showResult")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
         let resultCoordinator = ResultCoordinator(navigationController: navigationController)
         resultCoordinator.sentences = sentences
         resultCoordinator.start()
+    }
 
-    }
-    
-    func showPaywall(){
+    func presentPaywall(with offering: Offering) {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in showResult")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
-        let paywallCoordinator = PaywallCoordinator(navigationController: navigationController)
-        paywallCoordinator.start()
-    }
-    
+        let paywallVC = PaywallViewController(offering: offering)
+        navigationController.present(paywallVC, animated: true)
+      }
+
     func back() {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in ResultCoordinator")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
 
         if let tabBarController = navigationController.tabBarController {
             tabBarController.setTabBar(hidden: false, animated: true)
         }
-
         pop()
     }
 }
-

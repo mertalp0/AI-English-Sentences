@@ -1,12 +1,11 @@
-/* 
+/*
   Localizable.strings
   AIEnglishSentences
 
   Created by mert alp on 17.12.2024.
-  
 */
 
-// Shared Strings
+// MARK: - Shared Strings
 "google_button_title" = "Continue with Google";
 "apple_button_title" = "Continue with Apple";
 "login" = "Login";
@@ -21,15 +20,15 @@
 "dont_have_account" = "You don’t have an account?";
 "shared_error_message" = "An error occurred";
 
-// InfoVC Strings
+// MARK: - InfoVC Strings
 "info_subtitle" = "Create. Listen. Inspire.\nAiLex makes words come alive.";
 
-// LoginVC Strings
+// MARK: - LoginVC Strings
 "login_title" = "Login here";
 "login_subtitle" = "Welcome back you’ve \nbeen missed!";
 "forgot_password" = "Forgot Password?";
 
-// RegisterVC Strings
+// MARK: - RegisterVC Strings
 "create_account_title" = "Create Account";
 "register_subtitle" = "Join us and explore \nthe power of sentences!";
 "name_placeholder" = "Enter your Name";
@@ -38,89 +37,88 @@
 "login_highlighted" = "Login";
 "validation_name" = "Please enter your name.";
 
-// Tab Bar Titles
+// MARK: - Tab Bar Titles
 "tab_bar_history" = "History";
 "tab_bar_generate" = "Generate";
 "tab_bar_profile" = "Profile";
 
-// Segmented Control Titles
+// MARK: - Segmented Control Titles
 "history_segment_all" = "All";
 "history_segment_favourites" = "Favourites";
 
-// Empty State Titles and Descriptions
+// MARK: - Empty State Titles and Descriptions
 "history_empty_all_title" = "No History Found";
 "history_empty_all_description" = "You haven't created any sentences yet. Start generating by selecting a category.";
 "history_empty_favourites_title" = "No Favorites Yet!";
 "history_empty_favourites_description" = "Looks like you haven't saved anything. Tap the heart icon to add favorites.";
 
-// Toast Messages
+// MARK: - Toast Messages
 "history_copied_to_clipboard" = "Copied to clipboard!";
 
-// Delete Alert
+// MARK: - Delete Alert
 "history_delete_alert_title" = "Delete Sentence";
 "history_delete_alert_message" = "Are you sure you want to delete this sentence?";
 "history_delete_alert_cancel" = "Cancel";
 "history_delete_alert_confirm" = "Delete";
 
-//History View Model
+// MARK: - History View Model
 "historyFetchErrorUserNotLoggedIn" = "User not logged in.";
 
-// ContextaVC Strings
+// MARK: - ContextaVC Strings
 "contextaSubtitle" = "Where ideas take shape";
 "contextaCategoriesTitle" = "Categories";
 
-// CategoryCell Strings
+// MARK: - CategoryCell Strings
 "category_professional_title" = "Professional";
 "category_professional_description" = "For polished emails, formal correspondence, or engaging ad scripts.";
-
 "category_personal_title" = "Personal";
 "category_personal_description" = "For messages to friends, congratulatory notes, or casual posts.";
 "category_educational_title" = "Educational";
 "category_educational_description" = "For simple or advanced sentence building with your chosen word.";
 
-// Writing Tone Options
+// MARK: - Writing Tone Options
 "tone_formal" = "Formal";
 "tone_friendly" = "Friendly";
 "tone_casual" = "Casual";
 "tone_inspirational" = "Inspirational";
 "tone_humorous" = "Humorous";
 
-// Writing Style Options
+// MARK: - Writing Style Options
 "style_persuasive" = "Persuasive";
 "style_narrative" = "Narrative";
 "style_descriptive" = "Descriptive";
 "style_explanatory" = "Explanatory";
 "style_creative" = "Creative";
 
-// GenerateVC Strings
+// MARK: - GenerateVC Strings
 "generate_title" = "What will you generate today?";
 "writing_tone_title" = "Writing Tone";
 "writing_style_title" = "Writing Style";
 
-// GenerateVC Strings
+// MARK: - GenerateVC Strings
 "category_professional" = "Professional";
 
-// Error Messages
+// MARK: - Error Messages
 "generate_sentences_error" = "An error occurred while generating sentences.";
 
-// CountSelectorView Strings
+// MARK: - CountSelectorView Strings
 "sentence_count_title" = "Sentence Count";
 "max_word_count_title" = "Maximum Word Count";
 
-// GenerateButton Strings
+// MARK: - GenerateButton Strings
 "generate_button_title" = "Generate Sentence";
 
-// GenerateLoadingView Strings
+// MARK: - GenerateLoadingView Strings
 "generate_loading_title" = "Generating Sentence...";
 "generate_loading_description" = "Please wait while your sentence is being processed.\nThis may take a few moments.";
 
-// GenerateTextView Strings
+// MARK: - GenerateTextView Strings
 "generate_textview_placeholder" = "Write your sentence topic here...";
 
-/* GenerateViewModel Strings */
+// MARK: - GenerateViewModel Strings
 "generate_input_error" = "Please provide some input words to generate sentences.";
 
-/* ResultVC Strings */
+// MARK: - ResultVC Strings
 "result_success_title" = "Success";
 "result_success_registration_message" = "Registration successful";
 "result_ok_button" = "OK";
@@ -130,7 +128,7 @@
 "result_sentence_saved_success" = "Sentence saved successfully.";
 "result_sentence_saved_error" = "Failed to save sentence.";
 
-// ProfileVC Strings
+// MARK: - ProfileVC Strings
 "profile_language" = "Language";
 "profile_privacy_policy" = "Privacy Policy";
 "profile_invite_friends" = "Invite Friends";
@@ -149,13 +147,45 @@
 "profile_popup_logout_cancelled" = "Logout cancelled.";
 "profile_popup_delete_cancelled" = "Account deletion cancelled.";
 
-// Popup Messages
+// MARK: - Popup Messages
 "popup_logout_title" = "Logout?";
 "popup_logout_message" = "Are you sure you want to log out?";
 "popup_delete_title" = "Delete?";
 "popup_delete_message" = "Are you sure you want to delete this item?";
 
+// MARK: - General Strings
 "loading" = "Loading...";
-
 "language_english" = "English";
 "button_open_title" = "Open";
+
+// MARK: - Validation and Error Messages
+"validation_required_field" = "This field is required.";
+"error_invalid_email" = "The email address is not valid.";
+"error_wrong_password" = "The password is incorrect.";
+"error_user_not_found" = "User not found. Please register first.";
+"error_user_already_exists" = "User already exists. Please try logging in.";
+"error_weak_password" = "The password is too weak. Please choose a stronger password.";
+"error_network" = "Network error occurred. Please check your internet connection.";
+"error_unknown" = "An unknown error occurred. Please try again.";
+"error_user_not_logged_in" = "User is not logged in.";
+
+// MARK: - Gender Options
+"male" = "Male";
+"female" = "Female";
+"prefer_notto_say" = "PreferNottoSay";
+
+// MARK: - Document Errors
+"error_missing_document" = "The requested document is missing.";
+"error_decoding_failed" = "Failed to decode the document.";
+"error_document_already_exists" = "The document already exists in the database.";
+"error_unknown" = "An unknown error occurred.";
+
+// MARK: - App Bar Titles
+"app_bar_history" = "History";
+"app_bar_generate" = "Generate";
+"app_bar_profile" = "Profile";
+"app_bar_contexta" = "Contexta";
+"app_bar_result" = "Sentences";
+"app_bar_privacy_policy" = "Privacy Policy";
+"app_bar_my_apps" = "My Apps";
+"app_bar_languages" = "Languages";

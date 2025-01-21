@@ -9,14 +9,14 @@ import BaseMVVMCKit
 import UIKit
 
 final class ProfileCoordinator: BaseCoordinator {
-    
+
     override func start() {
         let profileViewModel = ProfileViewModel()
-        let profileVC = ProfileVC(viewModel: profileViewModel)
+        let profileVC = ProfileViewController(viewModel: profileViewModel)
         profileVC.coordinator = self
         push(profileVC)
     }
-    
+
     func showInfo() {
         if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let sceneDelegate = scene.delegate as? SceneDelegate,
@@ -24,50 +24,49 @@ final class ProfileCoordinator: BaseCoordinator {
             appCoordinator.start()
         }
     }
-    
-    func shareApp(){
+
+    func shareApp() {
         let appStoreLink = AppConstants.URLs.appUrl
         let activityVC = UIActivityViewController(activityItems: [appStoreLink], applicationActivities: nil)
         self.navigationController?.present(activityVC, animated: true, completion: nil)
     }
-    
-    func showApps(){
+
+    func showApps() {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in showResult")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
-        
+
         let myAppsCoordinator = MyAppsCoordinator(navigationController: navigationController)
         myAppsCoordinator.start()
-        
+
         if let tabBarController = navigationController.tabBarController {
             tabBarController.setTabBar(hidden: true, animated: false)
         }
     }
-    
-    func showLanguagePage(){
+
+    func showLanguagePage() {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in showResult")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
-        
+
         let coordinator = LanguageSelectionCoordinator(navigationController: navigationController)
         coordinator.start()
-        
+
         if let tabBarController = navigationController.tabBarController {
             tabBarController.setTabBar(hidden: true, animated: false)
         }
     }
-    
-    func showPrivacyPolicy(){
+
+    func showPrivacyPolicy() {
         guard let navigationController = navigationController else {
-            fatalError("Navigation controller is nil in showResult")
+            Logger.log("NavigationController is nil.", type: .error)
+            return
         }
-        
+
         let coordinator = PrivacyPolicyCoordinator(navigationController: navigationController)
         coordinator.start()
-        
-        if let tabBarController = navigationController.tabBarController {
-            tabBarController.setTabBar(hidden: true, animated: false)
-        }
+
     }
 }
-
