@@ -13,55 +13,87 @@ protocol AuthButtonDelegate: AnyObject {
 }
 
 final class AuthButton: UIButton {
+    // MARK: - Properties
     private let authButtonType: AuthButtonType
     weak var delegate: AuthButtonDelegate?
 
+    // MARK: - Initialization
     init(type: AuthButtonType) {
         self.authButtonType = type
         super.init(frame: .zero)
-        setupButton()
+        setupUI()
+        configure(with: type)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    private func setupButton() {
-        self.setTitle(authButtonType.title, for: .normal)
+// MARK: - Setup UI
+private extension AuthButton {
+    func setupUI() {
+        setupButtonStyle()
+        setupActions()
+    }
+
+    func setupButtonStyle() {
         self.titleLabel?.font = .dynamicFont(size: 16, weight: .medium)
         self.layer.cornerRadius = 8
+    }
 
-        switch authButtonType {
-        case .normal:
-            self.backgroundColor = .mainColor
-            self.setTitleColor(.white, for: .normal)
-        case .google, .apple:
-            self.backgroundColor = .white
-            self.setTitleColor(.black, for: .normal)
-            self.layer.borderWidth = 1
-            self.layer.borderColor = UIColor.systemGray4.cgColor
-
-            if let icon = authButtonType.image {
-                self.setImage(icon, for: .normal)
-                self.imageView?.contentMode = .scaleAspectFit
-                self.tintColor = .white
-                self.semanticContentAttribute = .forceLeftToRight
-            }
-        }
+    func setupActions() {
         self.addTarget(self, action: #selector(animateDown), for: .touchDown)
         self.addTarget(self, action: #selector(buttonTapped), for: [.touchUpInside, .touchCancel, .touchDragExit])
     }
+}
 
-    @objc private func buttonTapped() {
+// MARK: - Configuration
+private extension AuthButton {
+    func configure(with type: AuthButtonType) {
+        self.setTitle(type.title, for: .normal)
+
+        switch type {
+        case .normal:
+            configureAsNormalButton()
+        case .google, .apple:
+            configureAsSocialButton(with: type.image)
+        }
+    }
+
+    func configureAsNormalButton() {
+        self.backgroundColor = .mainColor
+        self.setTitleColor(.white, for: .normal)
+    }
+
+    func configureAsSocialButton(with image: UIImage?) {
+        self.backgroundColor = .white
+        self.setTitleColor(.black, for: .normal)
+        self.layer.borderWidth = 1
+        self.layer.borderColor = UIColor.systemGray4.cgColor
+
+        if let icon = image {
+            self.setImage(icon, for: .normal)
+            self.imageView?.contentMode = .scaleAspectFit
+            self.tintColor = .white
+            self.semanticContentAttribute = .forceLeftToRight
+        }
+    }
+}
+
+// MARK: - Actions
+private extension AuthButton {
+    @objc func buttonTapped() {
         self.animateScaleUp()
         delegate?.didTapButton(type: authButtonType)
     }
 
-    @objc private func animateDown() {
+    @objc func animateDown() {
         self.animateScaleDown()
     }
 }
 
+// MARK: - AuthButtonType Enum
 enum AuthButtonType {
     case normal(title: NormalButtonTitle)
     case google
@@ -84,6 +116,7 @@ enum AuthButtonType {
     }
 }
 
+// MARK: - NormalButtonTitle Enum
 enum NormalButtonTitle {
     case login
     case signup

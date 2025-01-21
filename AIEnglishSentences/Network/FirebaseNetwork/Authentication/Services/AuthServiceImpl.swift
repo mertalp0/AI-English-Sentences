@@ -214,7 +214,6 @@ final class AuthServiceImpl: AuthService {
 
 // MARK: - Helper func saveUserToFirestore
 extension AuthServiceImpl {
-
     enum AuthType {
         case social
         case email
@@ -238,18 +237,17 @@ extension AuthServiceImpl {
         )
 
         UserService.shared.saveUser(user: userModel) { result in
-            switch result {
-            case .success:
-                completion(true)
-            case .failure(let error):
-#warning("error enum wil be improved")
-                if error.localizedDescription == "The document already exists in the database." || type == .social {
-                    completion(true)
-                } else {
-                    completion(false)
-                }
-            }
-        }
+             switch result {
+             case .success:
+                 completion(true)
+             case .failure(let error):
+                 if let firebaseError = error as? FirebaseError, firebaseError == .documentAlreadyExists || type == .social {
+                     completion(true)
+                 } else {
+                     completion(false)
+                 }
+             }
+         }
     }
 }
 

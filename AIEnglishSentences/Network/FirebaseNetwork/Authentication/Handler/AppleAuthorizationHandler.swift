@@ -43,39 +43,57 @@ extension AppleAuthorizationHandler: ASAuthorizationControllerDelegate {
         controller: ASAuthorizationController,
         didCompleteWithAuthorization authorization: ASAuthorization
     ) {
-        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            guard let identityToken = appleIDCredential.identityToken,
-                  let idTokenString = String(data: identityToken, encoding: .utf8) else {
-                Logger.log("Failed to retrieve identity token.", type: .error)
-                self.completionHandler?(
-                    .failure(
-                        NSError(
-                            domain: "AppleAuthorizationHandler",
-                            code: -1,
-                            userInfo: [NSLocalizedDescriptionKey: "Invalid identity token"]
-                        )
-                    )
-                )
+        handleAppleIDCredential(from: authorization)
+    }
+
+    private func handleAppleIDCredential(from authorization: ASAuthorization) {
+        guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential else {
+            Logger.log("Invalid credential type.", type: .error)
+            return
+        }
+
+        guard let identityToken = appleIDCredential.identityToken,
+              let idTokenString = String(data: identityToken, encoding: .utf8) else {
+            handleAuthorizationError("Failed to retrieve identity token.", code: -1, description: "Invalid identity token")
+            return
+        }
+
+        signInWithFirebase(idTokenString: idTokenString)
+    }
+
+    private func signInWithFirebase(idTokenString: String) {
+        let credential = OAuthProvider.credential(
+            providerID: .apple,
+            idToken: idTokenString,
+            rawNonce: "",
+            accessToken: nil
+        )
+
+        Auth.auth().signIn(with: credential) { [weak self] authResult, error in
+            if let error = error {
+                Logger.log("Firebase Sign-In Error: \(error.localizedDescription)", type: .error)
+                self?.completionHandler?(.failure(error))
                 return
             }
 
-            let credential = OAuthProvider.credential(
-                providerID: .apple,
-                idToken: idTokenString,
-                rawNonce: "",
-                accessToken: nil
-            )
-
-            Auth.auth().signIn(with: credential) { authResult, error in
-                if let error = error {
-                    Logger.log("Firebase Sign-In Error: \(error.localizedDescription)", type: .error)
-                    self.completionHandler?(.failure(error))
-                } else if let authResult = authResult {
-                    Logger.log("Firebase Sign-In Success!", type: .info)
-                    self.completionHandler?(.success(authResult))
-                }
+            if let authResult = authResult {
+                Logger.log("Firebase Sign-In Success!", type: .info)
+                self?.completionHandler?(.success(authResult))
             }
         }
+    }
+
+    private func handleAuthorizationError(_ message: String, code: Int, description: String) {
+        Logger.log(message, type: .error)
+        self.completionHandler?(
+            .failure(
+                NSError(
+                    domain: "AppleAuthorizationHandler",
+                    code: code,
+                    userInfo: [NSLocalizedDescriptionKey: description]
+                )
+            )
+        )
     }
 
     func authorizationController(

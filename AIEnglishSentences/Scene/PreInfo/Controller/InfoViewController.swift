@@ -15,33 +15,44 @@ final class InfoViewController: BaseViewController<InfoCoordinator, InfoViewMode
     private var backgroundImageView: UIImageView!
     private var logoImageView: UIImageView!
     private var subtitleLabel: UILabel!
-    private var loginButton: AuthButton!
-    private var socialButtonsView: SocialButtonsView!
+    var loginButton: AuthButton!
+    var socialButtonsView: SocialButtonsView!
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupAll()
-    }
-
-    private func setupAll() {
         setupUI()
+    }
+}
+
+// MARK: - UI Setup
+private extension InfoViewController {
+
+   private func setupUI() {
+        setupBackgroundImageView()
+        setupLogoImageView()
+        setupSubtitleLabel()
+        setupLoginButton()
+        setupSocialButtonsView()
         setupConstraints()
     }
 
-    // MARK: - Setup UI
-    private func setupUI() {
+    private func setupBackgroundImageView() {
         backgroundImageView = UIImageView()
         backgroundImageView.image = .appImage(.backgroundImage)
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
         view.addSubview(backgroundImageView)
+    }
 
+    private func setupLogoImageView() {
         logoImageView = UIImageView()
         logoImageView.image = .appImage(.aiLexText)
         logoImageView.contentMode = .scaleAspectFit
         view.addSubview(logoImageView)
+    }
 
+    private func setupSubtitleLabel() {
         subtitleLabel = UILabel()
         subtitleLabel.textAlignment = .center
         subtitleLabel.numberOfLines = 0
@@ -61,23 +72,26 @@ final class InfoViewController: BaseViewController<InfoCoordinator, InfoViewMode
             ]
         )
         view.addSubview(subtitleLabel)
+    }
 
+    private func setupLoginButton() {
         loginButton = AuthButton(type: .normal(title: .login))
         loginButton.backgroundColor = .main
         loginButton.delegate = self
         view.addSubview(loginButton)
+    }
 
+    private func setupSocialButtonsView() {
         socialButtonsView = SocialButtonsView(
-                googleButtonTitle: .localized(for: .googleButtonTitle),
-                appleButtonTitle: .localized(for: .appleButtonTitle),
-                actionText: .localized(for: .dontHaveAccount),
-                actionHighlightedText: .localized(for: .signup)
+            googleButtonTitle: .localized(for: .googleButtonTitle),
+            appleButtonTitle: .localized(for: .appleButtonTitle),
+            actionText: .localized(for: .dontHaveAccount),
+            actionHighlightedText: .localized(for: .signup)
         )
         socialButtonsView.delegate = self
         view.addSubview(socialButtonsView)
     }
 
-    // MARK: - Setup Constraints
     private func setupConstraints() {
         backgroundImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()

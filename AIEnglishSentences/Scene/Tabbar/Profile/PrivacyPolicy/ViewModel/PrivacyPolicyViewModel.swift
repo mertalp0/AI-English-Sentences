@@ -6,5 +6,11 @@
 //
 
 import BaseMVVMCKit
+import Foundation
 
-final class PrivacyPolicyViewModel: BaseViewModel {}
+final class PrivacyPolicyViewModel: BaseViewModel {
+
+    func getPrivacyPolicyURL() -> URL? {
+        return URL(string: AppConstants.URLs.privacyPolicyURL)
+    }
+}

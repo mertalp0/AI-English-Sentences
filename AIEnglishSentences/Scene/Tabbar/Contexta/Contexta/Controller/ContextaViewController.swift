@@ -23,19 +23,30 @@ final class ContextaViewController: BaseViewController<ContextaCoordinator, Cont
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+    }
+}
+
+// MARK: - UI Setup
+private extension ContextaViewController {
+
+   private func setupUI() {
+        view.backgroundColor = .white
+        setupAppBar()
+        setupSubTitle()
+        setupCategoriesTitle()
         setupTableView()
     }
 
-    private func setupUI() {
-        view.backgroundColor = .white
-
+    private func setupAppBar() {
         appBar = AppBar(type: .contexta)
         view.addSubview(appBar)
         appBar.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
         }
+    }
 
+    private func setupSubTitle() {
         subTitle = UILabel()
         subTitle.text = .localized(for: .contextaSubtitle)
         subTitle.textColor = .mainColor
@@ -46,9 +57,11 @@ final class ContextaViewController: BaseViewController<ContextaCoordinator, Cont
             make.centerX.equalToSuperview()
             make.top.equalTo(appBar.snp.bottom).offset(UIHelper.dynamicHeight(5))
         }
+    }
 
+    private func setupCategoriesTitle() {
         categoriesTitle = UILabel()
-        subTitle.text = .localized(for: .contextaCategoriesTitle)
+        categoriesTitle.text = .localized(for: .contextaCategoriesTitle)
         categoriesTitle.textColor = .black
         categoriesTitle.font = .dynamicFont(size: 24, weight: .medium)
         categoriesTitle.textAlignment = .center

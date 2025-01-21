@@ -4,6 +4,7 @@
 //
 //  Created by mert alp on 19.12.2024.
 //
+
 import Foundation
 import BaseMVVMCKit
 
@@ -13,6 +14,7 @@ final class ResultViewModel: BaseViewModel {
     private let authService: AuthService = AuthServiceImpl.shared
     private let userService = UserService.shared
 
+    // MARK: - Save Sentence
     func saveSentence(
         sentence: Sentence,
         completion: @escaping (Bool) -> Void
@@ -30,6 +32,21 @@ final class ResultViewModel: BaseViewModel {
             }
         }
     }
+
+    // MARK: - Delete Sentence
+    func deleteSentence(
+        sentence: Sentence,
+        completion: @escaping (Bool) -> Void
+    ) {
+        startLoading()
+        generateService.deleteSentence(sentence: sentence) { [weak self] result in
+            self?.handleDeleteResult(result: result, sentence: sentence, completion: completion)
+        }
+    }
+}
+
+// MARK: - Private Helpers
+extension ResultViewModel {
 
     private func handleSentenceeSaveSuccess(
         sentence: Sentence,
@@ -54,48 +71,62 @@ final class ResultViewModel: BaseViewModel {
         }
     }
 
-    func deleteSentence(
+    private func handleDeleteResult(
+        result: Result<Void, Error>,
         sentence: Sentence,
         completion: @escaping (Bool) -> Void
     ) {
-        startLoading()
-        generateService.deleteSentence(sentence: sentence) { [weak self] result in
-            switch result {
-            case .success:
-                if let index = SentenceManager.shared.sentences.firstIndex(where: { $0.id == sentence.id }) {
-                    Logger.log("\(sentence.sentence) successfully deleted.", type: .info)
-                    guard let userId = self?.authService.getCurrentUserId() else {
-                        Logger.log("Failed to retrieve user ID.", type: .error)
-                        completion(false)
-                        return
-                    }
+        switch result {
+        case .success:
+            handleLocalSentenceDeletion(sentence: sentence, completion: completion)
+        case .failure(let error):
+            handleError(message: error.localizedDescription)
+            Logger.log("Failed to delete sentence: \(error.localizedDescription)", type: .error)
+            completion(false)
+        }
+        stopLoading()
+    }
 
-                    self?.userService
-                        .removeGenerateIdFromUser(
-                            userId: userId,
-                            generateId: sentence.id
-                        ) { result in
-                        switch result {
-                        case .success:
-                            SentenceManager.shared.removeSentence(at: index)
-                            Logger.log("\(sentence.id) successfully removed from user.", type: .info)
-                            completion(true)
-                        case .failure(let error):
-                            self?.handleError(message: error.localizedDescription)
-                            Logger.log("Failed to remove generate ID from user: \(error.localizedDescription)", type: .error)
-                            completion(false)
-                        }
-                    }
-                } else {
-                    Logger.log("Sentence not found in the local list.", type: .error)
-                    completion(false)
-                }
-            case .failure(let error):
-                self?.handleError(message: error.localizedDescription)
-                Logger.log("Failed to delete sentence: \(error.localizedDescription)", type: .error)
-                completion(false)
-            }
-            self?.stopLoading()
+    private func handleLocalSentenceDeletion(
+        sentence: Sentence,
+        completion: @escaping (Bool) -> Void
+    ) {
+        guard let index = SentenceManager.shared.sentences.firstIndex(where: { $0.id == sentence.id }) else {
+            Logger.log("Sentence not found in the local list.", type: .error)
+            completion(false)
+            return
+        }
+
+        Logger.log("\(sentence.sentence) successfully deleted.", type: .info)
+        guard let userId = authService.getCurrentUserId() else {
+            Logger.log("Failed to retrieve user ID.", type: .error)
+            completion(false)
+            return
+        }
+
+        userService.removeGenerateIdFromUser(
+            userId: userId,
+            generateId: sentence.id
+        ) { [weak self] result in
+            self?.handleUserServiceResult(result: result, index: index, sentenceId: sentence.id, completion: completion)
+        }
+    }
+
+    private func handleUserServiceResult(
+        result: Result<Void, Error>,
+        index: Int,
+        sentenceId: String,
+        completion: @escaping (Bool) -> Void
+    ) {
+        switch result {
+        case .success:
+            SentenceManager.shared.removeSentence(at: index)
+            Logger.log("\(sentenceId) successfully removed from user.", type: .info)
+            completion(true)
+        case .failure(let error):
+            handleError(message: error.localizedDescription)
+            Logger.log("Failed to remove generate ID from user: \(error.localizedDescription)", type: .error)
+            completion(false)
         }
     }
 }

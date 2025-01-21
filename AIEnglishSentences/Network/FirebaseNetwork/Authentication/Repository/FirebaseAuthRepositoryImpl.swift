@@ -92,7 +92,6 @@ final class FirebaseAuthRepositoryImpl: AuthRepository {
             completion(.failure(AuthError.userNotLoggedIn))
             return
         }
-
         user.delete { error in
             if let error = error {
                 completion(.failure(AuthError.map(from: error)))

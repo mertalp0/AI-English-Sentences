@@ -13,18 +13,6 @@ final class PrivacyPolicyCoordinator: BaseCoordinator {
         let privacyPolicyViewModel = PrivacyPolicyViewModel()
         let privacyPolicyVC = PrivacyPolicyViewController(viewModel: privacyPolicyViewModel)
         privacyPolicyVC.coordinator = self
-        push(privacyPolicyVC)
-    }
-
-    func back() {
-        guard let navigationController = navigationController else {
-            Logger.log("NavigationController is nil.", type: .error)
-            return
-        }
-
-        if let tabBarController = navigationController.tabBarController {
-            tabBarController.setTabBar(hidden: false, animated: true)
-        }
-        pop()
+        navigationController?.present(privacyPolicyVC, animated: true)
     }
 }

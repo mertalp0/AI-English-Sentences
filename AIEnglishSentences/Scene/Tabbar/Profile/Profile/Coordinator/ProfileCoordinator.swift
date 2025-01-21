@@ -68,8 +68,5 @@ final class ProfileCoordinator: BaseCoordinator {
         let coordinator = PrivacyPolicyCoordinator(navigationController: navigationController)
         coordinator.start()
 
-        if let tabBarController = navigationController.tabBarController {
-            tabBarController.setTabBar(hidden: true, animated: false)
-        }
     }
 }

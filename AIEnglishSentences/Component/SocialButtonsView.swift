@@ -45,33 +45,49 @@ final class SocialButtonsView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
 
-    // MARK: - Setup UI
+// MARK: - Setup UI
+extension SocialButtonsView {
+
     private func setupUI(
         googleButtonTitle: String,
         appleButtonTitle: String,
         actionText: String,
         actionHighlightedText: String
     ) {
+        setupOrLabel()
+        setupGoogleButton(with: googleButtonTitle)
+        setupAppleButton(with: appleButtonTitle)
+        setupActionLabel(actionText: actionText, actionHighlightedText: actionHighlightedText)
+    }
+
+    private func setupOrLabel() {
         orLabel = UILabel()
         orLabel.text = .localized(for: .orText)
         orLabel.font = .dynamicFont(size: 14, weight: .regular)
         orLabel.textAlignment = .center
         orLabel.textColor = .mainColor
         addSubview(orLabel)
+    }
 
+    private func setupGoogleButton(with title: String) {
         googleButton = AuthButton(type: .google)
-        googleButton.setTitle(googleButtonTitle, for: .normal)
+        googleButton.setTitle(title, for: .normal)
         googleButton.addTarget(self, action: #selector(didTapGoogleButton), for: .touchUpInside)
         addSubview(googleButton)
+    }
 
+    private func setupAppleButton(with title: String) {
         appleButton = AuthButton(type: .apple)
-        appleButton.setTitle(appleButtonTitle, for: .normal)
+        appleButton.setTitle(title, for: .normal)
         appleButton.backgroundColor = .black
         appleButton.setTitleColor(.white, for: .normal)
         appleButton.addTarget(self, action: #selector(didTapAppleButton), for: .touchUpInside)
         addSubview(appleButton)
+    }
 
+    private func setupActionLabel(actionText: String, actionHighlightedText: String) {
         actionLabel = UILabel()
         let attributedString = NSMutableAttributedString(
             string: actionText + " ",
@@ -119,7 +135,11 @@ final class SocialButtonsView: UIView {
         }
     }
 
-    // MARK: - Actions
+}
+
+// MARK: - Actions
+extension SocialButtonsView {
+
     @objc private func didTapGoogleButton() {
         delegate?.didTapGoogleButton()
     }

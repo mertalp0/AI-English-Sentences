@@ -25,7 +25,7 @@ final class ProfileHeaderView: UIView {
     weak var delegate: ProfileHeaderViewDelegate?
 
     // MARK: - Properties
-     var isEditingName = false {
+    var isEditingName = false {
         didSet {
             updateEditingState()
         }
@@ -43,57 +43,106 @@ final class ProfileHeaderView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-
-            let cornerRadii = CGSize(width: 16, height: 16)
-            let path = UIBezierPath(
-                roundedRect: self.bounds,
-                byRoundingCorners: [.bottomLeft, .bottomRight],
-                cornerRadii: cornerRadii
-            )
-            let maskLayer = CAShapeLayer()
-            maskLayer.path = path.cgPath
-            self.layer.mask = maskLayer
+        applyRoundedCorners()
     }
 
-    // MARK: - Setup UI
+    // MARK: - Configure
+    func configure(name: String, email: String) {
+        nameLabel.text = name
+        nameTextField.text = name
+        emailLabel.text = email
+    }
+
+    func updateEditingState() {
+        toggleNameEditing(isEditingName)
+        updateEditButtonIcon(isEditingName)
+
+        if isEditingName {
+            nameTextField.becomeFirstResponder()
+        } else {
+            finalizeNameEditing()
+        }
+    }
+
+    private func toggleNameEditing(_ isEditing: Bool) {
+        nameLabel.isHidden = isEditing
+        nameTextField.isHidden = !isEditing
+    }
+
+    private func updateEditButtonIcon(_ isEditing: Bool) {
+        let editIcon: UIImage = isEditing ? .appIcon(.checkmarkCircle)! : .appIcon(.squareAndPencil)!
+        editButton.setImage(editIcon, for: .normal)
+    }
+
+    private func finalizeNameEditing() {
+        guard let newName = nameTextField.text, !newName.isEmpty else { return }
+        nameLabel.text = newName
+        nameTextField.resignFirstResponder()
+        delegate?.didUpdateName(newName)
+    }
+
+    @objc private func didTapEditButton() {
+        isEditingName.toggle()
+    }
+
+    @objc private func textFieldEditingChanged() {
+        nameLabel.text = nameTextField.text
+    }
+}
+
+// MARK: - Setup UI
+private extension ProfileHeaderView {
     private func setupUI() {
         self.backgroundColor = .mainColor
         self.clipsToBounds = true
+        setupAppBar()
+        setupAvatarImageView()
+        setupNameLabel()
+        setupNameTextField()
+        setupEmailLabel()
+        setupEditButton()
+    }
 
+    private func setupAppBar() {
         appBar = AppBar(type: .profile)
-        self.addSubview(appBar)
-
+        addSubview(appBar)
         appBar.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
         }
+    }
 
+    private func setupAvatarImageView() {
         avatarImageView = UIImageView()
         avatarImageView.image = .appIcon(.personCircle)
         avatarImageView.tintColor = .white
         avatarImageView.contentMode = .scaleAspectFit
         avatarImageView.layer.cornerRadius = 40
         avatarImageView.clipsToBounds = true
-        self.addSubview(avatarImageView)
+        addSubview(avatarImageView)
 
         avatarImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.top.equalTo(appBar.snp.bottom).offset(UIHelper.dynamicHeight(16))
             make.width.height.equalTo(UIHelper.dynamicHeight(80))
         }
+    }
+
+    private func setupNameLabel() {
         nameLabel = UILabel()
         nameLabel.text = LocalizationManager.shared.localized(for: .loading)
         nameLabel.textColor = .white
         nameLabel.font = .dynamicFont(size: 24, weight: .bold)
-        nameLabel.isHidden = false
-        self.addSubview(nameLabel)
+        addSubview(nameLabel)
 
         nameLabel.snp.makeConstraints { make in
             make.top.equalTo(avatarImageView.snp.top).offset(UIHelper.dynamicHeight(8))
             make.leading.equalTo(avatarImageView.snp.trailing).offset(16)
             make.trailing.equalToSuperview().offset(-60)
         }
+    }
 
+    private func setupNameTextField() {
         nameTextField = UITextField()
         nameTextField.textColor = .black
         nameTextField.font = .dynamicFont(size: 24, weight: .bold)
@@ -106,29 +155,33 @@ final class ProfileHeaderView: UIView {
         nameTextField.borderStyle = .none
         nameTextField.isHidden = true
         nameTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
-        self.addSubview(nameTextField)
+        addSubview(nameTextField)
 
         nameTextField.snp.makeConstraints { make in
             make.edges.equalTo(nameLabel)
             make.height.equalTo(UIHelper.dynamicHeight(40))
         }
+    }
 
+    private func setupEmailLabel() {
         emailLabel = UILabel()
-        nameLabel.text = LocalizationManager.shared.localized(for: .loading)
+        emailLabel.text = LocalizationManager.shared.localized(for: .loading)
         emailLabel.textColor = .white
         emailLabel.font = .dynamicFont(size: 16, weight: .medium)
-        self.addSubview(emailLabel)
+        addSubview(emailLabel)
 
         emailLabel.snp.makeConstraints { make in
             make.top.equalTo(nameLabel.snp.bottom).offset(UIHelper.dynamicHeight(4))
             make.leading.trailing.equalTo(nameLabel)
         }
+    }
 
+    private func setupEditButton() {
         editButton = UIButton()
         editButton.setImage(.appIcon(.squareAndPencil), for: .normal)
         editButton.tintColor = .white
         editButton.addTarget(self, action: #selector(didTapEditButton), for: .touchUpInside)
-        self.addSubview(editButton)
+        addSubview(editButton)
 
         editButton.snp.makeConstraints { make in
             make.centerY.equalTo(nameLabel)
@@ -137,36 +190,15 @@ final class ProfileHeaderView: UIView {
         }
     }
 
-    // MARK: - Configure
-    func configure(name: String, email: String) {
-        nameLabel.text = name
-        nameTextField.text = name
-        emailLabel.text = email
-    }
-
-     func updateEditingState() {
-        nameLabel.isHidden = isEditingName
-        nameTextField.isHidden = !isEditingName
-
-         let editIcon: UIImage = isEditingName ? .appIcon(.checkmarkCircle)! : .appIcon(.squareAndPencil)!
-         editButton.setImage(editIcon, for: .normal)
-
-        if !isEditingName {
-            if let newName = nameTextField.text, !newName.isEmpty {
-                nameLabel.text = newName
-                nameTextField.resignFirstResponder()
-                delegate?.didUpdateName(newName)
-            }
-        } else {
-            nameTextField.becomeFirstResponder()
-        }
-    }
-
-    @objc private func didTapEditButton() {
-        isEditingName.toggle()
-    }
-
-    @objc private func textFieldEditingChanged() {
-        nameLabel.text = nameTextField.text
+    private func applyRoundedCorners() {
+        let cornerRadii = CGSize(width: 16, height: 16)
+        let path = UIBezierPath(
+            roundedRect: self.bounds,
+            byRoundingCorners: [.bottomLeft, .bottomRight],
+            cornerRadii: cornerRadii
+        )
+        let maskLayer = CAShapeLayer()
+        maskLayer.path = path.cgPath
+        self.layer.mask = maskLayer
     }
 }

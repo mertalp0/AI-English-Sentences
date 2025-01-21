@@ -22,30 +22,14 @@ final class AppBar: UIView {
     weak var delegate: AppBarDelegate?
 
     // MARK: - UI Elements
-     var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .white
-        label.font = .dynamicFont(size: 24, weight: .bold)
-        label.textAlignment = .center
-        return label
-    }()
-
-    private let leftButton: UIButton = {
-        let button = UIButton()
-        button.tintColor = .main
-        return button
-    }()
-
-    private let rightButton: UIButton = {
-        let button = UIButton()
-        button.tintColor = .main
-        return button
-    }()
+    private var titleLabel: UILabel!
+    private var leftButton: UIButton!
+    private var rightButton: UIButton!
 
     // MARK: - Initialization
     init(type: AppBarType) {
         super.init(frame: .zero)
-        setupView()
+        setupUI()
         configure(with: type)
     }
 
@@ -53,15 +37,74 @@ final class AppBar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    // MARK: - Setup
-    private func setupView() {
-        backgroundColor = .clear
+    // MARK: - Configuration
+    private func configure(with type: AppBarType) {
+        titleLabel.text = type.title
 
+        if let leftIcon = type.leftIcon {
+            let resizedLeftIcon = leftIcon.resizedIcon(dynamicSize: 22, weight: .bold)
+            leftButton.setImage(resizedLeftIcon, for: .normal)
+        }
+
+        if let rightIcon = type.rightIcon {
+            let resizedRightIcon = rightIcon.resizedIcon(dynamicSize: 22, weight: .bold)
+            rightButton.setImage(resizedRightIcon, for: .normal)
+        }
+
+        titleLabel.textColor = type.titleColor
+        rightButton.setTitleColor(type.titleColor, for: .normal)
+        leftButton.setTitleColor(type.titleColor, for: .normal)
+
+        leftButton.isHidden = type.leftIcon == nil
+        rightButton.isHidden = type.rightIcon == nil
+    }
+
+    // MARK: - Actions
+    @objc private func leftButtonTapped() {
+        delegate?.leftButtonTapped()
+    }
+
+    @objc private func rightButtonTapped() {
+        delegate?.rightButtonTapped()
+    }
+}
+
+// MARK: - Setup UI
+private extension AppBar {
+    private func setupUI() {
+        setupTitleLabel()
+        setupLeftButton()
+        setupRightButton()
+        setupConstraints()
+    }
+
+    private func setupTitleLabel() {
+        titleLabel = UILabel()
+        titleLabel.textColor = .white
+        titleLabel.font = .dynamicFont(size: 24, weight: .bold)
+        titleLabel.textAlignment = .center
         addSubview(titleLabel)
-        addSubview(leftButton)
-        addSubview(rightButton)
+    }
 
-        self.snp.makeConstraints { make in
+    private func setupLeftButton() {
+        leftButton = UIButton()
+        leftButton.tintColor = .main
+        leftButton.addTarget(self, action: #selector(leftButtonTapped), for: .touchUpInside)
+        leftButton.addPressAnimation()
+        addSubview(leftButton)
+    }
+
+    private func setupRightButton() {
+        rightButton = UIButton()
+        rightButton.tintColor = .main
+        rightButton.addTarget(self, action: #selector(rightButtonTapped), for: .touchUpInside)
+        rightButton.addPressAnimation()
+        addSubview(rightButton)
+    }
+
+    // MARK: - Setup Constraints
+    private func setupConstraints() {
+        snp.makeConstraints { make in
             make.height.equalTo(UIHelper.dynamicHeight(60))
         }
 
@@ -80,45 +123,8 @@ final class AppBar: UIView {
         titleLabel.snp.makeConstraints { make in
             make.center.equalToSuperview()
         }
-
-        leftButton.addPressAnimation()
-        rightButton.addPressAnimation()
-
-        leftButton.addTarget(self, action: #selector(leftButtonTapped), for: .touchUpInside)
-        rightButton.addTarget(self, action: #selector(rightButtonTapped), for: .touchUpInside)
     }
 
-    // MARK: - Configuration
-    private func configure(with type: AppBarType) {
-        titleLabel.text = type.title
-
-        if let leftIcon = type.leftIcon {
-            let resizedLeftIcon = leftIcon.resizedIcon(dynamicSize: 22, weight: .bold)
-            leftButton.setImage(resizedLeftIcon, for: .normal)
-        }
-
-        if let rightIcon = type.rightIcon {
-            let resizedRightIcon = rightIcon.resizedIcon(dynamicSize: 22, weight: .bold)
-            rightButton.setImage(resizedRightIcon, for: .normal)
-        }
-
-        titleLabel.textColor = type.titleColor
-
-        rightButton.setTitleColor(type.titleColor, for: .normal)
-        leftButton.setTitleColor(type.titleColor, for: .normal)
-
-        leftButton.isHidden = type.leftIcon == nil
-        rightButton.isHidden = type.rightIcon == nil
-    }
-
-    // MARK: - Actions
-    @objc private func leftButtonTapped() {
-        delegate?.leftButtonTapped()
-    }
-
-    @objc private func rightButtonTapped() {
-        delegate?.rightButtonTapped()
-    }
 }
 
 enum AppBarType {
@@ -178,6 +184,11 @@ enum AppBarType {
     }
 
     var titleColor: UIColor {
-        return .main
+        switch self {
+        case .profile:
+            return .white
+        default:
+            return .main
+        }
     }
 }

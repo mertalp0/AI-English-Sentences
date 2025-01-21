@@ -15,49 +15,11 @@ final class CustomTextField: UIView {
     private var type: CustomTextFieldType = .normal
     private var validationLabel: UILabel!
 
-    // MARK: - Subviews
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .darkGray
-        label.font = .dynamicFont(size: 14, weight: .medium)
-        label.textAlignment = .left
-        return label
-    }()
-
-    private let textField: UITextField = {
-        let textField = UITextField()
-        textField.borderStyle = .none
-        textField.textColor = .black
-        textField.backgroundColor = .clear
-        textField.font = .dynamicFont(size: 16)
-        return textField
-    }()
-
-    private let containerView: UIView = {
-        let view = UIView()
-        view.layer.cornerRadius = 8
-        view.layer.borderWidth = 1
-        view.layer.borderColor = UIColor.lightGray.cgColor
-        view.backgroundColor = .white
-        return view
-    }()
-
-    private let togglePasswordButton: UIButton = {
-        let button = UIButton(type: .custom)
-        let image = UIImage.appIcon(.eyeSlash)
-        button.setImage(image, for: .normal)
-        button.tintColor = .gray
-        return button
-    }()
-
-    private let shadowLayer: CALayer = {
-        let layer = CALayer()
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOpacity = 0.1
-        layer.shadowOffset = CGSize(width: 0, height: 2)
-        layer.shadowRadius = 4
-        return layer
-    }()
+    private var titleLabel: UILabel!
+    private var textField: UITextField!
+    private var containerView: UIView!
+    private var togglePasswordButton: UIButton!
+    private let shadowLayer: CALayer = CALayer()
 
     var placeholder: String? {
         get { textField.placeholder }
@@ -80,51 +42,12 @@ final class CustomTextField: UIView {
         setupUI()
     }
 
-    private func setupUI() {
-        addSubview(titleLabel)
-        addSubview(containerView)
-        containerView.layer.addSublayer(shadowLayer)
-        containerView.addSubview(textField)
-
-        validationLabel = UILabel()
-        validationLabel.textColor = .red
-        validationLabel.font = .dynamicFont(size: 10)
-        validationLabel.numberOfLines = 0
-        validationLabel.isHidden = true
-        addSubview(validationLabel)
-
-        titleLabel.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(UIHelper.dynamicHeight(20))
-        }
-
-        containerView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(4)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(UIHelper.dynamicHeight(40))
-        }
-
-        textField.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(UIHelper.dynamicHeight(10))
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().inset(16)
-        }
-
-        validationLabel.snp.makeConstraints { make in
-            make.top.equalTo(containerView.snp.bottom)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.lessThanOrEqualToSuperview()
-        }
-
-        textField.delegate = self
-    }
-
     override func layoutSubviews() {
         super.layoutSubviews()
         shadowLayer.frame = containerView.bounds
     }
 
-    // MARK: - Public Configuration
+    // MARK: - Configuration
     func configure(placeholder: String, type: CustomTextFieldType, title: String?) {
         self.type = type
         titleLabel.text = title
@@ -138,12 +61,17 @@ final class CustomTextField: UIView {
 
         if type == .password {
             textField.isSecureTextEntry = true
-            addPasswordToggle()
+            setupTogglePasswordButton()
         }
     }
 
-    private func addPasswordToggle() {
+    private func setupTogglePasswordButton() {
+        togglePasswordButton = UIButton(type: .custom)
+        let image = UIImage.appIcon(.eyeSlash)
+        togglePasswordButton.setImage(image, for: .normal)
+        togglePasswordButton.tintColor = .gray
         containerView.addSubview(togglePasswordButton)
+
         togglePasswordButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.trailing.equalToSuperview().inset(12)
@@ -166,19 +94,13 @@ final class CustomTextField: UIView {
         togglePasswordButton.setImage(image, for: .normal)
     }
 
-    // MARK: - Focus Animasyon
+    // MARK: - Focus Animations
     private func updateFocusState(isFocused: Bool) {
         UIView.animate(withDuration: 0.3) {
-            if isFocused {
-                self.containerView.layer.borderColor = UIColor.mainColor?.cgColor
-                self.containerView.layer.borderWidth = 1.5
-                self.shadowLayer.shadowOpacity = 0.4
-                self.shadowLayer.shadowRadius = 8
-            } else {
-                self.containerView.layer.borderColor = UIColor.lightGray.cgColor
-                self.shadowLayer.shadowOpacity = 0.1
-                self.shadowLayer.shadowRadius = 4
-            }
+            self.containerView.layer.borderColor = isFocused ? UIColor.mainColor?.cgColor : UIColor.lightGray.cgColor
+            self.containerView.layer.borderWidth = isFocused ? 1.5 : 1
+            self.shadowLayer.shadowOpacity = isFocused ? 0.4 : 0.1
+            self.shadowLayer.shadowRadius = isFocused ? 8 : 4
         }
     }
 
@@ -193,6 +115,83 @@ final class CustomTextField: UIView {
         containerView.layer.borderColor = UIColor.lightGray.cgColor
         validationLabel.isHidden = true
         return true
+    }
+}
+
+// MARK: - Setup UI
+private extension CustomTextField {
+    private func setupUI() {
+        setupTitleLabel()
+        setupContainerView()
+        setupTextField()
+        setupValidationLabel()
+        setupConstraints()
+    }
+
+    private func setupTitleLabel() {
+        titleLabel = UILabel()
+        titleLabel.textColor = .darkGray
+        titleLabel.font = .dynamicFont(size: 14, weight: .medium)
+        titleLabel.textAlignment = .left
+        addSubview(titleLabel)
+    }
+
+    private func setupContainerView() {
+        containerView = UIView()
+        containerView.layer.cornerRadius = 8
+        containerView.layer.borderWidth = 1
+        containerView.layer.borderColor = UIColor.lightGray.cgColor
+        containerView.backgroundColor = .white
+        shadowLayer.shadowColor = UIColor.black.cgColor
+        shadowLayer.shadowOpacity = 0.1
+        shadowLayer.shadowOffset = CGSize(width: 0, height: 2)
+        shadowLayer.shadowRadius = 4
+        containerView.layer.addSublayer(shadowLayer)
+        addSubview(containerView)
+    }
+
+    private func setupTextField() {
+        textField = UITextField()
+        textField.borderStyle = .none
+        textField.textColor = .black
+        textField.backgroundColor = .clear
+        textField.font = .dynamicFont(size: 16)
+        textField.delegate = self
+        containerView.addSubview(textField)
+    }
+
+    private func setupValidationLabel() {
+        validationLabel = UILabel()
+        validationLabel.textColor = .red
+        validationLabel.font = .dynamicFont(size: 10)
+        validationLabel.numberOfLines = 0
+        validationLabel.isHidden = true
+        addSubview(validationLabel)
+    }
+
+    private func setupConstraints() {
+        titleLabel.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(UIHelper.dynamicHeight(20))
+        }
+
+        containerView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(UIHelper.dynamicHeight(40))
+        }
+
+        textField.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview().inset(UIHelper.dynamicHeight(10))
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().inset(16)
+        }
+
+        validationLabel.snp.makeConstraints { make in
+            make.top.equalTo(containerView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.lessThanOrEqualToSuperview()
+        }
     }
 }
 

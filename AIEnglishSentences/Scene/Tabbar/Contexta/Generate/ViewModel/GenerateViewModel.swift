@@ -38,7 +38,7 @@ final class GenerateViewModel: BaseViewModel {
                 writingTone: writingTone,
                 writingStyle: writingStyle
             ) { result in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 switch result {
                 case .success(let sentences):
                     self.stopLoading()
@@ -71,7 +71,6 @@ final class GenerateViewModel: BaseViewModel {
                 completion(nil)
                 return
             }
-
             Logger.log("Successfully fetched current offering.", type: .info)
             completion(currentOffering)
         }

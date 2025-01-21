@@ -21,21 +21,42 @@ final class LanguageSelectionViewController: BaseViewController<LanguageSelectio
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupConstraints()
+    }
+}
+
+// MARK: - UI Setup
+private extension LanguageSelectionViewController {
+
+    func setupUI() {
+        setupBackgroundImageView()
+        setupAppBar()
+        setupTableView()
     }
 
-    // MARK: - Setup UI
-    private func setupUI() {
+    private func setupBackgroundImageView() {
         backgroundImageView = UIImageView()
         backgroundImageView.image = .appImage(.backgroundImage)
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
         view.addSubview(backgroundImageView)
 
+        backgroundImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+
+    private func setupAppBar() {
         appBar = AppBar(type: .languages)
         appBar.delegate = self
         view.addSubview(appBar)
 
+        appBar.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
+        }
+    }
+
+    private func setupTableView() {
         tableView = UITableView()
         tableView.register(LanguageCell.self, forCellReuseIdentifier: LanguageCell.identifier)
         tableView.delegate = self
@@ -43,18 +64,6 @@ final class LanguageSelectionViewController: BaseViewController<LanguageSelectio
         tableView.backgroundColor = .clear
         tableView.separatorStyle = .none
         view.addSubview(tableView)
-    }
-
-    // MARK: - Setup Constraints
-    private func setupConstraints() {
-        backgroundImageView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-
-        appBar.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalTo(UIHelper.statusBarHeight + UIHelper.dynamicHeight(10))
-        }
 
         tableView.snp.makeConstraints { make in
             make.top.equalTo(appBar.snp.bottom).offset(UIHelper.dynamicHeight(20))

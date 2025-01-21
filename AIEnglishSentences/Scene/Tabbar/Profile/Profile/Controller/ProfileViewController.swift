@@ -38,8 +38,33 @@ final class ProfileViewController: BaseViewController<ProfileCoordinator, Profil
         setupKeyboardDismissRecognizer()
     }
 
-    // MARK: - Setup UI
+    // MARK: - Setup Actions
+    private func setupActions() {
+        logoutButton.addTarget(self, action: #selector(onLogoutButtonPressed), for: .touchUpInside)
+    }
+
+    private func fetchUserData() {
+        viewModel.getUser { [weak self] user in
+            guard let self = self else { return }
+            self.profileHeaderView.configure(name: user.name, email: user.email)
+        }
+    }
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        dismissKeyboard()
+    }
+}
+
+// MARK: - SetupUI
+private extension ProfileViewController {
+
     private func setupUI() {
+        setupProfileHeaderView()
+        setupOptionsTableView()
+        setupLogoutButton()
+    }
+
+    private func setupProfileHeaderView() {
         profileHeaderView = ProfileHeaderView()
         profileHeaderView.delegate = self
         view.addSubview(profileHeaderView)
@@ -49,7 +74,9 @@ final class ProfileViewController: BaseViewController<ProfileCoordinator, Profil
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(UIHelper.dynamicHeight(250))
         }
+    }
 
+    private func setupOptionsTableView() {
         optionsTableView = UITableView()
         optionsTableView.delegate = self
         optionsTableView.dataSource = self
@@ -64,7 +91,9 @@ final class ProfileViewController: BaseViewController<ProfileCoordinator, Profil
             make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(80)
         }
+    }
 
+    private func setupLogoutButton() {
         logoutButton = UIButton(type: .system)
         logoutButton.setTitle(.localized(for: .profileLogout), for: .normal)
         logoutButton.setTitleColor(.systemRed, for: .normal)
@@ -79,20 +108,5 @@ final class ProfileViewController: BaseViewController<ProfileCoordinator, Profil
             make.height.equalTo(UIHelper.dynamicHeight(40))
             make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-UIHelper.dynamicHeight(22))
         }
-    }
-
-    private func setupActions() {
-        logoutButton.addTarget(self, action: #selector(onLogoutButtonPressed), for: .touchUpInside)
-    }
-
-    private func fetchUserData() {
-        viewModel.getUser { [weak self] user in
-            guard let self = self else { return }
-            self.profileHeaderView.configure(name: user.name, email: user.email)
-        }
-    }
-
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        dismissKeyboard()
     }
 }

@@ -11,38 +11,56 @@ import SnapKit
 
 final class RegisterViewController: BaseViewController<RegisterCoordinator, RegisterViewModel> {
 
-     var gender: Gender = .preferNotToSay
+    var gender: Gender = .preferNotToSay
 
     // MARK: - UI Elements
-     var backgroundImageView: UIImageView!
-     var socialButtonsView: SocialButtonsView!
-     var authBar: AuthBar!
-     var subtitleLabel: UILabel!
-     var emailTextField: CustomTextField!
-     var passwordTextField: CustomTextField!
-     var nameTextField: CustomTextField!
-     var loginButton: AuthButton!
-     var forgotPasswordLabel: UILabel!
+    private var backgroundImageView: UIImageView!
+    var socialButtonsView: SocialButtonsView!
+    var authBar: AuthBar!
+    private var subtitleLabel: UILabel!
+    var emailTextField: CustomTextField!
+    var passwordTextField: CustomTextField!
+    var nameTextField: CustomTextField!
+    var loginButton: AuthButton!
 
     // MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        setupConstraints()
         setupKeyboardDismissRecognizer()
     }
+}
+
+// MARK: - UI Setup
+private extension RegisterViewController {
 
     private func setupUI() {
+        setupBackgroundImageView()
+        setupAuthBar()
+        setupSubtitleLabel()
+        setupNameTextField()
+        setupEmailTextField()
+        setupPasswordTextField()
+        setupLoginButton()
+        setupSocialButtonsView()
+        setupConstraints()
+    }
+
+    private func setupBackgroundImageView() {
         backgroundImageView = UIImageView()
         backgroundImageView.image = .appImage(.backgroundImage)
         backgroundImageView.contentMode = .scaleAspectFill
         backgroundImageView.clipsToBounds = true
         view.addSubview(backgroundImageView)
+    }
 
+    private func setupAuthBar() {
         authBar = AuthBar(title: .localized(for: .createAccountTitle))
         authBar.delegate = self
         view.addSubview(authBar)
+    }
 
+    private func setupSubtitleLabel() {
         subtitleLabel = UILabel()
         subtitleLabel.textAlignment = .center
         subtitleLabel.numberOfLines = 0
@@ -62,15 +80,9 @@ final class RegisterViewController: BaseViewController<RegisterCoordinator, Regi
             ]
         )
         view.addSubview(subtitleLabel)
+    }
 
-        emailTextField = CustomTextField()
-        emailTextField.configure(
-            placeholder: .localized(for: .emailPlaceholder),
-            type: .normal,
-            title: .localized(for: .emailTitle)
-        )
-        view.addSubview(emailTextField)
-
+    private func setupNameTextField() {
         nameTextField = CustomTextField()
         nameTextField.configure(
             placeholder: .localized(for: .namePlaceholder),
@@ -78,7 +90,19 @@ final class RegisterViewController: BaseViewController<RegisterCoordinator, Regi
             title: .localized(for: .nameTitle)
         )
         view.addSubview(nameTextField)
+    }
 
+    private func setupEmailTextField() {
+        emailTextField = CustomTextField()
+        emailTextField.configure(
+            placeholder: .localized(for: .emailPlaceholder),
+            type: .normal,
+            title: .localized(for: .emailTitle)
+        )
+        view.addSubview(emailTextField)
+    }
+
+    private func setupPasswordTextField() {
         passwordTextField = CustomTextField()
         passwordTextField.configure(
             placeholder: .localized(for: .passwordPlaceholder),
@@ -86,11 +110,15 @@ final class RegisterViewController: BaseViewController<RegisterCoordinator, Regi
             title: .localized(for: .passwordTitle)
         )
         view.addSubview(passwordTextField)
+    }
 
+    private func setupLoginButton() {
         loginButton = AuthButton(type: .normal(title: .signup))
         loginButton.delegate = self
         view.addSubview(loginButton)
+    }
 
+    private func setupSocialButtonsView() {
         socialButtonsView = SocialButtonsView(
             googleButtonTitle: .localized(for: .googleButtonTitle),
             appleButtonTitle: .localized(for: .appleButtonTitle),

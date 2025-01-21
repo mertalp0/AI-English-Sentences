@@ -26,8 +26,7 @@ final class RegisterViewModel: BaseViewModel {
         completion: @escaping (Result<UserModel, AuthError>) -> Void
     ) {
         startLoading()
-        authService
-            .registerWithEmail(
+        authService.registerWithEmail(
                 email: email,
                 password: password,
                 name: name,

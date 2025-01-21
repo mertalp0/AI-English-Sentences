@@ -44,6 +44,7 @@ final class SentenceCell: UITableViewCell {
         label.font = .dynamicFont(size: 16, weight: .regular)
         label.textColor = .black
         label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
         return label
     }()
 
