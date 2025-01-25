@@ -7,7 +7,10 @@
 
 // MARK: - CountSelectorViewDelegate
 extension GenerateViewController: CountSelectorViewDelegate {
-    func countSelectorView(_ view: CountSelectorView, didSelectValue value: Int) {
+    func countSelectorView(
+        _ view: CountSelectorView,
+        didSelectValue value: Int
+    ) {
         if view.type == .sentence {
             Logger.log("Sentence Count Selected: \(value)", type: .debug)
         } else if view.type == .word {

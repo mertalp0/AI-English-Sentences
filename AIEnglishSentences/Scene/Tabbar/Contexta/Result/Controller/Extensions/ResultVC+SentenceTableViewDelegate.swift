@@ -13,7 +13,10 @@ extension ResultViewController: SentenceTableViewDelegate {
         showToast(message: .localized(for: .resultCopyToClipboard))
     }
 
-    func didTapSave(for sentence: Sentence, in cell: SentenceCell) {
+    func didTapSave(
+        for sentence: Sentence,
+        in cell: SentenceCell
+    ) {
         let isSentenceSaved = SentenceManager.shared.sentences.contains { $0.id == sentence.id }
 
         if isSentenceSaved {
@@ -23,21 +26,32 @@ extension ResultViewController: SentenceTableViewDelegate {
         }
     }
 
-    private func handleSentenceDeletion(for sentence: Sentence, in cell: SentenceCell) {
+    private func handleSentenceDeletion(
+        for sentence: Sentence,
+        in cell: SentenceCell
+    ) {
         viewModel.deleteSentence(sentence: sentence) { [weak self] isSuccess in
             guard let self = self else { return }
             self.handleSaveResult(isSuccess: isSuccess, isSaving: false, for: sentence, in: cell)
         }
     }
 
-    private func handleSentenceSaving(for sentence: Sentence, in cell: SentenceCell) {
+    private func handleSentenceSaving(
+        for sentence: Sentence,
+        in cell: SentenceCell
+    ) {
         viewModel.saveSentence(sentence: sentence) { [weak self] isSuccess in
             guard let self = self else { return }
             self.handleSaveResult(isSuccess: isSuccess, isSaving: true, for: sentence, in: cell)
         }
     }
 
-    private func handleSaveResult(isSuccess: Bool, isSaving: Bool, for sentence: Sentence, in cell: SentenceCell) {
+    private func handleSaveResult(
+        isSuccess: Bool,
+        isSaving: Bool,
+        for sentence: Sentence,
+        in cell: SentenceCell
+    ) {
         cell.updateSaveAndFavoriteButton(for: sentence)
 
         let title: String = .localized(for: .resultSuccessTitle)

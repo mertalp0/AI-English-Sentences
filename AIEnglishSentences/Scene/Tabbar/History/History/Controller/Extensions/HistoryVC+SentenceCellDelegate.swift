@@ -14,7 +14,10 @@ extension HistoryViewController: SentenceCellDelegate {
         showToast(message: .localized(for: .historyCopiedToClipboard))
     }
 
-    func didTapSaveAndFavorite(for sentence: Sentence, in cell: SentenceCell) {
+    func didTapSaveAndFavorite(
+        for sentence: Sentence,
+        in cell: SentenceCell
+    ) {
 
         if let indexInAllData = SentenceManager.shared.sentences.firstIndex(where: { $0.id == sentence.id }) {
             var updatedSentence = sentence
@@ -46,7 +49,10 @@ extension HistoryViewController: SentenceCellDelegate {
         }
     }
 
-    func didTapPlayButton(for sentence: String, in cell: SentenceCell) {
+    func didTapPlayButton(
+        for sentence: String,
+        in cell: SentenceCell
+    ) {
         if let currentlyPlayingCell = currentlyPlayingCell, currentlyPlayingCell == cell {
             stopCurrentSpeaking()
         } else {
@@ -57,7 +63,10 @@ extension HistoryViewController: SentenceCellDelegate {
         }
     }
 
-    func didTapDelete(for sentence: Sentence, in cell: SentenceCell) {
+    func didTapDelete(
+        for sentence: Sentence,
+        in cell: SentenceCell
+    ) {
         let alertController = UIAlertController(
             title: .localized(for: .historyDeleteAlertTitle),
             message: .localized(for: .historyDeleteAlertMessage),

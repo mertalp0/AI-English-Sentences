@@ -23,7 +23,7 @@ class SubscriptionService {
     func configure() {
         let userId = Auth.auth().currentUser?.uid
         Purchases.configure(withAPIKey: apiKey, appUserID: userId)
-        Purchases.logLevel = .error
+        Purchases.logLevel = .debug
         Logger.log("RevenueCat configured with userId: \(userId ?? "Anonymous")", type: .info)
     }
 

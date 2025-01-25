@@ -23,7 +23,14 @@ extension GenerateViewController {
         viewModel.checkPremiumStatus { [weak self] isPremium in
             guard let self = self else { return }
             if isPremium {
-                self.generateSentences(inputWords: inputWords, maxWords: maxWords, sentenceCount: sentenceCount, category: category, tone: tone, style: style)
+                self.generateSentences(
+                    inputWords: inputWords,
+                    maxWords: maxWords,
+                    sentenceCount: sentenceCount,
+                    category: category,
+                    tone: tone,
+                    style: style
+                )
             } else {
                 self.viewModel.fetchPaywallOfferings { offering in
                     guard let offering = offering else { return }
@@ -33,7 +40,14 @@ extension GenerateViewController {
         }
     }
 
-    private func generateSentences(inputWords: String, maxWords: Int, sentenceCount: Int, category: String, tone: String, style: String) {
+    private func generateSentences(
+        inputWords: String,
+        maxWords: Int,
+        sentenceCount: Int,
+        category: String,
+        tone: String,
+        style: String
+    ) {
         viewModel.generateSentences(
             inputWords: inputWords,
             maxWords: maxWords,

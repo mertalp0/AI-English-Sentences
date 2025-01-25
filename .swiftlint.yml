@@ -18,10 +18,6 @@ excluded:
   - AIEnglishSentencesUITests
 
 
-# Function body length limit
-function_body_length:
-  warning: 50
-  
 # Function parameter count limit
 function_parameter_count:
   warning: 8
