@@ -38,8 +38,9 @@ private extension AuthButton {
     }
 
     func setupButtonStyle() {
-        self.titleLabel?.font = .dynamicFont(size: 16, weight: .medium)
-        self.layer.cornerRadius = 8
+        self.titleLabel?.font = .dynamicFont(size: 16, weight: .semibold)
+        self.layer.cornerRadius = 14
+        self.clipsToBounds = false
     }
 
     func setupActions() {
@@ -64,19 +65,28 @@ private extension AuthButton {
     func configureAsNormalButton() {
         self.backgroundColor = .mainColor
         self.setTitleColor(.white, for: .normal)
+        self.layer.shadowColor = UIColor.mainColor?.cgColor
+        self.layer.shadowOffset = CGSize(width: 0, height: 5)
+        self.layer.shadowRadius = 10
+        self.layer.shadowOpacity = 0.3
     }
 
     func configureAsSocialButton(with image: UIImage?) {
-        self.backgroundColor = .white
-        self.setTitleColor(.black, for: .normal)
+        self.backgroundColor = .systemBackground
+        self.setTitleColor(.label, for: .normal)
         self.layer.borderWidth = 1
         self.layer.borderColor = UIColor.systemGray4.cgColor
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOffset = CGSize(width: 0, height: 2)
+        self.layer.shadowRadius = 6
+        self.layer.shadowOpacity = 0.06
 
         if let icon = image {
             self.setImage(icon, for: .normal)
             self.imageView?.contentMode = .scaleAspectFit
             self.tintColor = .white
             self.semanticContentAttribute = .forceLeftToRight
+            self.imageEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 8)
         }
     }
 }

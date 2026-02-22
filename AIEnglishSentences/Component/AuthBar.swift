@@ -47,10 +47,13 @@ private extension AuthBar {
 
     private func setupBackButton() {
         backButton = UIButton(type: .system)
-        let backIcon = UIImage.appIcon(.chevronLeft)?.resizedIcon(dynamicSize: 22, weight: .bold)
+        let backIcon = UIImage.appIcon(.chevronLeft)?.resizedIcon(dynamicSize: 18, weight: .semibold)
         backButton.setImage(backIcon, for: .normal)
         backButton.tintColor = .mainColor
-        backButton.contentHorizontalAlignment = .leading
+        backButton.backgroundColor = UIColor.mainColor?.withAlphaComponent(0.08)
+        backButton.layer.cornerRadius = 18
+        backButton.clipsToBounds = true
+        backButton.contentHorizontalAlignment = .center
         backButton.imageView?.contentMode = .scaleAspectFit
         backButton.addTarget(self, action: #selector(didTapBackButton), for: .touchUpInside)
         addSubview(backButton)
@@ -58,22 +61,23 @@ private extension AuthBar {
         backButton.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
-            make.width.height.equalTo(UIHelper.dynamicHeight(24))
+            make.width.height.equalTo(UIHelper.dynamicHeight(36))
         }
     }
 
     private func setupTitleLabel(with title: String) {
         titleLabel = UILabel()
         titleLabel.text = title
-        titleLabel.font = .dynamicFont(size: 27, weight: .bold)
-        titleLabel.textColor = .mainColor
+        titleLabel.font = .dynamicFont(size: 20, weight: .bold)
+        titleLabel.textColor = .label
         titleLabel.textAlignment = .center
         addSubview(titleLabel)
 
         titleLabel.snp.makeConstraints { make in
-            make.center.equalToSuperview()
+            make.centerY.equalToSuperview()
             make.leading.greaterThanOrEqualTo(backButton.snp.trailing).offset(8)
-            make.trailing.equalToSuperview().offset(-16)
+            make.trailing.equalToSuperview().offset(-56)
+            make.centerX.equalToSuperview()
         }
     }
 }

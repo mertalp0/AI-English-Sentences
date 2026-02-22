@@ -23,6 +23,12 @@ final class GenerateViewModel: BaseViewModel {
         writingStyle: String,
         completion: @escaping (Result<[Sentence], Error>) -> Void
     ) {
+        let limit = RemoteConfigManager.shared.sentenceLimit
+        if !LimitManager.shared.canGenerate(limit: limit) {
+            handleError(message: "Monthly sentence limit reached (\(limit)). Your limit will reset on \(LimitManager.shared.resetDate?.formatted() ?? "next month").")
+            return
+        }
+
         if inputWords.isEmpty {
             handleError(message: .localized(for: .generateInputError))
             return
@@ -40,6 +46,7 @@ final class GenerateViewModel: BaseViewModel {
                 switch result {
                 case .success(let sentences):
                     self.stopLoading()
+                    LimitManager.shared.incrementCount()
                     Logger.log("Generated Sentences: \(sentences)", type: .info)
                     completion(.success(sentences))
                 case .failure(let error):

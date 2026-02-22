@@ -31,4 +31,5 @@ enum AppIcons: String {
     case trash = "trash"
     case chevronDown = "chevron.down"
     case chevronRight = "chevron.right"
+    case arrowClockwise = "arrow.clockwise"
 }

@@ -57,7 +57,7 @@ private extension EmptyStateView {
         titleLabel = UILabel()
         titleLabel.textAlignment = .center
         titleLabel.font = .dynamicFont(size: 18, weight: .bold)
-        titleLabel.textColor = .darkGray
+        titleLabel.textColor = .label
         addSubview(titleLabel)
 
         titleLabel.snp.makeConstraints { make in
@@ -70,7 +70,7 @@ private extension EmptyStateView {
         descriptionLabel = UILabel()
         descriptionLabel.textAlignment = .center
         descriptionLabel.font = .dynamicFont(size: 14, weight: .regular)
-        descriptionLabel.textColor = .gray
+        descriptionLabel.textColor = .secondaryLabel
         descriptionLabel.numberOfLines = 0
         addSubview(descriptionLabel)
 

@@ -28,9 +28,23 @@ final class DashboardController: UITabBarController {
     }
 
     private func setupTabBar() {
-        self.tabBar.backgroundColor = .mainBlur
-        self.tabBar.tintColor = .mainColor
-        self.tabBar.unselectedItemTintColor = UIColor.lightGray
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .systemBackground
+
+        // Selected item appearance
+        appearance.stackedLayoutAppearance.selected.iconColor = .mainColor
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor.mainColor ?? UIColor.systemBlue]
+
+        // Unselected item appearance
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor.lightGray
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.lightGray]
+
+        self.tabBar.standardAppearance = appearance
+        if #available(iOS 15.0, *) {
+            self.tabBar.scrollEdgeAppearance = appearance
+        }
+
         let historyNavigationController = historyCoordinator.navigationController!
         historyNavigationController.tabBarItem = UITabBarItem(
             title: .localized(for: .tabBarHistory),

@@ -20,6 +20,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
             guard let windowScene = (scene as? UIWindowScene) else { return }
             let window = UIWindow(windowScene: windowScene)
+            window.overrideUserInterfaceStyle = .light  // Always use light mode
             appCoordinator = AppCoordinator(navigationController: navigationController)
             appCoordinator?.start()
             window.rootViewController = navigationController

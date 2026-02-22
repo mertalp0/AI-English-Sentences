@@ -96,11 +96,12 @@ final class CustomTextField: UIView {
 
     // MARK: - Focus Animations
     private func updateFocusState(isFocused: Bool) {
-        UIView.animate(withDuration: 0.3) {
-            self.containerView.layer.borderColor = isFocused ? UIColor.mainColor?.cgColor : UIColor.lightGray.cgColor
-            self.containerView.layer.borderWidth = isFocused ? 1.5 : 1
-            self.shadowLayer.shadowOpacity = isFocused ? 0.4 : 0.1
-            self.shadowLayer.shadowRadius = isFocused ? 8 : 4
+        UIView.animate(withDuration: 0.25) {
+            self.containerView.layer.borderColor = isFocused
+                ? UIColor.mainColor?.cgColor
+                : UIColor.systemGray5.cgColor
+            self.containerView.layer.borderWidth = isFocused ? 2 : 1.5
+            self.containerView.backgroundColor = isFocused ? .systemBackground : UIColor.systemGray6
         }
     }
 
@@ -130,30 +131,25 @@ private extension CustomTextField {
 
     private func setupTitleLabel() {
         titleLabel = UILabel()
-        titleLabel.textColor = .darkGray
-        titleLabel.font = .dynamicFont(size: 14, weight: .medium)
+        titleLabel.textColor = .secondaryLabel
+        titleLabel.font = .dynamicFont(size: 13, weight: .semibold)
         titleLabel.textAlignment = .left
         addSubview(titleLabel)
     }
 
     private func setupContainerView() {
         containerView = UIView()
-        containerView.layer.cornerRadius = 8
-        containerView.layer.borderWidth = 1
-        containerView.layer.borderColor = UIColor.lightGray.cgColor
-        containerView.backgroundColor = .white
-        shadowLayer.shadowColor = UIColor.black.cgColor
-        shadowLayer.shadowOpacity = 0.1
-        shadowLayer.shadowOffset = CGSize(width: 0, height: 2)
-        shadowLayer.shadowRadius = 4
-        containerView.layer.addSublayer(shadowLayer)
+        containerView.layer.cornerRadius = 12
+        containerView.layer.borderWidth = 1.5
+        containerView.layer.borderColor = UIColor.systemGray5.cgColor
+        containerView.backgroundColor = UIColor.systemGray6
         addSubview(containerView)
     }
 
     private func setupTextField() {
         textField = UITextField()
         textField.borderStyle = .none
-        textField.textColor = .black
+        textField.textColor = .label
         textField.backgroundColor = .clear
         textField.font = .dynamicFont(size: 16)
         textField.delegate = self
@@ -176,9 +172,9 @@ private extension CustomTextField {
         }
 
         containerView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(4)
+            make.top.equalTo(titleLabel.snp.bottom).offset(6)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(UIHelper.dynamicHeight(40))
+            make.height.equalTo(UIHelper.dynamicHeight(50))
         }
 
         textField.snp.makeConstraints { make in

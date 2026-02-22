@@ -21,9 +21,10 @@ final class ProfileViewController: BaseViewController<ProfileCoordinator, Profil
             (.localized(for: .profileLanguage), .appIcon(.globe)),
             (.localized(for: .profilePrivacyPolicy), .appIcon(.textMagnifyingGlass)),
             (.localized(for: .profileInviteFriends), .appIcon(.envelope)),
-            (.localized(for: .profileAppsByDeveloper), .appIcon(.appBadge)),
+//            (.localized(for: .profileAppsByDeveloper), .appIcon(.appBadge)),
             (.localized(for: .profileDeleteAccount), .appIcon(.binCircle)),
-            (.localized(for: .profileRateApp), .appIcon(.star))
+            (.localized(for: .profileRateApp), .appIcon(.star)),
+            (.localized(for: .profileRestorePurchase), UIImage.appIcon(.arrowClockwise))
         ]
         return items
     }()

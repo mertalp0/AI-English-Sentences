@@ -141,16 +141,19 @@ extension SentenceCell {
     }
 
     private func setupContainerView() {
-        containerView.backgroundColor = .white
-        containerView.layer.cornerRadius = 12
-        containerView.layer.borderWidth = 1
-        containerView.layer.borderColor = UIColor.lightGray.cgColor
+        containerView.backgroundColor = .systemBackground
+        containerView.layer.cornerRadius = 16
+        containerView.layer.shadowColor = UIColor.black.cgColor
+        containerView.layer.shadowOpacity = 0.07
+        containerView.layer.shadowOffset = CGSize(width: 0, height: 3)
+        containerView.layer.shadowRadius = 8
+        containerView.layer.masksToBounds = false
         contentView.addSubview(containerView)
     }
 
     private func setupSentenceLabel() {
         sentenceLabel.font = .dynamicFont(size: 16, weight: .regular)
-        sentenceLabel.textColor = .black
+        sentenceLabel.textColor = .label
         sentenceLabel.numberOfLines = 0
         containerView.addSubview(sentenceLabel)
     }
@@ -164,7 +167,7 @@ extension SentenceCell {
     }
 
     private func setupSaveAndFavoriteButton() {
-        saveAndFavoriteButton.tintColor = .systemYellow
+        saveAndFavoriteButton.tintColor = UIColor.systemYellow
         containerView.addSubview(saveAndFavoriteButton)
 
         saveAndFavoriteButton.addTarget(self, action: #selector(onTapSaveAndFavorite), for: .touchUpInside)
@@ -172,21 +175,20 @@ extension SentenceCell {
 
     private func setupCopyButton() {
         copyButton.setImage(.appIcon(.docOnDoc), for: .normal)
-        copyButton.tintColor = .systemGreen
+        copyButton.tintColor = .secondaryLabel
         containerView.addSubview(copyButton)
 
         copyButton.addTarget(self, action: #selector(onTapCopy), for: .touchUpInside)
     }
 
     private func setupSeparatorLine() {
-        separatorLine.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+        separatorLine.backgroundColor = UIColor.separator
         containerView.addSubview(separatorLine)
-
     }
 
     private func setupMetadataStackView() {
         metadataStackView.axis = .horizontal
-        metadataStackView.spacing = 8
+        metadataStackView.spacing = 6
         metadataStackView.alignment = .center
         containerView.addSubview(metadataStackView)
 
@@ -196,82 +198,83 @@ extension SentenceCell {
     }
 
     private func setupWritingToneContainer() {
-        writingToneContainer.backgroundColor = .systemPurple
+        writingToneContainer.backgroundColor = UIColor.mainColor?.withAlphaComponent(0.12)
         writingToneContainer.layer.cornerRadius = 8
         writingToneContainer.layer.masksToBounds = true
         metadataStackView.addArrangedSubview(writingToneContainer)
 
-        writingToneLabel.font = .dynamicFont(size: 12, weight: .medium)
-        writingToneLabel.textColor = .white
+        writingToneLabel.font = .dynamicFont(size: 11, weight: .semibold)
+        writingToneLabel.textColor = .mainColor
         writingToneLabel.textAlignment = .center
         writingToneLabel.numberOfLines = 1
         writingToneContainer.addSubview(writingToneLabel)
     }
 
     private func setupWritingStyleContainer() {
-        writingStyleContainer.backgroundColor = .systemTeal
+        writingStyleContainer.backgroundColor = UIColor.systemTeal.withAlphaComponent(0.12)
         writingStyleContainer.layer.cornerRadius = 8
         writingStyleContainer.layer.masksToBounds = true
         metadataStackView.addArrangedSubview(writingStyleContainer)
 
-        writingStyleLabel.font = .dynamicFont(size: 12, weight: .medium)
-        writingStyleLabel.textColor = .white
+        writingStyleLabel.font = .dynamicFont(size: 11, weight: .semibold)
+        writingStyleLabel.textColor = .systemTeal
         writingStyleLabel.textAlignment = .center
         writingStyleLabel.numberOfLines = 1
         writingStyleContainer.addSubview(writingStyleLabel)
     }
 
     private func setupCreatedAtLabel() {
-        createdAtLabel.font = .dynamicFont(size: 12, weight: .light)
-        createdAtLabel.textColor = .darkGray
+        createdAtLabel.font = .dynamicFont(size: 11, weight: .regular)
+        createdAtLabel.textColor = .tertiaryLabel
         createdAtLabel.textAlignment = .right
         metadataStackView.addArrangedSubview(createdAtLabel)
     }
 
     private func setupConstraints() {
         containerView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(8)
+            make.top.bottom.equalToSuperview().inset(6)
+            make.leading.trailing.equalToSuperview().inset(16)
         }
 
         sentenceLabel.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().offset(UIHelper.dynamicHeight(16))
+            make.top.leading.equalToSuperview().offset(16)
             make.trailing.equalTo(playButton.snp.leading).offset(-8)
         }
 
         playButton.snp.makeConstraints { make in
             make.trailing.equalTo(saveAndFavoriteButton.snp.leading).offset(-8)
-            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(16))
+            make.top.equalToSuperview().offset(16)
             make.width.height.equalTo(UIHelper.dynamicHeight(24))
         }
 
         saveAndFavoriteButton.snp.makeConstraints { make in
             make.trailing.equalTo(copyButton.snp.leading).offset(-8)
-            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(16))
+            make.top.equalToSuperview().offset(16)
             make.width.height.equalTo(UIHelper.dynamicHeight(24))
         }
 
         copyButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-16)
-            make.top.equalToSuperview().offset(UIHelper.dynamicHeight(16))
+            make.top.equalToSuperview().offset(16)
             make.width.height.equalTo(UIHelper.dynamicHeight(24))
         }
 
         separatorLine.snp.makeConstraints { make in
-            make.top.equalTo(sentenceLabel.snp.bottom).offset(UIHelper.dynamicHeight(8))
+            make.top.equalTo(sentenceLabel.snp.bottom).offset(12)
             make.leading.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(1)
+            make.height.equalTo(0.5)
         }
 
         writingToneLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(8)
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
         }
 
         writingStyleLabel.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(8)
+            make.edges.equalToSuperview().inset(UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8))
         }
 
         metadataStackView.snp.makeConstraints { make in
-            make.top.equalTo(separatorLine.snp.bottom).offset(UIHelper.dynamicHeight(8))
+            make.top.equalTo(separatorLine.snp.bottom).offset(10)
             make.leading.trailing.bottom.equalToSuperview().inset(16)
         }
     }

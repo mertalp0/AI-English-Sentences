@@ -39,16 +39,21 @@ final class HistorySegmentedControl: UIView {
 // MARK: - Setup UI
 private extension HistorySegmentedControl {
     func setupUI(items: [String]) {
+        backgroundColor = UIColor.systemGray6
+        layer.cornerRadius = 12
+        layer.masksToBounds = true
+
+        setupSelectionIndicator(itemCount: items.count)
         setupButtons(items: items)
         setupStackView()
-        setupSelectionIndicator(itemCount: items.count)
     }
 
     func setupButtons(items: [String]) {
         buttons = items.enumerated().map { index, title in
             let button = UIButton(type: .system)
             button.setTitle(title, for: .normal)
-            button.setTitleColor(index == 0 ? .mainColor : .gray, for: .normal)
+            button.titleLabel?.font = .dynamicFont(size: 14, weight: index == 0 ? .semibold : .regular)
+            button.setTitleColor(index == 0 ? .mainColor : .secondaryLabel, for: .normal)
             button.tag = index
             button.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
             return button
@@ -69,14 +74,18 @@ private extension HistorySegmentedControl {
 
     func setupSelectionIndicator(itemCount: Int) {
         selectionIndicator = UIView()
-        selectionIndicator.backgroundColor = .mainColor
+        selectionIndicator.backgroundColor = .systemBackground
+        selectionIndicator.layer.cornerRadius = 10
+        selectionIndicator.layer.shadowColor = UIColor.black.cgColor
+        selectionIndicator.layer.shadowOpacity = 0.08
+        selectionIndicator.layer.shadowOffset = CGSize(width: 0, height: 2)
+        selectionIndicator.layer.shadowRadius = 4
         addSubview(selectionIndicator)
 
         selectionIndicator.snp.makeConstraints { make in
-            make.height.equalTo(UIHelper.dynamicHeight(2))
-            make.leading.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.width.equalToSuperview().dividedBy(itemCount)
+            make.top.bottom.equalToSuperview().inset(3)
+            make.leading.equalToSuperview().inset(3)
+            make.width.equalToSuperview().dividedBy(itemCount).offset(-3)
         }
     }
 }
@@ -84,18 +93,21 @@ private extension HistorySegmentedControl {
 // MARK: - Actions
 private extension HistorySegmentedControl {
     @objc func buttonTapped(_ sender: UIButton) {
-        buttons.forEach { $0.setTitleColor(.gray, for: .normal) }
+        buttons.forEach {
+            $0.setTitleColor(.secondaryLabel, for: .normal)
+            $0.titleLabel?.font = .dynamicFont(size: 14, weight: .regular)
+        }
         sender.setTitleColor(.mainColor, for: .normal)
+        sender.titleLabel?.font = .dynamicFont(size: 14, weight: .semibold)
 
         selectedIndexInternal = sender.tag
         delegate?.segmentChanged(to: selectedIndexInternal)
 
-        UIView.animate(withDuration: 0.3) {
+        UIView.animate(withDuration: 0.3, delay: 0, usingSpringWithDamping: 0.75, initialSpringVelocity: 0.5) {
             self.selectionIndicator.snp.remakeConstraints { make in
-                make.height.equalTo(UIHelper.dynamicHeight(2))
-                make.leading.equalTo(self.stackView.snp.leading).offset(sender.frame.origin.x)
-                make.bottom.equalToSuperview()
-                make.width.equalToSuperview().dividedBy(self.buttons.count)
+                make.top.bottom.equalToSuperview().inset(3)
+                make.leading.equalTo(self.stackView.snp.leading).offset(sender.frame.origin.x + 3)
+                make.width.equalToSuperview().dividedBy(self.buttons.count).offset(-3)
             }
             self.layoutIfNeeded()
         }

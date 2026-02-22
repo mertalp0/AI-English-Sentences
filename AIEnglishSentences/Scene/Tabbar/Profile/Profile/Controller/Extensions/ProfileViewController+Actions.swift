@@ -5,7 +5,8 @@
 //  Created by mert alp on 19.01.2025.
 //
 
-import Foundation
+import UIKit
+import BaseMVVMCKit
 
 // MARK: - Actions
 extension ProfileViewController {
@@ -76,6 +77,20 @@ extension ProfileViewController {
             } else {
                 self.tabBarController?.tabBar.isUserInteractionEnabled = true
             }
+        }
+    }
+
+    func restorePurchase() {
+        viewModel.startLoading()
+        SubscriptionService.shared.restorePurchase { [weak self] isPremium in
+            self?.viewModel.stopLoading()
+            let alert = UIAlertController(
+                title: isPremium ? "Success" : "Restore Result",
+                message: isPremium ? "Your purchases have been successfully restored!" : "No active subscriptions found for this account.",
+                preferredStyle: .alert
+            )
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self?.present(alert, animated: true)
         }
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 import BaseMVVMCKit
 import RevenueCat
-import RevenueCatUI
+import RevenueCat
 
 final class GenerateViewController: BaseViewController<GenerateCoordinator, GenerateViewModel> {
 

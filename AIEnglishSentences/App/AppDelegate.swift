@@ -16,6 +16,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         configureCrashlytics()
         SubscriptionService.shared.configure()
+        RemoteConfigManager.shared.fetchRemoteConfig {
+            print("Remote Config synchronized")
+        }
         return true
     }
 

@@ -8,7 +8,6 @@
 import BaseMVVMCKit
 import UIKit
 import RevenueCat
-import RevenueCatUI
 
 final class GenerateCoordinator: BaseCoordinator {
 

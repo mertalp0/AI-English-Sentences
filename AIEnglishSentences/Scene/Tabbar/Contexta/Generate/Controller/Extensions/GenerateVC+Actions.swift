@@ -7,7 +7,6 @@
 
 import Foundation
 import RevenueCat
-import RevenueCatUI
 
 // MARK: - Actions
 extension GenerateViewController {

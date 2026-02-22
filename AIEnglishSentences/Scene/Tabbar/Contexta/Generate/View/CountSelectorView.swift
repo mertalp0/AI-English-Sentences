@@ -58,15 +58,19 @@ private extension CountSelectorView {
     }
 
     private func setupContainer() {
-        container.backgroundColor = .white
+        container.backgroundColor = .systemBackground
         container.layer.cornerRadius = 16
+        container.layer.shadowColor = UIColor.black.cgColor
+        container.layer.shadowOpacity = 0.06
+        container.layer.shadowOffset = CGSize(width: 0, height: 3)
+        container.layer.shadowRadius = 8
         addSubview(container)
     }
 
     private func setupTitleLabel() {
         titleLabel.text = type.title
-        titleLabel.font = .dynamicFont(size: 14, weight: .medium)
-        titleLabel.textColor = .gray
+        titleLabel.font = .dynamicFont(size: 12, weight: .semibold)
+        titleLabel.textColor = .secondaryLabel
         container.addSubview(titleLabel)
     }
 
@@ -74,9 +78,9 @@ private extension CountSelectorView {
         optionsStackView.axis = .horizontal
         optionsStackView.alignment = .fill
         optionsStackView.distribution = .fillEqually
-        optionsStackView.spacing = 10
-        optionsStackView.layer.cornerRadius = 16
-        optionsStackView.backgroundColor = .background
+        optionsStackView.spacing = 8
+        optionsStackView.layer.cornerRadius = 12
+        optionsStackView.backgroundColor = UIColor.systemGray6
         container.addSubview(optionsStackView)
     }
 
@@ -105,16 +109,16 @@ private extension CountSelectorView {
         }
 
         if let firstButton = optionsStackView.arrangedSubviews.first as? UIButton {
-            firstButton.backgroundColor = .mainColor?.withAlphaComponent(0.2)
+            firstButton.backgroundColor = .systemBackground
         }
     }
 
     private func createOptionButton(with title: String) -> UIButton {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)
-        button.titleLabel?.font = .dynamicFont(size: 18, weight: .medium)
+        button.titleLabel?.font = .dynamicFont(size: 16, weight: .semibold)
         button.setTitleColor(.mainColor, for: .normal)
-        button.backgroundColor = .white
+        button.backgroundColor = .clear
         button.layer.cornerRadius = 10
         button.addTarget(self, action: #selector(optionTapped(_:)), for: .touchUpInside)
         return button
@@ -123,10 +127,14 @@ private extension CountSelectorView {
     private func updateOptionStyles(selectedButton: UIButton) {
         optionsStackView.arrangedSubviews.forEach { view in
             if let button = view as? UIButton {
-                button.backgroundColor = .white
+                button.backgroundColor = .clear
+                button.setTitleColor(.mainColor, for: .normal)
             }
         }
-        selectedButton.backgroundColor = .mainColor?.withAlphaComponent(0.2)
+        UIView.animate(withDuration: 0.2) {
+            selectedButton.backgroundColor = .systemBackground
+            selectedButton.setTitleColor(.mainColor, for: .normal)
+        }
     }
 }
 

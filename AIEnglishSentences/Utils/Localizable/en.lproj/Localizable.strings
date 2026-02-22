@@ -136,6 +136,7 @@
 "profile_delete_account" = "Delete Account";
 "profile_rate_app" = "Rate App";
 "profile_logout" = "Log Out";
+"profile_restore_purchase" = "Restore Purchase";
 "profile_logout_cancel" = "Cancel";
 "profile_logout_confirm" = "Logout";
 "profile_delete_cancel" = "Cancel";
@@ -185,7 +186,30 @@
 "app_bar_generate" = "Generate";
 "app_bar_profile" = "Profile";
 "app_bar_contexta" = "Contexta";
-"app_bar_result" = "Sentences";
-"app_bar_privacy_policy" = "Privacy Policy";
-"app_bar_my_apps" = "My Apps";
 "app_bar_languages" = "Languages";
+"app_bar_result" = "Sentences";
+
+// MARK: - Paywall Strings
+"paywall_title" = "Upgrade to Premium";
+"paywall_date_prefix" = "Subscription Start: %@";
+"paywall_feature_1" = "Unlimited sentence generation";
+"paywall_feature_2" = "Learn with advanced AI models";
+"paywall_feature_3" = "Unlimited favorite recordings";
+"paywall_action_button" = "Start Now";
+"paywall_disclaimer" = "Subscriptions renew automatically. You can cancel anytime in account settings.";
+"paywall_restore" = "Restore Purchases";
+"paywall_privacy" = "Privacy Policy";
+"paywall_terms" = "Terms of Use";
+"paywall_alert_title" = "Information";
+"paywall_alert_no_subscription" = "No active subscription found to restore.";
+"paywall_alert_ok" = "OK";
+"paywall_package_annual" = "1 Year Premium";
+"paywall_package_six_month" = "6 Months Premium";
+"paywall_package_three_month" = "3 Months Premium";
+"paywall_package_monthly" = "1 Month Premium";
+"paywall_savings" = "%% %d SAVINGS";
+"paywall_best_value" = "BEST VALUE";
+"paywall_per_year" = "/ year";
+"paywall_per_six_month" = "/ 6 months";
+"paywall_per_three_month" = "/ 3 months";
+"paywall_per_month" = "/ month";

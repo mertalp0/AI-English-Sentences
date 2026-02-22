@@ -64,16 +64,15 @@ private extension RegisterViewController {
         subtitleLabel = UILabel()
         subtitleLabel.textAlignment = .center
         subtitleLabel.numberOfLines = 0
-        subtitleLabel.textColor = UIColor.darkGray
         subtitleLabel.attributedText = NSAttributedString(
             string: .localized(for: .registerSubtitle),
             attributes: [
-                .font: UIFont.dynamicFont(size: 22, weight: .bold),
-                .foregroundColor: UIColor.darkGray,
-                .kern: 1.0,
+                .font: UIFont.dynamicFont(size: 18, weight: .semibold),
+                .foregroundColor: UIColor.secondaryLabel,
+                .kern: 0.3,
                 .paragraphStyle: {
                     let style = NSMutableParagraphStyle()
-                    style.lineSpacing = 5
+                    style.lineSpacing = 4
                     style.alignment = .center
                     return style
                 }()
@@ -165,8 +164,8 @@ private extension RegisterViewController {
 
         loginButton.snp.makeConstraints { make in
             make.bottom.equalTo(socialButtonsView.snp.top).offset(-UIHelper.dynamicHeight(20))
-            make.leading.trailing.equalToSuperview().inset(32)
-            make.height.equalTo(UIHelper.dynamicHeight(40))
+            make.leading.trailing.equalToSuperview().inset(24)
+            make.height.equalTo(UIHelper.dynamicHeight(52))
         }
 
         socialButtonsView.snp.makeConstraints { make in

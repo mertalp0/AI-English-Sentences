@@ -14,6 +14,7 @@ final class InfoViewController: BaseViewController<InfoCoordinator, InfoViewMode
     // MARK: - UI Elements
     private var backgroundImageView: UIImageView!
     private var logoImageView: UIImageView!
+    private var appNameLabel: UILabel!
     private var subtitleLabel: UILabel!
     var loginButton: AuthButton!
     var socialButtonsView: SocialButtonsView!
@@ -30,11 +31,29 @@ private extension InfoViewController {
 
    private func setupUI() {
         setupBackgroundImageView()
+        setupAppNameLabel()
         setupLogoImageView()
         setupSubtitleLabel()
         setupLoginButton()
         setupSocialButtonsView()
         setupConstraints()
+    }
+
+    private func setupAppNameLabel() {
+        appNameLabel = UILabel()
+        appNameLabel.text = "Sentence AI"
+        appNameLabel.textAlignment = .center
+        appNameLabel.font = .dynamicFont(size: 48, weight: .bold)
+        appNameLabel.textColor = .mainColor
+        
+        // Add premium shadow
+        appNameLabel.layer.shadowColor = UIColor.mainColor?.cgColor
+        appNameLabel.layer.shadowRadius = 8.0
+        appNameLabel.layer.shadowOpacity = 0.2
+        appNameLabel.layer.shadowOffset = CGSize(width: 0, height: 4)
+        appNameLabel.layer.masksToBounds = false
+        
+        view.addSubview(appNameLabel)
     }
 
     private func setupBackgroundImageView() {
@@ -97,11 +116,16 @@ private extension InfoViewController {
             make.edges.equalToSuperview()
         }
 
-        logoImageView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(UIHelper.dynamicHeight(90))
+        appNameLabel.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(UIHelper.dynamicHeight(40))
             make.centerX.equalToSuperview()
-            make.width.equalTo(UIHelper.dynamicWidth(250))
-            make.height.equalTo(UIHelper.dynamicHeight(80))
+        }
+
+        logoImageView.snp.makeConstraints { make in
+            make.top.equalTo(appNameLabel.snp.bottom).offset(UIHelper.dynamicHeight(20))
+            make.centerX.equalToSuperview()
+            make.width.equalTo(UIHelper.dynamicWidth(200))
+            make.height.equalTo(UIHelper.dynamicHeight(60))
         }
 
         subtitleLabel.snp.makeConstraints { make in

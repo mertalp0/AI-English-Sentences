@@ -139,4 +139,18 @@ class SubscriptionService {
             completion(isPremium)
         }
     }
+
+    // MARK: - Restore Purchases
+    func restorePurchase(completion: @escaping (Bool) -> Void) {
+        Purchases.shared.restorePurchases { customerInfo, error in
+            if let error = error {
+                Logger.log("Restore failed: \(error.localizedDescription)", type: .error)
+                completion(false)
+                return
+            }
+            let isPremium = customerInfo?.entitlements["premium"]?.isActive == true
+            Logger.log("Restore successful. Premium status: \(isPremium)", type: .info)
+            completion(isPremium)
+        }
+    }
 }

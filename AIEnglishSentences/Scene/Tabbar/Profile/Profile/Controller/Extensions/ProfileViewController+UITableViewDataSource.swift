@@ -41,11 +41,11 @@ extension ProfileViewController: UITableViewDelegate, UITableViewDataSource {
         case 2:
             inviteFriends()
         case 3:
-            openAppsByDeveloper()
-        case 4:
             deleteAccount()
-        case 5:
+        case 4:
             rateApp()
+        case 5:
+            restorePurchase()
         default:
             break
         }
