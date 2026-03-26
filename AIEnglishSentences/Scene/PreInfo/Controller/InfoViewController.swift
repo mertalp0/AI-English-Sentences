@@ -25,7 +25,7 @@ final class InfoViewController: BaseViewController<InfoCoordinator, InfoViewMode
         setupUI()
     }
 }
-
+ 
 // MARK: - UI Setup
 private extension InfoViewController {
 
